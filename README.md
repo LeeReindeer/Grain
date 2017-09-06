@@ -1,9 +1,13 @@
 ## Grain
 
 
-## Attributions
+### Attributions
 [Attributions](/ATTRIBUTIONS.md)
 
-## License
+### Download && How-to
+
+[Download](https://www.pgyer.com/grain)
+
+### License
 
 GPL
