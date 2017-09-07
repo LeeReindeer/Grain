@@ -38,7 +38,7 @@
                     android:id="@+id/name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/name"
+                    android:hint="@string/login_name"
                     android:maxLines="1"
                     android:singleLine="true" />
 
@@ -52,7 +52,7 @@
                     android:id="@+id/account"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/schoolid"
+                    android:hint="@string/login_id"
                     android:inputType="number"
                     android:maxLines="1"
                     android:singleLine="true" />
@@ -67,7 +67,7 @@
                     android:id="@+id/password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/prompt_password"
+                    android:hint="@string/login_pass"
                     android:imeActionId="@+id/login"
                     android:imeActionLabel="@string/action_sign_in_short"
                     android:imeOptions="actionUnspecified"

@@ -51,35 +51,35 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginRight="16dp"
-            android:text="Time"/>
+            android:text="@string/cd_title_time"/>
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginRight="16dp"
-            android:text="Place"/>
+            android:text="@string/cd_title_place"/>
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginRight="16dp"
-            android:text="Terminal"/>
+            android:text="@string/cd_title_terminal"/>
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginRight="16dp"
-            android:text="Consume"/>
+            android:text="@string/cd_title_consume"/>
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginRight="16dp"
-            android:text="Balance"/>
+            android:text="@string/cd_title_balance"/>
     </LinearLayout>
 
     <ListView
