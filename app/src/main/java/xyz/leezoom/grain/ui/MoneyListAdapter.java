@@ -42,7 +42,7 @@ public class MoneyListAdapter extends ArrayAdapter<Card> implements ListAdapter 
 
         Card card = getItem(position);
         viewHolder.mTime.setText(card.getTime());
-        viewHolder.mPlace.setText(card.getBalance());
+        viewHolder.mPlace.setText(card.getPlace());
         viewHolder.mTerminal.setText(card.getTerminal());
         viewHolder.mConsume.setText(card.getConsume());
         viewHolder.mBalance.setText(card.getBalance());

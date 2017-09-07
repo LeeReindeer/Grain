@@ -15,4 +15,7 @@ public enum QueryType {
     //user pic
     CardUserPicture,
     CardUserPayment,
+    //query book
+    TsgQueryBooks,
+    TsgUserLibrarys
 }

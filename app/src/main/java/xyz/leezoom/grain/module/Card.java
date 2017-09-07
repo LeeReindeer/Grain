@@ -6,11 +6,30 @@ package xyz.leezoom.grain.module;
  */
 
 public class Card {
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     private String time;
     private String consume;
     private String Balance;
     private String place;
     private String terminal;
+    private String status;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public String getTime() {
         return time;

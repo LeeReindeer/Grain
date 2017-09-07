@@ -1,5 +1,7 @@
 package xyz.leezoom.grain.module;
 
+import java.util.Random;
+
 /**
  * @Author lee
  * @Time 9/4/17.
@@ -18,6 +20,13 @@ public class User {
     private String others="1504533068218,net";
 
     public User() {
+    }
+
+    //simulate
+    private String getRandomPhoneVersion(){
+        String  [] phones = {"MI 5", "MI 5s", "Mi Note 2","KNT-AL10", "EVA-AL00","NTS-AL00", "VTR-AL00", "SM-G9300 ", "SM-G9350", "SM-G9500", "SM705", "SM801", "OD105", "OPPO R7sPlus", "vivo X7", "OPPO R9s Plus", "OPPO R11 "};
+        Random random = new Random();
+        return phones[random.nextInt(17)];
     }
 
     public User(String name, String schoolId, String password, String certCard, String extend) {

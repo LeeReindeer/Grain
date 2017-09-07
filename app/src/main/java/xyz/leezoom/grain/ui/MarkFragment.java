@@ -16,12 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.Socket;
-import java.net.SocketException;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,9 +28,7 @@ import xyz.leezoom.grain.module.ServerIp;
 import xyz.leezoom.grain.module.User;
 import xyz.leezoom.grain.util.MyBase64;
 import xyz.leezoom.grain.util.PackMessage;
-import xyz.leezoom.grain.util.TcpCommon;
 import xyz.leezoom.grain.util.TcpUtil;
-
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -50,7 +42,9 @@ public class MarkFragment extends Fragment {
     private SharedPreferences query;
 
     private String [] markSplitArray;
-
+    private final static QueryType queryType = QueryType.ZFQueryXueshengChengji;
+    //get user info from MainActivity
+    private User user;
     @BindView(R.id.mk_recycler_view) RecyclerView recyclerView;
     @BindView(R.id.mk_refresh_view) SwipeRefreshLayout refreshLayout;
 
@@ -77,7 +71,7 @@ public class MarkFragment extends Fragment {
                 refreshMarks();
             }
         });
-        initList();
+        initList(false);
         return view;
     }
 
@@ -93,7 +87,7 @@ public class MarkFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        initList();
+                        initList(true);
                         refreshLayout.setRefreshing(false);
                     }
                 });
@@ -109,7 +103,7 @@ public class MarkFragment extends Fragment {
         toolbar.setTitle(getString(R.string.app_name));
     }
 
-    private void initList(){
+    private void initList(boolean fromNet){
         markList.clear();
         User user = new User();
         info = getActivity().getSharedPreferences("info",Context.MODE_PRIVATE);
@@ -125,8 +119,13 @@ public class MarkFragment extends Fragment {
         user.setExtend(account);
         user.setPassword(pass);
         user.setToken(MyBase64.BASE64ToString(query.getString("ttt","none")));
-        markTask = new NetWorkTask(user,QueryType.ZFQueryXueshengChengji);
-        markTask.execute((Void) null);
+        if (fromNet) {
+            markTask = new NetWorkTask(user, queryType);
+            markTask.execute((Void) null);
+        }else{
+            getMarkDataFromLocal(null,false);
+            adapter.notifyDataSetChanged();
+        }
         /*Mark mark = new Mark();
         mark.setName("大学英语1");
         mark.setTeacherName(" ming");
@@ -136,6 +135,37 @@ public class MarkFragment extends Fragment {
         markList.add(0,mark);*/
     }
 
+    /**
+     *
+     * @param netMarks marks from internet
+     * @return
+     */
+    private boolean getMarkDataFromLocal(String netMarks,boolean isFromNet){
+        markList.clear();
+        query = getActivity().getSharedPreferences("query", Context.MODE_PRIVATE);
+        String marks = MyBase64.BASE64ToString(query.getString(queryType.name(),"none"));
+        boolean isHaveLocalData = !marks.equals("none");
+        if (!isHaveLocalData || marks.equals("false")) {
+            isHaveLocalData = false;
+            return false;
+        }
+        String allMarks [] = !isFromNet ? marks.split("\n"):netMarks.split("\n");
+        for (String e: allMarks){
+            Log.d("mark",e);
+            markSplitArray = e.split(PackMessage.SplitFields);
+            Mark mark = new Mark();
+            mark.setSchoolId(markSplitArray[0]);
+            mark.setYear(markSplitArray[2]);
+            mark.setSemester(markSplitArray[3]);
+            mark.setTeacherName(markSplitArray[4]);
+            mark.setName(markSplitArray[5]);
+            mark.setScore(markSplitArray[6]);
+            mark.setCredit(markSplitArray[7]);
+            mark.setGp(markSplitArray[8]);
+            markList.add(mark);
+        }
+        return isHaveLocalData;
+    }
 
     /**
      * get mark from server
@@ -183,21 +213,7 @@ public class MarkFragment extends Fragment {
                     Toast.makeText(getContext(), "Failed.YOu can try to enter new token.",Toast.LENGTH_SHORT).show();
                     return;
                 }
-                String allMarks [] = marks.split("\n");
-                for (String e: allMarks){
-                    Log.d("mark",e);
-                    markSplitArray = e.split(PackMessage.SplitFields);
-                    Mark mark = new Mark();
-                    mark.setSchoolId(markSplitArray[0]);
-                    mark.setYear(markSplitArray[2]);
-                    mark.setSemester(markSplitArray[3]);
-                    mark.setTeacherName(markSplitArray[4]);
-                    mark.setName(markSplitArray[5]);
-                    mark.setScore(markSplitArray[6]);
-                    mark.setCredit(markSplitArray[7]);
-                    mark.setGp(markSplitArray[8]);
-                    markList.add(mark);
-                }
+                getMarkDataFromLocal(marks,true);
                 adapter.notifyDataSetChanged();
                 refreshLayout.setRefreshing(false);
             } else {

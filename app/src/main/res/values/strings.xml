@@ -31,7 +31,6 @@
 
 
     <!-- fun title-->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="fun_title_your_mark" translatable="false">君の成绩</string>
     <string name="fun_title_your_card">Your card</string>
     <string name="fun_title_library">Library</string>
@@ -44,7 +43,7 @@
     <string name="cd_title_balance">Balance</string>
 
 
-    <string name="dev_email">reindeerlee.work@gmail.com</string>
-    <string name="about_page">https://github.com/LeeReindeer/Grain/blob/master/README.md</string>
+    <string name="dev_email" translatable="false">reindeerlee.work@gmail.com</string>
+    <string name="about_page" translatable="false">https://github.com/LeeReindeer/Grain/blob/master/README.md</string>
 
 </resources>

@@ -1,6 +1,7 @@
 package xyz.leezoom.grain.ui;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -30,7 +31,8 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, FunctionFragment.FOnClickListener {
 
     private boolean isLogin=false;
-    private SharedPreferences preferences;
+    private SharedPreferences info;
+    private SharedPreferences query;
     private User user;
     private FunctionFragment mainFunction;
     private MarkFragment mMark;
@@ -51,8 +53,8 @@ public class MainActivity extends AppCompatActivity
 
     //if not login ,start login
     private void checkLogin(){
-        preferences=getSharedPreferences("info",MODE_PRIVATE);
-        isLogin=preferences.getBoolean("isLogin",false);
+        info =getSharedPreferences("info",MODE_PRIVATE);
+        isLogin= info.getBoolean("isLogin",false);
         if (isLogin) return;
         Intent intent=new Intent(MainActivity.this,LoginActivity.class);
         startActivity(intent);
@@ -61,8 +63,19 @@ public class MainActivity extends AppCompatActivity
 
     private void loadData(){
         user=new User();
-        preferences=getSharedPreferences("info",MODE_PRIVATE);
-        user.setAccount(preferences.getString("aaa","none"));
+        info = getSharedPreferences("info", Context.MODE_PRIVATE);
+        query = getSharedPreferences("query",Context.MODE_PRIVATE);
+        String name = MyBase64.BASE64ToString(info.getString("nnn","none"));
+        String account = MyBase64.BASE64ToString(info.getString("aaa","none"));
+        String idCard = MyBase64.BASE64ToString(info.getString("ppp","none"));
+        String pass = idCard.substring(9, 18);
+        user.setName(name);
+        user.setAccount(account);
+        user.setSchoolId(account);
+        user.setCertCard(idCard);
+        user.setExtend(account);
+        user.setPassword(pass);
+        user.setToken(MyBase64.BASE64ToString(query.getString("ttt","none")));
     }
 
 
@@ -88,8 +101,8 @@ public class MainActivity extends AppCompatActivity
                                 Log.d("Main",token);
                                 Log.d("Main",i+"");
                                 //token
-                                preferences = getSharedPreferences("query",MODE_PRIVATE);
-                                SharedPreferences.Editor editor = preferences.edit();
+                                query = getSharedPreferences("query",MODE_PRIVATE);
+                                SharedPreferences.Editor editor = query.edit();
                                 if (token!=null&&!token.isEmpty()&&token.length()==32) {
                                     editor.putString("ttt", MyBase64.stringToBASE64(token));
                                     Log.d("Main",token);
@@ -164,7 +177,7 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_feedback:
                 //send email to me
                 Intent data = new Intent(Intent.ACTION_SENDTO);
-                data.setData(Uri.parse("mailto:reindeerlee.work@gmail.com"));
+                data.setData(Uri.parse("mailto:"+getString(R.string.dev_email)));
                 data.putExtra(Intent.EXTRA_SUBJECT, "Grain feedback");
                 data.putExtra(Intent.EXTRA_TEXT, "");
                 startActivity(data);
@@ -175,13 +188,13 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_about:
                 //show about page
-                Intent net = new Intent(Intent.ACTION_VIEW,Uri.parse("https://github.com/LeeReindeer/Grain/blob/master/README.md"));
+                Intent net = new Intent(Intent.ACTION_VIEW,Uri.parse(getString(R.string.about_page)));
                 startActivity(net);
                 break;
             case R.id.nav_exit:
                 //finish();
-                preferences = getSharedPreferences("info",MODE_PRIVATE);
-                SharedPreferences.Editor editor =preferences.edit();
+                info = getSharedPreferences("info",MODE_PRIVATE);
+                SharedPreferences.Editor editor = info.edit();
                 editor.putString("aaa","");
                 editor.putString("nnn","");
                 editor.putString("ppp","");
@@ -217,10 +230,10 @@ public class MainActivity extends AppCompatActivity
                 Toast.makeText(this,"Coming soon",Toast.LENGTH_SHORT).show();
                 break;
             case R.id.card_card:
-                Toast.makeText(this,"Coming soon",Toast.LENGTH_SHORT).show();
-                //toolbar.setTitle(R.string.fun_title_your_card);
-                //if (mCard == null) mCard = new CardFragment();
-                //transaction.replace(R.id.tab_content,mCard);
+                //Toast.makeText(this,"Coming soon",Toast.LENGTH_SHORT).show();
+                toolbar.setTitle(R.string.fun_title_your_card);
+                if (mCard == null) mCard = new CardFragment();
+                transaction.replace(R.id.tab_content,mCard);
                 break;
             case R.id.card_library:
                 Toast.makeText(this,"Coming soon",Toast.LENGTH_SHORT).show();
