@@ -42,8 +42,6 @@ import xyz.leezoom.grain.util.TcpUtil;
  */
 public class CardFragment extends Fragment {
 
-    // FIXME: 9/6/17 get card info failed
-
     @BindView(R.id.cd_recent_money_list) ListView moneyListView;
     @BindView(R.id.cd_pic) CircleImageView mUserPic;
     @BindView(R.id.cd_name) TextView mName;
@@ -82,8 +80,9 @@ public class CardFragment extends Fragment {
         query = getActivity().getSharedPreferences("query",Context.MODE_PRIVATE);
         String name = MyBase64.BASE64ToString(info.getString("nnn","none"));
         String account = MyBase64.BASE64ToString(info.getString("aaa","none"));
-        String idCard = MyBase64.BASE64ToString(info.getString("ppp","none"));
-        String pass = idCard.substring(9, 18);
+        String pass = MyBase64.BASE64ToString(info.getString("ppp","none"));
+        String hostInfo = MyBase64.BASE64ToString(info.getString("hhh","none"));
+        String idCard = MyBase64.BASE64ToString(info.getString("ccc","none"));
         user = new User();
         user.setName(name);
         user.setAccount(account);
@@ -92,6 +91,7 @@ public class CardFragment extends Fragment {
         user.setExtend(account);
         user.setPassword(pass);
         user.setToken(MyBase64.BASE64ToString(query.getString("ttt","none")));
+        user.setHostInfo(hostInfo);
         initList();
         //gte base info
         cTask = new NetWorkTask(user, BASEINFO);
@@ -178,9 +178,12 @@ public class CardFragment extends Fragment {
                 Date date = new Date();
                 SimpleDateFormat ft = new SimpleDateFormat("yyyyMMdd");
                 System.out.println(ft.format(date));
-                packMessage=new PackMessage(user.getAccount(),user.getCertCard(),user.getExtend()+","+ft.format(date)+",0",user.getHostInfo(),user.getOthers(),user.getPassword(),user.getSchoolId(),user.getPhoneNumber(),queryType.name(),user.getToken(),user.getName(),user.getVersion());
+                //// TODO: 9/7/17
+                packMessage=new PackMessage(queryType.name(), user.getName(), user.getSchoolId(), user.getAccount(), user.getPassword(),
+                        user.getPhoneNumber(), user.getCertCard(), user.getToken(), user.getExtend()+","+ft.format(date)+",0",user.getHostInfo(),user.getVersion(),user.getOthers());
             }else {
-                packMessage=new PackMessage(user.getAccount(),user.getCertCard(),user.getExtend(),user.getHostInfo(),user.getOthers(),user.getPassword(),user.getSchoolId(),user.getPhoneNumber(),queryType.name(),user.getToken(),user.getName(),user.getVersion());
+                packMessage=new PackMessage(queryType.name(), user.getName(), user.getSchoolId(), user.getAccount(), user.getPassword(),
+                        user.getPhoneNumber(), user.getCertCard(), user.getToken(), user.getExtend(),user.getHostInfo(),user.getVersion(),user.getOthers());
             }
             TcpUtil tcpUtil= new  TcpUtil(ServerIp.cardServerPort,packMessage);
             String receiveMsg = tcpUtil.receiveString();

@@ -14,7 +14,7 @@
     <string name="action_sign_in">Sign in</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="error_invalid_schoolId">This SchoolId is invalid</string>
-    <string name="error_invalid_password">Password must be your ID number(18 digits)</string>
+    <string name="error_invalid_password">Password maybe your ID number(last 9 digits)</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
 
@@ -43,7 +43,9 @@
     <string name="cd_title_balance">Balance</string>
 
 
+    <!--my info-->
     <string name="dev_email" translatable="false">reindeerlee.work@gmail.com</string>
     <string name="about_page" translatable="false">https://github.com/LeeReindeer/Grain/blob/master/README.md</string>
+    <string name="update_page" translatable="false">https://www.pgyer.com/grain</string>
 
 </resources>

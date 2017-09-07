@@ -11,6 +11,7 @@ public enum QueryType {
     Validation,
     //get  last version number
     VersionNumber,
+    Version,
     CardUserBaseInfo,
     //user pic
     CardUserPicture,

@@ -1,40 +1,48 @@
 package xyz.leezoom.grain.module;
 
+import android.content.Context;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
+import android.os.Build;
+import android.util.Log;
+
 import java.util.Random;
 
 /**
  * @Author lee
- * @Time 9/4/17.
- */
+*/
+
+
 public class User {
+
     private String name="";
     private String schoolId="";
-    private String account="";
+    private String account=""; // no use
     private String password="";
-    private String phoneNumber="";
+    private String phoneNumber=""; // no use
     private String certCard="";
     private String token="";
     private String extend=""; //查询参数
-    private String hostInfo="NEM-AL10,192.168.1.100,F4:CB:52:13:05:49,,中国移动,460022147545798,898600C1111456040898";
-    private String version="7.0,2.160125.8,20150608";
-    private String others="1504533068218,net";
+    private String hostInfo="";
+    private String version="7.0,2.160125.8,20150608"; // no use
+    private String others="1504533068218,net";; // no use
 
-    public User() {
-    }
 
-    //simulate
-    private String getRandomPhoneVersion(){
-        String  [] phones = {"MI 5", "MI 5s", "Mi Note 2","KNT-AL10", "EVA-AL00","NTS-AL00", "VTR-AL00", "SM-G9300 ", "SM-G9350", "SM-G9500", "SM705", "SM801", "OD105", "OPPO R7sPlus", "vivo X7", "OPPO R9s Plus", "OPPO R11 "};
-        Random random = new Random();
-        return phones[random.nextInt(17)];
-    }
-
-    public User(String name, String schoolId, String password, String certCard, String extend) {
+    public User(String name, String schoolId, String password, String certCard, String extend, String hostInfo, String token) {
         this.name = name;
         this.schoolId = schoolId;
         this.password = password;
         this.certCard = certCard;
         this.extend = extend;
+        this.hostInfo = hostInfo;
+        this.token = token;
+    }
+
+    public User() {
+    }
+
+    public void setHostInfo(String hostInfo) {
+        this.hostInfo = hostInfo;
     }
 
     public String getHostInfo() {

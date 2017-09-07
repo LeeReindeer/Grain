@@ -67,8 +67,9 @@ public class MainActivity extends AppCompatActivity
         query = getSharedPreferences("query",Context.MODE_PRIVATE);
         String name = MyBase64.BASE64ToString(info.getString("nnn","none"));
         String account = MyBase64.BASE64ToString(info.getString("aaa","none"));
-        String idCard = MyBase64.BASE64ToString(info.getString("ppp","none"));
-        String pass = idCard.substring(9, 18);
+        String pass = MyBase64.BASE64ToString(info.getString("ppp","none"));
+        String hostInfo = MyBase64.BASE64ToString(info.getString("hhh","none"));
+        String idCard = MyBase64.BASE64ToString(info.getString("ccc","none"));
         user.setName(name);
         user.setAccount(account);
         user.setSchoolId(account);
@@ -76,6 +77,7 @@ public class MainActivity extends AppCompatActivity
         user.setExtend(account);
         user.setPassword(pass);
         user.setToken(MyBase64.BASE64ToString(query.getString("ttt","none")));
+        user.setHostInfo(hostInfo);
     }
 
 
@@ -184,12 +186,14 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_update:
                 //check update
-                Toast.makeText(this,"This is the last version",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this,"This is the last version",Toast.LENGTH_SHORT).show();
+                Intent update = new Intent(Intent.ACTION_VIEW,Uri.parse(getString(R.string.update_page)));
+                startActivity(update);
                 break;
             case R.id.nav_about:
                 //show about page
-                Intent net = new Intent(Intent.ACTION_VIEW,Uri.parse(getString(R.string.about_page)));
-                startActivity(net);
+                Intent about = new Intent(Intent.ACTION_VIEW,Uri.parse(getString(R.string.about_page)));
+                startActivity(about);
                 break;
             case R.id.nav_exit:
                 //finish();
@@ -200,8 +204,8 @@ public class MainActivity extends AppCompatActivity
                 editor.putString("ppp","");
                 editor.putBoolean("isLogin",false);
                 editor.apply();
-                Intent intent = new Intent(MainActivity.this,LoginActivity.class);
-                startActivity(intent);
+                Intent exit = new Intent(MainActivity.this,LoginActivity.class);
+                startActivity(exit);
                 finish();
                 break;
             case R.id.nav_share:

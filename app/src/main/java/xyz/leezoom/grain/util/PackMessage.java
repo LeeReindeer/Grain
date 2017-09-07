@@ -24,7 +24,8 @@ public class PackMessage {
     public String m_username = "";
     public String m_version = "";
 
-    public PackMessage(String m_accnum, String m_certcode, String m_extend, String m_hostinfo, String m_other, String m_passwd, String m_percode, String m_phonenum, String m_questtype, String m_token, String m_username, String m_version) {
+    public PackMessage(String m_questtype, String m_username, String m_percode, String m_accnum, String m_passwd,  String m_phonenum,
+                       String m_certcode, String m_token, String m_extend, String m_hostinfo,  String m_version, String m_other) {
         this.m_accnum = m_accnum;
         this.m_certcode = m_certcode;
         this.m_extend = m_extend;
@@ -40,7 +41,6 @@ public class PackMessage {
     }
 
     public String PackQuestMessage() {
-        // TODO: 4/14/17 core 5
         return new StringBuilder(String.valueOf(new StringBuilder(String.valueOf(new StringBuilder(String.valueOf(new StringBuilder(String.valueOf(new StringBuilder(String.valueOf(new StringBuilder(String.valueOf(new StringBuilder(String.valueOf(new StringBuilder(String.valueOf(new StringBuilder(String.valueOf(new StringBuilder(String.valueOf(new StringBuilder(String.valueOf("" + this.m_questtype + SplitFields)).append(this.m_username).append(SplitFields).toString())).append(this.m_percode).append(SplitFields).toString())).append(this.m_accnum).append(SplitFields).toString())).append(this.m_passwd).append(SplitFields).toString())).append(this.m_phonenum).append(SplitFields).toString())).append(this.m_certcode).append(SplitFields).toString())).append(this.m_token).append(SplitFields).toString())).append(this.m_extend).append(SplitFields).toString())).append(this.m_hostinfo).append(SplitFields).toString())).append(this.m_version).append(SplitFields).toString())).append(this.m_other).toString();
     }
 

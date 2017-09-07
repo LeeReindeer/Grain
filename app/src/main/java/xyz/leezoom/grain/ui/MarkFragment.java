@@ -1,8 +1,11 @@
 package xyz.leezoom.grain.ui;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -110,8 +113,9 @@ public class MarkFragment extends Fragment {
         query = getActivity().getSharedPreferences("query",Context.MODE_PRIVATE);
         String name = MyBase64.BASE64ToString(info.getString("nnn","none"));
         String account = MyBase64.BASE64ToString(info.getString("aaa","none"));
-        String idCard = MyBase64.BASE64ToString(info.getString("ppp","none"));
-        String pass = idCard.substring(9, 18);
+        String pass = MyBase64.BASE64ToString(info.getString("ppp","none"));
+        String hostInfo = MyBase64.BASE64ToString(info.getString("hhh","none"));
+        String idCard = MyBase64.BASE64ToString(info.getString("ccc","none"));
         user.setName(name);
         user.setAccount(account);
         user.setSchoolId(account);
@@ -119,13 +123,9 @@ public class MarkFragment extends Fragment {
         user.setExtend(account);
         user.setPassword(pass);
         user.setToken(MyBase64.BASE64ToString(query.getString("ttt","none")));
-        if (fromNet) {
-            markTask = new NetWorkTask(user, queryType);
-            markTask.execute((Void) null);
-        }else{
-            getMarkDataFromLocal(null,false);
-            adapter.notifyDataSetChanged();
-        }
+        user.setHostInfo(hostInfo);
+        markTask = new NetWorkTask(user, queryType);
+        markTask.execute((Void) null);
         /*Mark mark = new Mark();
         mark.setName("大学英语1");
         mark.setTeacherName(" ming");
@@ -140,16 +140,11 @@ public class MarkFragment extends Fragment {
      * @param netMarks marks from internet
      * @return
      */
-    private boolean getMarkDataFromLocal(String netMarks,boolean isFromNet){
+    private void getMarkDataFromLocal(String netMarks){
         markList.clear();
         query = getActivity().getSharedPreferences("query", Context.MODE_PRIVATE);
         String marks = MyBase64.BASE64ToString(query.getString(queryType.name(),"none"));
-        boolean isHaveLocalData = !marks.equals("none");
-        if (!isHaveLocalData || marks.equals("false")) {
-            isHaveLocalData = false;
-            return false;
-        }
-        String allMarks [] = !isFromNet ? marks.split("\n"):netMarks.split("\n");
+        String allMarks [] = netMarks.split("\n");
         for (String e: allMarks){
             Log.d("mark",e);
             markSplitArray = e.split(PackMessage.SplitFields);
@@ -164,7 +159,6 @@ public class MarkFragment extends Fragment {
             mark.setGp(markSplitArray[8]);
             markList.add(mark);
         }
-        return isHaveLocalData;
     }
 
     /**
@@ -188,7 +182,9 @@ public class MarkFragment extends Fragment {
         @Override
         protected Boolean doInBackground(Void... params) {
 
-            PackMessage packMessage=new PackMessage(user.getAccount(),user.getCertCard(),user.getExtend(),user.getHostInfo(),user.getOthers(),user.getPassword(),user.getSchoolId(),user.getPhoneNumber(),queryType.name(),user.getToken(),user.getName(),user.getVersion());
+            //// TODO: 9/7/17
+            PackMessage packMessage=new PackMessage(queryType.name(), user.getName(), user.getSchoolId(), user.getAccount(), user.getPassword(),
+                    user.getPhoneNumber(), user.getCertCard(), user.getToken(), user.getExtend(),user.getHostInfo(),user.getVersion(),user.getOthers());
             TcpUtil tcpUtil= new  TcpUtil(ServerIp.mainServerPort,packMessage);
             String receiveMsg = tcpUtil.receiveString();
             query = getActivity().getSharedPreferences("query",Context.MODE_PRIVATE);
@@ -210,10 +206,10 @@ public class MarkFragment extends Fragment {
                 String marks = MyBase64.BASE64ToString(query.getString(queryType.name(),"none"));
                 if (marks == null || marks.equals("false")) {
                     //todo show failed page or send broadcast to show dialog
-                    Toast.makeText(getContext(), "Failed.YOu can try to enter new token.",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Failed.Try to sign in again.",Toast.LENGTH_LONG).show();
                     return;
                 }
-                getMarkDataFromLocal(marks,true);
+                getMarkDataFromLocal(marks);
                 adapter.notifyDataSetChanged();
                 refreshLayout.setRefreshing(false);
             } else {
