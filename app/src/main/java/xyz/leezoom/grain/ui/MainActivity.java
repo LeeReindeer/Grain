@@ -208,7 +208,7 @@ public class MainActivity extends AppCompatActivity
         switch (id){
             case R.id.card_mark:
                 toolbar.setTitle(R.string.fun_title_your_mark);
-                Toast.makeText(this,"mark,call on mainActivity",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this,"mark,call on mainActivity",Toast.LENGTH_SHORT).show();
                 if (mMark == null) mMark = new MarkFragment();
                 transaction.replace(R.id.tab_content,mMark);
                 break;

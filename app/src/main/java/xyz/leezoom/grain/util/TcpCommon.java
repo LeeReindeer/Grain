@@ -1,7 +1,5 @@
-package xyz.leezoom.grain.util; /**
- * @Author lee
- * @Time 9/3/17.
- */
+package xyz.leezoom.grain.util;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;

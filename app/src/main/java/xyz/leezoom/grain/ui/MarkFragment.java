@@ -35,6 +35,7 @@ import xyz.leezoom.grain.module.User;
 import xyz.leezoom.grain.util.MyBase64;
 import xyz.leezoom.grain.util.PackMessage;
 import xyz.leezoom.grain.util.TcpCommon;
+import xyz.leezoom.grain.util.TcpUtil;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -156,32 +157,15 @@ public class MarkFragment extends Fragment {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            try {
-                PackMessage packMessage=new PackMessage(user.getAccount(),user.getCertCard(),user.getExtend(),user.getHostInfo(),user.getOthers(),user.getPassword(),user.getSchoolId(),user.getPhoneNumber(),queryType.name(),user.getToken(),user.getName(),user.getVersion());
-                String packMsg= MyBase64.stringToBASE64(packMessage.PackQuestMessage());
-                String receiveMsg="";
-                TcpCommon tcpCommon=new TcpCommon();
-                Socket socket=new Socket(ServerIp.mainIp,Integer.valueOf(ServerIp.mainServerPort));
-                socket.setSoTimeout(5000);
-                InputStream in=socket.getInputStream();
-                OutputStream out=socket.getOutputStream();
-                tcpCommon.SendString(out,packMsg);
-                receiveMsg=tcpCommon.ReceiveString(in);
-                in.close();
-                out.close();
-                socket.close();
-                query = getActivity().getSharedPreferences("query",Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = query.edit();
-                editor.putString(queryType.name(),MyBase64.stringToBASE64(receiveMsg));
-                // commit
-                editor.apply();
-            } catch (SocketException e) {
-                e.printStackTrace();
-            } catch (UnknownHostException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+
+            PackMessage packMessage=new PackMessage(user.getAccount(),user.getCertCard(),user.getExtend(),user.getHostInfo(),user.getOthers(),user.getPassword(),user.getSchoolId(),user.getPhoneNumber(),queryType.name(),user.getToken(),user.getName(),user.getVersion());
+            TcpUtil tcpUtil= new  TcpUtil(ServerIp.mainServerPort,packMessage);
+            String receiveMsg = tcpUtil.receiveString();
+            query = getActivity().getSharedPreferences("query",Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = query.edit();
+            editor.putString(queryType.name(),MyBase64.stringToBASE64(receiveMsg));
+            // commit
+            editor.apply();
             return true;
         }
 
