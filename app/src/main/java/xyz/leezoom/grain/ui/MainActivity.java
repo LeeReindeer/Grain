@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 AlertDialog dialog= builder
                         .setTitle("Your Token")
-                        .setIcon(R.mipmap.ic_launcher)
+                        .setIcon(R.mipmap.ic_reindeer)
                         .setCancelable(true)
                         .setView(editToken=new EditText(MainActivity.this))
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
