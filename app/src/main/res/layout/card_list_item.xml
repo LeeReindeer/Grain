@@ -14,7 +14,6 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginRight="16dp"
-            android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
             tools:text="2017-9-6 16:44:32" />
 
         <TextView
@@ -38,6 +37,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:textColor="@android:color/black"
             android:layout_marginRight="16dp"
             tools:text="-1.10"/>
 

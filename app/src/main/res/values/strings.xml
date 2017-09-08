@@ -20,20 +20,21 @@
 
 
     <!--drawer title-->
-    <string name="drawer_title_others">Others</string>
     <string name="drawer_title_feedback">Feedback</string>
     <string name="drawer_title_update">Update</string>
     <string name="drawer_title_about">About</string>
     <string name="drawer_title_exit">Login out</string>
-    <string name="drawer_title_other_app">Other app</string>
-    <string name="drawer_title_share">Share</string>
-
-
+    <string name="drawer_title_mark">Mark</string>
+    <string name="drawer_title_schedule">Schedule</string>
+    <string name="drawer_title_card">Card</string>
+    <string name="drawer_title_library">Library</string>
+    <string name="drawer_title_others">Others</string>
 
     <!-- fun title-->
     <string name="fun_title_your_mark" translatable="false">君の成绩</string>
     <string name="fun_title_your_card">Your card</string>
     <string name="fun_title_library">Library</string>
+    <string name="fun_title_schedule">Schedule</string>
 
     <!-- card title -->
     <string name="cd_title_time">Time</string>
@@ -47,5 +48,9 @@
     <string name="dev_email" translatable="false">reindeerlee.work@gmail.com</string>
     <string name="about_page" translatable="false">https://github.com/LeeReindeer/Grain/blob/master/README.md</string>
     <string name="update_page" translatable="false">https://www.pgyer.com/grain</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+
 
 </resources>

@@ -3,33 +3,41 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_feedback"
-            android:icon="@drawable/ic_feedback_black_24dp"
-            android:title="@string/drawer_title_feedback" />
+            android:id="@+id/nav_mark"
+            android:icon="@drawable/ic_mark_black_48dp"
+            android:title="@string/drawer_title_mark" />
         <item
-            android:id="@+id/nav_update"
-            android:icon="@drawable/ic_update_black_24dp"
-            android:title="@string/drawer_title_update" />
+            android:id="@+id/nav_schedule"
+            android:icon="@drawable/ic_schedule_black_48dp"
+            android:title="@string/drawer_title_schedule"/>
         <item
-            android:id="@+id/nav_about"
-            android:icon="@drawable/ic_info_black_24dp"
-            android:title="@string/drawer_title_about" />
+            android:id="@+id/nav_card"
+            android:icon="@drawable/ic_card_black_48dp"
+            android:title="@string/drawer_title_card"/>
+        <item
+            android:id="@+id/nav_library"
+            android:icon="@drawable/ic_library_black_48dp"
+            android:title="@string/drawer_title_library"/>
         <item
             android:id="@+id/nav_exit"
-            android:icon="@drawable/ic_exit_to_app_black_24dp"
+            android:icon="@drawable/ic_exit_to_app_black_48dp"
             android:title="@string/drawer_title_exit" />
     </group>
 
     <item android:title="@string/drawer_title_others">
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_share_black_24dp"
-                android:title="@string/drawer_title_share" />
+                android:id="@+id/nav_feedback"
+                android:icon="@drawable/ic_bug_report_black_48dp"
+                android:title="@string/drawer_title_feedback" />
             <item
-                android:id="@+id/nav_other_app"
-                android:icon="@drawable/ic_share_black_24dp"
-                android:title="@string/drawer_title_other_app" />
+                android:id="@+id/nav_update"
+                android:icon="@drawable/ic_update_black_48dp"
+                android:title="@string/drawer_title_update" />
+            <item
+                android:id="@+id/nav_about"
+                android:icon="@drawable/ic_about_black_48dp"
+                android:title="@string/drawer_title_about" />
         </menu>
     </item>
 

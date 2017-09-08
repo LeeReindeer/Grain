@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="action_settings">设置</string>
+    <string name="action_sign_in">登录</string>
+    <string name="action_sign_in_short">登录</string>
+    <string name="cd_title_balance">余额</string>
+    <string name="cd_title_consume">消费</string>
+    <string name="cd_title_place">地点</string>
+    <string name="cd_title_terminal">终端</string>
+    <string name="cd_title_time">时间</string>
+    <string name="drawer_title_about">关于</string>
+    <string name="drawer_title_exit">登出</string>
+    <string name="drawer_title_feedback">反馈</string>
+    <string name="drawer_title_others">其他</string>
+    <string name="drawer_title_update">更新</string>
+    <string name="error_field_required">请填写</string>
+    <string name="error_incorrect_password">密码不正确</string>
+    <string name="error_invalid_password">如果你没有更改密码,初始密码是你的身份证号码最后九位</string>
+    <string name="error_invalid_schoolId">学号格式不正确</string>
+    <string name="fun_title_library">图书馆</string>
+    <string name="fun_title_your_card">校园卡</string>
+    <string name="login_id">学号</string>
+    <string name="login_name">你的名字</string>
+    <string name="login_pass">密码</string>
+    <string name="title_activity_login">登录</string>
+    <string name="app_name">怪小助</string>
+    <string name="drawer_title_library">图书馆</string>
+    <string name="drawer_title_mark">成绩单</string>
+    <string name="drawer_title_schedule">课程表</string>
+    <string name="drawer_title_card">校园卡</string>
+    <string name="fun_title_schedule">课程表</string>
+</resources>

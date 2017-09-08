@@ -182,7 +182,18 @@ public class MarkFragment extends Fragment {
         @Override
         protected Boolean doInBackground(Void... params) {
 
-            //// TODO: 9/7/17
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            refreshLayout.setRefreshing(true);
+                        }
+                    });
+                }
+            }).start();
+
             PackMessage packMessage=new PackMessage(queryType.name(), user.getName(), user.getSchoolId(), user.getAccount(), user.getPassword(),
                     user.getPhoneNumber(), user.getCertCard(), user.getToken(), user.getExtend(),user.getHostInfo(),user.getVersion(),user.getOthers());
             TcpUtil tcpUtil= new  TcpUtil(ServerIp.mainServerPort,packMessage);

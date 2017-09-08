@@ -225,8 +225,6 @@ public class LoginActivity extends AppCompatActivity{
             try {
                 // Simulate network access.
                 Thread.sleep(2000);
-                // TODO: 9/7/17
-
                 //first time validation
                 User user=new User(mName,mAccount,mPassword,"","",getDeviceInfo(),""); // get token
                 PackMessage packMessage=new PackMessage(QueryType.Validation.name(), mName, mAccount, user.getAccount(), user.getPassword(),

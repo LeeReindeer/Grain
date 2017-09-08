@@ -175,6 +175,8 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction transaction = fm.beginTransaction();
         switch (id){
             case R.id.nav_feedback:
                 //send email to me
@@ -208,11 +210,23 @@ public class MainActivity extends AppCompatActivity
                 startActivity(exit);
                 finish();
                 break;
-            case R.id.nav_share:
+            case R.id.nav_mark:
+                toolbar.setTitle(R.string.fun_title_your_mark);
+                if (mMark == null) mMark = new MarkFragment();
+                transaction.replace(R.id.tab_content,mMark);
                 break;
-            case R.id.nav_other_app:
+            case R.id.nav_card:
+                toolbar.setTitle(R.string.fun_title_your_card);
+                if (mCard == null) mCard = new CardFragment();
+                transaction.replace(R.id.tab_content,mCard);
+                break;
+            case R.id.nav_library:
+                break;
+            case R.id.nav_schedule:
                 break;
         }
+        transaction.addToBackStack(null);
+        transaction.commit();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -225,7 +239,6 @@ public class MainActivity extends AppCompatActivity
         switch (id){
             case R.id.card_mark:
                 toolbar.setTitle(R.string.fun_title_your_mark);
-                //Toast.makeText(this,"mark,call on mainActivity",Toast.LENGTH_SHORT).show();
                 if (mMark == null) mMark = new MarkFragment();
                 transaction.replace(R.id.tab_content,mMark);
                 break;
@@ -234,14 +247,13 @@ public class MainActivity extends AppCompatActivity
                 Toast.makeText(this,"Coming soon",Toast.LENGTH_SHORT).show();
                 break;
             case R.id.card_card:
-                //Toast.makeText(this,"Coming soon",Toast.LENGTH_SHORT).show();
                 toolbar.setTitle(R.string.fun_title_your_card);
                 if (mCard == null) mCard = new CardFragment();
                 transaction.replace(R.id.tab_content,mCard);
                 break;
             case R.id.card_library:
-                Toast.makeText(this,"Coming soon",Toast.LENGTH_SHORT).show();
-                //toolbar.setTitle(R.string.fun_title_library);
+                Intent libraryIntent = new Intent(MainActivity.this,LibraryActivity.class);
+                startActivity(libraryIntent);
                 break;
         }
         //add to stack

@@ -178,7 +178,6 @@ public class CardFragment extends Fragment {
                 Date date = new Date();
                 SimpleDateFormat ft = new SimpleDateFormat("yyyyMMdd");
                 System.out.println(ft.format(date));
-                //// TODO: 9/7/17
                 packMessage=new PackMessage(queryType.name(), user.getName(), user.getSchoolId(), user.getAccount(), user.getPassword(),
                         user.getPhoneNumber(), user.getCertCard(), user.getToken(), user.getExtend()+","+ft.format(date)+",0",user.getHostInfo(),user.getVersion(),user.getOthers());
             }else {
@@ -204,7 +203,7 @@ public class CardFragment extends Fragment {
                 final String cardData = MyBase64.BASE64ToString(query.getString(queryType.name(),"none"));
                 if (cardData == null || cardData.equals("false")) {
                     //todo show failed page or send broadcast to show dialog
-                    Toast.makeText(getContext(), "Failed.YOu can try to enter new token.",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Failed.Try to sign again.",Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (queryType == BASEINFO){
@@ -230,7 +229,7 @@ public class CardFragment extends Fragment {
                             for (String e : allPayment) {
                                 String [] singlePay = e.split(PackMessage.SplitFields);
                                 Card card1 = new Card();
-                                card1.setTime(singlePay[1].substring(0,11));
+                                card1.setTime(singlePay[1].replace(" ","\n"));
                                 card1.setPlace(singlePay[12]);
                                 card1.setTerminal(singlePay[9].replace("\r",""));
                                 card1.setConsume(singlePay[4].contains("-")?singlePay[4]:"+"+singlePay[4]);
@@ -252,6 +251,7 @@ public class CardFragment extends Fragment {
                     }).start();
 
                 }else if (queryType == PICTURE){
+                    // TODO: 9/8/17 get user pic
 
                 }
                 showProgress(false);
