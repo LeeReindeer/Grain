@@ -10,32 +10,31 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:fitsSystemWindows="true"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <ImageView
         android:id="@+id/account_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
-        app:srcCompat="@mipmap/ic_reindeer_round"
-        android:scaleType="centerCrop"/>
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_gravity="center"
+        android:fitsSystemWindows="true"
+        android:scaleType="centerCrop"
+        app:srcCompat="@mipmap/ic_reindeer_round" />
 
     <TextView
         android:id="@+id/account_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
+        android:paddingLeft="@dimen/nav_header_vertical_spacing"
+        android:paddingRight="@dimen/nav_header_vertical_spacing"
         android:text="@string/app_name"
         android:textSize="14sp"
         android:fontFamily="sans-serif"
         android:textColor="@color/brown_700"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/dev_email"
-        android:textColor="@color/brown_700"/>
 
 </LinearLayout>
