@@ -1,16 +1,21 @@
 package xyz.leezoom.grain.ui;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -22,6 +27,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.pgyersdk.feedback.PgyFeedback;
+import com.pgyersdk.update.PgyUpdateManager;
 
 import xyz.leezoom.grain.R;
 import xyz.leezoom.grain.module.User;
@@ -44,10 +52,12 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        PgyUpdateManager.setIsForced(false);
+        PgyUpdateManager.register(this,"xyz.leezoom.grain");
         checkLogin();
         loadData();
         initUI();
-
+        checkPermission();
     }
 
 
@@ -59,6 +69,27 @@ public class MainActivity extends AppCompatActivity
         Intent intent=new Intent(MainActivity.this,LoginActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    private void checkPermission(){
+        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
+                PackageManager.PERMISSION_GRANTED){
+            Toast.makeText(MainActivity.this,getString(R.string.app_name)+"need write storage permission to run.",Toast.LENGTH_LONG).show();
+            ActivityCompat.requestPermissions(MainActivity.this,new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
+        }else {
+            return;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == 1){
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                //do nothing
+            }else {
+                Toast.makeText(MainActivity.this,"You denied me",Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     private void loadData(){
@@ -89,33 +120,7 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this,"Enter your token",Toast.LENGTH_SHORT).show();
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                AlertDialog dialog= builder
-                        .setTitle("Your Token")
-                        .setIcon(R.mipmap.ic_reindeer)
-                        .setCancelable(true)
-                        .setView(editToken=new EditText(MainActivity.this))
-                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                String token = editToken.getText().toString();
-                                Log.d("Main",token);
-                                Log.d("Main",i+"");
-                                //token
-                                query = getSharedPreferences("query",MODE_PRIVATE);
-                                SharedPreferences.Editor editor = query.edit();
-                                if (token!=null&&!token.isEmpty()&&token.length()==32) {
-                                    editor.putString("ttt", MyBase64.stringToBASE64(token));
-                                    Log.d("Main",token);
-                                    editor.apply();
-                                }
-                                editor.clear();
-                            }
-                        })
-                        .setNegativeButton("取消",null)
-                        .create();
-                dialog.show();
+                PgyFeedback.getInstance().showDialog(MainActivity.this);
             }
         });
 
@@ -149,6 +154,12 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        PgyUpdateManager.unregister();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
@@ -179,18 +190,13 @@ public class MainActivity extends AppCompatActivity
         FragmentTransaction transaction = fm.beginTransaction();
         switch (id){
             case R.id.nav_feedback:
-                //send email to me
-                Intent data = new Intent(Intent.ACTION_SENDTO);
-                data.setData(Uri.parse("mailto:"+getString(R.string.dev_email)));
-                data.putExtra(Intent.EXTRA_SUBJECT, "Grain feedback");
-                data.putExtra(Intent.EXTRA_TEXT, "");
-                startActivity(data);
+                PgyFeedback.getInstance().showDialog(MainActivity.this);
                 break;
             case R.id.nav_update:
                 //check update
-                //Toast.makeText(this,"This is the last version",Toast.LENGTH_SHORT).show();
-                Intent update = new Intent(Intent.ACTION_VIEW,Uri.parse(getString(R.string.update_page)));
-                startActivity(update);
+                Toast.makeText(this,"This is the last version",Toast.LENGTH_SHORT).show();
+                //Intent update = new Intent(Intent.ACTION_VIEW,Uri.parse(getString(R.string.update_page)));
+                //startActivity(update);
                 break;
             case R.id.nav_about:
                 //show about page
@@ -252,8 +258,10 @@ public class MainActivity extends AppCompatActivity
                 transaction.replace(R.id.tab_content,mCard);
                 break;
             case R.id.card_library:
-                Intent libraryIntent = new Intent(MainActivity.this,LibraryActivity.class);
-                startActivity(libraryIntent);
+                // TODO: 9/8/17 library
+                Toast.makeText(this,"Coming soon",Toast.LENGTH_SHORT).show();
+                //Intent libraryIntent = new Intent(MainActivity.this,LibraryActivity.class);
+                //startActivity(libraryIntent);
                 break;
         }
         //add to stack

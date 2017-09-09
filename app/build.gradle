@@ -7,8 +7,8 @@ android {
         applicationId "xyz.leezoom.grain"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 3
-        versionName "1.3.1-beta"
+        versionCode 6
+        versionName "1.4-beta"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -26,14 +26,13 @@ dependencies {
     })
 
     compile files('libs/sun.misc.BASE64Decoder.jar')
-
+    compile 'com.pgyersdk:sdk:2.7.4'
     compile 'com.android.support:appcompat-v7:26.0.0-alpha1'
     compile 'com.android.support:design:26.0.0-alpha1'
     compile 'com.android.support:support-v4:26.0.0-alpha1'
     compile 'com.android.support:cardview-v7:26.+'
     compile 'com.jakewharton:butterknife:8.8.1'
     compile 'de.hdodenhof:circleimageview:2.1.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.miguelcatalan:materialsearchview:1.4.0'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
