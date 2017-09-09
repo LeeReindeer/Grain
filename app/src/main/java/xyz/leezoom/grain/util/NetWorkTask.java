@@ -10,6 +10,8 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import xyz.leezoom.grain.module.QueryType;
 import xyz.leezoom.grain.module.ServerIp;
@@ -25,56 +27,49 @@ public class NetWorkTask extends AsyncTask<Void, Void, Boolean> {
 
     private User user;
     private NetWorkTask mTask;
-    private OnNetWorkListener listener;
-    private SharedPreferences query;
+    private NetWorkListener listener;
     private Context mContext;
+    private String port;
+    private SharedPreferences query;
     private QueryType queryType;
 
     /**
      *
      * @param user
-     * @param context
      * @param queryType
-     */
-    public NetWorkTask(User user, Context context, QueryType queryType) {
+     * @param listener
+     * */
+    public NetWorkTask(User user, QueryType queryType, String port, NetWorkListener listener, Context context) {
         this.user = user;
-        this.mContext = context;
+        this.listener = listener;
         this.queryType = queryType;
-        if (context instanceof OnNetWorkListener) {
-            listener = ((OnNetWorkListener) context);
-        }
+        this.mContext = context;
+        this.port = port;
     }
 
     @Override
     protected Boolean doInBackground(Void... params) {
-        try {
-            //Thread.sleep(500);
-            PackMessage packMessage=new PackMessage(user.getAccount(),user.getCertCard(),user.getExtend(),user.getHostInfo(),user.getOthers(),user.getPassword(),user.getSchoolId(),user.getPhoneNumber(),queryType.name(),user.getToken(),user.getName(),user.getVersion());
-            String packMsg= MyBase64.stringToBASE64(packMessage.PackQuestMessage());
-            String receiveMsg="";
-            TcpCommon tcpCommon=new TcpCommon();
-            Socket socket=new Socket(ServerIp.mainIp,Integer.valueOf(ServerIp.mainServerPort));
-            socket.setSoTimeout(5000);
-            InputStream in=socket.getInputStream();
-            OutputStream out=socket.getOutputStream();
-            tcpCommon.SendString(out,packMsg);
-            receiveMsg=tcpCommon.ReceiveString(in);
-            in.close();
-            out.close();
-            socket.close();
-            query = mContext.getSharedPreferences("query",Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = query.edit();
-            editor.putString(queryType.name(),MyBase64.stringToBASE64(receiveMsg));
-            // commit
-            editor.apply();
-        } catch (SocketException e) {
-            e.printStackTrace();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        PackMessage packMessage = null;
+        if (queryType == QueryType.CardUserPayment){
+            Date date = new Date();
+            SimpleDateFormat ft = new SimpleDateFormat("yyyyMMdd");
+            //System.out.println(ft.format(date));
+            packMessage=new PackMessage(queryType.name(), user.getName(), user.getSchoolId(), user.getAccount(), user.getPassword(),
+                    user.getPhoneNumber(), user.getCertCard(), user.getToken(), user.getExtend()+","+ft.format(date)+",0",user.getHostInfo(),user.getVersion(),user.getOthers());
+        }else {
+            packMessage=new PackMessage(queryType.name(), user.getName(), user.getSchoolId(), user.getAccount(), user.getPassword(),
+                    user.getPhoneNumber(), user.getCertCard(), user.getToken(), user.getExtend(),user.getHostInfo(),user.getVersion(),user.getOthers());
         }
-        return true;
+
+        String receiveMsg="";
+        TcpUtil tcpUtil = new TcpUtil(port, packMessage);
+        receiveMsg = tcpUtil.receiveString();
+        query = mContext.getSharedPreferences("query",Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = query.edit();
+        editor.putString(queryType.name(),MyBase64.stringToBASE64(receiveMsg));
+        // commit
+        editor.apply();
+        return !(receiveMsg == null || receiveMsg.equals("false"));
     }
 
     @Override
@@ -94,7 +89,7 @@ public class NetWorkTask extends AsyncTask<Void, Void, Boolean> {
        listener.onFailed();
     }
 
-    public interface OnNetWorkListener{
+    public interface NetWorkListener{
         void onSuccess();
         void onFailed();
     }

@@ -173,14 +173,14 @@ public class CardFragment extends Fragment {
         @Override
         protected Boolean doInBackground(Void... params) {
 
-            PackMessage packMessage;
+            PackMessage packMessage = null;
             if (queryType == PAYMENT){
                 Date date = new Date();
                 SimpleDateFormat ft = new SimpleDateFormat("yyyyMMdd");
                 System.out.println(ft.format(date));
                 packMessage=new PackMessage(queryType.name(), user.getName(), user.getSchoolId(), user.getAccount(), user.getPassword(),
                         user.getPhoneNumber(), user.getCertCard(), user.getToken(), user.getExtend()+","+ft.format(date)+",0",user.getHostInfo(),user.getVersion(),user.getOthers());
-            }else {
+            }else if (queryType == BASEINFO){
                 packMessage=new PackMessage(queryType.name(), user.getName(), user.getSchoolId(), user.getAccount(), user.getPassword(),
                         user.getPhoneNumber(), user.getCertCard(), user.getToken(), user.getExtend(),user.getHostInfo(),user.getVersion(),user.getOthers());
             }
