@@ -33,11 +33,6 @@
             android:name=".ui.LoginActivity"
             android:label="@string/title_activity_login">
         </activity>
-        <activity
-            android:name=".ui.LibraryActivity"
-            android:label="@string/fun_title_library"
-            android:theme="@style/LibraryTheme">
-        </activity>
 
 
         <!--AppID-->

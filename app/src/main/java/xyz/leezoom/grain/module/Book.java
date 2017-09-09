@@ -10,8 +10,8 @@ public class Book {
     private String author;
     private String press;
     private String place;
-    private String borrowTime;
-    private String backTime;
+    private String param1;
+    private String param2;
 
     public String getName() {
         return name;
@@ -45,19 +45,19 @@ public class Book {
         this.place = place;
     }
 
-    public String getBorrowTime() {
-        return borrowTime;
+    public String getParam1() {
+        return param1;
     }
 
-    public void setBorrowTime(String borrowTime) {
-        this.borrowTime = borrowTime;
+    public void setParam1(String param1) {
+        this.param1 = param1;
     }
 
-    public String getBackTime() {
-        return backTime;
+    public String getParam2() {
+        return param2;
     }
 
-    public void setBackTime(String backTime) {
-        this.backTime = backTime;
+    public void setParam2(String param2) {
+        this.param2 = param2;
     }
 }

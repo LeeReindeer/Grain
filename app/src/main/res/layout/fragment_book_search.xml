@@ -1,0 +1,40 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="xyz.leezoom.grain.ui.BookSearchFragment">
+
+    <LinearLayout
+        android:background="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/bk_search_view"
+            android:layout_width="0dp"
+            android:layout_height="36dp"
+            android:layout_weight="4"
+            android:layout_marginTop="48dp"
+            android:background="@null"
+            android:maxLines="1"/>
+
+        <ImageView
+            android:id="@+id/bk_action_search"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="36dp"
+            android:layout_marginTop="48dp"
+            android:clickable="true"
+            android:src="@drawable/ic_search_white_48dp"
+            android:scaleType="fitCenter"/>
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/bk_search_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </android.support.v7.widget.RecyclerView>
+
+</LinearLayout>

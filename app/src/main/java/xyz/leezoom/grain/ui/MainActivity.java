@@ -1,16 +1,13 @@
 package xyz.leezoom.grain.ui;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
@@ -21,16 +18,19 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.pgyersdk.feedback.PgyFeedback;
 import com.pgyersdk.update.PgyUpdateManager;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import xyz.leezoom.grain.R;
 import xyz.leezoom.grain.module.User;
 import xyz.leezoom.grain.util.MyBase64;
@@ -45,8 +45,11 @@ public class MainActivity extends AppCompatActivity
     private FunctionFragment mainFunction;
     private MarkFragment mMark;
     private CardFragment mCard;
+    private LibraryFragment mLibrary;
     private Toolbar toolbar;
-    private EditText editToken;
+    @BindView(R.id.multiple_actions) FloatingActionsMenu mulitiAction;
+    @BindView(R.id.fab_a) com.getbase.floatingactionbutton.FloatingActionButton actionA;
+    @BindView(R.id.fab_b) com.getbase.floatingactionbutton.FloatingActionButton actionB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +63,13 @@ public class MainActivity extends AppCompatActivity
         checkPermission();
     }
 
+    @OnClick (R.id.fab_a) void fabA(){
+        PgyFeedback.getInstance().showDialog(MainActivity.this);
+    }
+
+    @OnClick (R.id.fab_b) void fabB(){
+
+    }
 
     //if not login ,start login
     private void checkLogin(){
@@ -113,17 +123,11 @@ public class MainActivity extends AppCompatActivity
 
 
     private void initUI(){
-        //ButterKnife.bind(this);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                PgyFeedback.getInstance().showDialog(MainActivity.this);
-            }
-        });
-
+        ButterKnife.bind(this);
+        actionA.setTitle(getString(R.string.drawer_title_feedback));
+        actionB.setVisibility(View.GONE);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -132,6 +136,9 @@ public class MainActivity extends AppCompatActivity
         drawer.openDrawer(GravityCompat.START);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        View header = navigationView.getHeaderView(0);
+        TextView  navAccountName= (TextView) header.findViewById(R.id.account_name);
+        navAccountName.setText(user.getName());
         setDefaultFragment();
     }
 
@@ -150,6 +157,10 @@ public class MainActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+        }
+
+        if (mulitiAction.isExpanded()){
+            mulitiAction.collapse();
         }
     }
 
@@ -227,6 +238,9 @@ public class MainActivity extends AppCompatActivity
                 transaction.replace(R.id.tab_content,mCard);
                 break;
             case R.id.nav_library:
+                toolbar.setTitle(getString(R.string.fun_title_library));
+                if (mLibrary == null) mLibrary = new LibraryFragment();
+                transaction.replace(R.id.tab_content,mLibrary);
                 break;
             case R.id.nav_schedule:
                 break;
@@ -259,9 +273,12 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.card_library:
                 // TODO: 9/8/17 library
-                Toast.makeText(this,"Coming soon",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this,"Coming soon",Toast.LENGTH_SHORT).show();
                 //Intent libraryIntent = new Intent(MainActivity.this,LibraryActivity.class);
                 //startActivity(libraryIntent);
+                toolbar.setTitle(getString(R.string.fun_title_library));
+                if (mLibrary == null) mLibrary = new LibraryFragment();
+                transaction.replace(R.id.tab_content,mLibrary);
                 break;
         }
         //add to stack

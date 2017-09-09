@@ -1,0 +1,42 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="xyz.leezoom.grain.ui.LibraryFragment">
+
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/view_page"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </android.support.v4.view.ViewPager>
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/lb_tab_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        app:tabMode="scrollable"
+        app:tabGravity="fill">
+
+        <android.support.design.widget.TabItem
+            android:id="@+id/item_books"
+            tools:text="item1"
+            android:icon="@drawable/ic_book_white_48dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp"/>
+
+        <android.support.design.widget.TabItem
+            android:id="@+id/item_search"
+            tools:text="item2"
+            android:icon="@drawable/ic_stars_white_48dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp"/>
+
+    </android.support.design.widget.TabLayout>
+
+</RelativeLayout>
