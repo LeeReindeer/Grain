@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context="xyz.leezoom.grain.ui.CardFragment">
+    tools:context="xyz.leezoom.grain.ui.fragment.CardFragment">
 
     <ProgressBar
         android:id="@+id/cd_progress"

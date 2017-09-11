@@ -1,4 +1,4 @@
-package xyz.leezoom.grain.ui;
+package xyz.leezoom.grain.ui.activity;
 
 import android.Manifest;
 import android.content.Context;
@@ -33,6 +33,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import xyz.leezoom.grain.R;
 import xyz.leezoom.grain.module.User;
+import xyz.leezoom.grain.ui.fragment.CardFragment;
+import xyz.leezoom.grain.ui.fragment.FunctionFragment;
+import xyz.leezoom.grain.ui.fragment.LibraryFragment;
+import xyz.leezoom.grain.ui.fragment.MarkFragment;
 import xyz.leezoom.grain.util.MyBase64;
 
 public class MainActivity extends AppCompatActivity
@@ -211,7 +215,7 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_about:
                 //show about page
-                Intent about = new Intent(Intent.ACTION_VIEW,Uri.parse(getString(R.string.about_page)));
+                Intent about = new Intent(MainActivity.this, AboutActivity.class);
                 startActivity(about);
                 break;
             case R.id.nav_exit:

@@ -1,4 +1,4 @@
-package xyz.leezoom.grain.ui;
+package xyz.leezoom.grain.ui.fragment;
 
 
 import android.animation.Animator;
@@ -33,6 +33,7 @@ import xyz.leezoom.grain.module.Card;
 import xyz.leezoom.grain.module.QueryType;
 import xyz.leezoom.grain.module.ServerIp;
 import xyz.leezoom.grain.module.User;
+import xyz.leezoom.grain.ui.MoneyListAdapter;
 import xyz.leezoom.grain.util.MyBase64;
 import xyz.leezoom.grain.util.PackMessage;
 import xyz.leezoom.grain.util.TcpUtil;

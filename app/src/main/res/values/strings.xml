@@ -46,11 +46,9 @@
 
     <!--my info-->
     <string name="dev_email" translatable="false">reindeerlee.work@gmail.com</string>
-    <string name="about_page" translatable="false">https://github.com/LeeReindeer/Grain/blob/master/README.md</string>
+    <string name="about_page" translatable="false">https://github.com/LeeReindeer/Grain/</string>
     <string name="update_page" translatable="false">https://www.pgyer.com/grain</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+    <string name="about_text">This is Grain which is my personal work.I hope it will bring you a nice experience.\n\nAnd thanks 吃番茄的外星人 design this pretty icon.\n\nTo be continued...</string>
 
 
 </resources>

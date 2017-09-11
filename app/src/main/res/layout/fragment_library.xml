@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="xyz.leezoom.grain.ui.LibraryFragment">
+    tools:context="xyz.leezoom.grain.ui.fragment.LibraryFragment">
 
 
     <android.support.v4.view.ViewPager

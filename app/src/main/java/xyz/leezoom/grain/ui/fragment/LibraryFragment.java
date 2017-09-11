@@ -1,4 +1,4 @@
-package xyz.leezoom.grain.ui;
+package xyz.leezoom.grain.ui.fragment;
 
 
 import android.os.Bundle;

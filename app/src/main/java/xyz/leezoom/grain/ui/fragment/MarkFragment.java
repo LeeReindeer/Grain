@@ -1,4 +1,4 @@
-package xyz.leezoom.grain.ui;
+package xyz.leezoom.grain.ui.fragment;
 
 
 import android.annotation.SuppressLint;
@@ -29,6 +29,7 @@ import xyz.leezoom.grain.module.Mark;
 import xyz.leezoom.grain.module.QueryType;
 import xyz.leezoom.grain.module.ServerIp;
 import xyz.leezoom.grain.module.User;
+import xyz.leezoom.grain.ui.MarkAdapter;
 import xyz.leezoom.grain.util.MyBase64;
 import xyz.leezoom.grain.util.NetWorkTask;
 import xyz.leezoom.grain.util.PackMessage;
