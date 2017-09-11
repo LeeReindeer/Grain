@@ -30,6 +30,7 @@ import xyz.leezoom.grain.module.QueryType;
 import xyz.leezoom.grain.module.ServerIp;
 import xyz.leezoom.grain.module.User;
 import xyz.leezoom.grain.util.MyBase64;
+import xyz.leezoom.grain.util.NetWorkTask;
 import xyz.leezoom.grain.util.PackMessage;
 import xyz.leezoom.grain.util.TcpUtil;
 /**
@@ -39,13 +40,27 @@ public class MarkFragment extends Fragment {
 
     private List<Mark> markList = new ArrayList<>();
     private MarkAdapter adapter;
-    private NetWorkTask markTask;
-
     private SharedPreferences info;
     private SharedPreferences query;
 
     private String [] markSplitArray;
     private final static QueryType queryType = QueryType.ZFQueryXueshengChengji;
+    private xyz.leezoom.grain.util.NetWorkTask.NetWorkListener listener = new xyz.leezoom.grain.util.NetWorkTask.NetWorkListener() {
+        @Override
+        public void onSuccess() {
+            markList.clear();
+            query = getActivity().getSharedPreferences("query", Context.MODE_PRIVATE);
+            String marks = MyBase64.BASE64ToString(query.getString(queryType.name(),"none"));
+            getMarkDataFromLocal(marks);
+            adapter.notifyDataSetChanged();
+            refreshLayout.setRefreshing(false);
+        }
+
+        @Override
+        public void onFailed() {
+            //todo show failed page or send broadcast to show dialog
+        }
+    };
     //get user info from MainActivity
     private User user;
     @BindView(R.id.mk_recycler_view) RecyclerView recyclerView;
@@ -108,7 +123,7 @@ public class MarkFragment extends Fragment {
 
     private void initList(boolean fromNet){
         markList.clear();
-        User user = new User();
+        user = new User();
         info = getActivity().getSharedPreferences("info",Context.MODE_PRIVATE);
         query = getActivity().getSharedPreferences("query",Context.MODE_PRIVATE);
         String name = MyBase64.BASE64ToString(info.getString("nnn","none"));
@@ -124,8 +139,11 @@ public class MarkFragment extends Fragment {
         user.setPassword(pass);
         user.setToken(MyBase64.BASE64ToString(query.getString("ttt","none")));
         user.setHostInfo(hostInfo);
-        markTask = new NetWorkTask(user, queryType);
-        markTask.execute((Void) null);
+        //markTask = new NetWorkTask(user, queryType);
+        //markTask.execute((Void) null);
+        refreshLayout.setRefreshing(true);
+        xyz.leezoom.grain.util.NetWorkTask mTask = new xyz.leezoom.grain.util.NetWorkTask(user, queryType, ServerIp.mainServerPort, listener, getContext());
+        mTask.execute((Void) null);
         /*Mark mark = new Mark();
         mark.setName("大学英语1");
         mark.setTeacherName(" ming");
@@ -144,94 +162,26 @@ public class MarkFragment extends Fragment {
         markList.clear();
         query = getActivity().getSharedPreferences("query", Context.MODE_PRIVATE);
         String marks = MyBase64.BASE64ToString(query.getString(queryType.name(),"none"));
-        String allMarks [] = netMarks.split("\n");
+        String [] allMarks = netMarks.split("\n");
+        List<String> processed = new ArrayList<>();
         for (String e: allMarks){
             Log.d("mark",e);
             markSplitArray = e.split(PackMessage.SplitFields);
-            Mark mark = new Mark();
-            mark.setSchoolId(markSplitArray[0]);
-            mark.setYear(markSplitArray[2]);
-            mark.setSemester(markSplitArray[3]);
-            mark.setTeacherName(markSplitArray[4]);
-            mark.setName(markSplitArray[5]);
-            mark.setScore(markSplitArray[6]);
-            mark.setCredit(markSplitArray[7]);
-            mark.setGp(markSplitArray[8]);
-            markList.add(mark);
-        }
-    }
-
-    /**
-     * get mark from server
-     */
-    public class NetWorkTask extends AsyncTask<Void, Void, Boolean> {
-
-        private User user;
-        private SharedPreferences query;
-        private QueryType queryType;
-
-        /**
-         * @param user
-         * @param queryType
-         */
-        public NetWorkTask(User user, QueryType queryType) {
-            this.user = user;
-            this.queryType = queryType;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            refreshLayout.setRefreshing(true);
-                        }
-                    });
-                }
-            }).start();
-
-            PackMessage packMessage=new PackMessage(queryType.name(), user.getName(), user.getSchoolId(), user.getAccount(), user.getPassword(),
-                    user.getPhoneNumber(), user.getCertCard(), user.getToken(), user.getExtend(),user.getHostInfo(),user.getVersion(),user.getOthers());
-            TcpUtil tcpUtil= new  TcpUtil(ServerIp.mainServerPort,packMessage);
-            String receiveMsg = tcpUtil.receiveString();
-            query = getActivity().getSharedPreferences("query",Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = query.edit();
-            editor.putString(queryType.name(),MyBase64.stringToBASE64(receiveMsg));
-            // commit
-            editor.apply();
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute( Boolean success) {
-            markTask = null;
-
-            if (success) {
-                //
-                markList.clear();
-                query = getActivity().getSharedPreferences("query", Context.MODE_PRIVATE);
-                String marks = MyBase64.BASE64ToString(query.getString(queryType.name(),"none"));
-                if (marks == null || marks.equals("false")) {
-                    //todo show failed page or send broadcast to show dialog
-                    Toast.makeText(getContext(), "Failed.Try to sign in again.",Toast.LENGTH_LONG).show();
-                    return;
-                }
-                getMarkDataFromLocal(marks);
-                adapter.notifyDataSetChanged();
-                refreshLayout.setRefreshing(false);
-            } else {
-                //show failed fragment
+            //get Not repeat scores
+            if (!processed.contains(markSplitArray[5])) {
+                processed.add(markSplitArray[5]);
+                Mark mark = new Mark();
+                mark.setSchoolId(markSplitArray[0]);
+                mark.setYear(markSplitArray[2]);
+                mark.setSemester(markSplitArray[3]);
+                mark.setTeacherName(markSplitArray[4]);
+                mark.setName(markSplitArray[5]);
+                mark.setScore(markSplitArray[6]);
+                mark.setCredit(markSplitArray[7]);
+                mark.setGp(markSplitArray[8]);
+                markList.add(mark);
             }
         }
-
-        @Override
-        protected void onCancelled() {
-            //show failed fragment
-        }
+        processed.clear();
     }
-
 }

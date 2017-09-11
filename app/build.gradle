@@ -7,8 +7,8 @@ android {
         applicationId "xyz.leezoom.grain"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 7
-        versionName "1.4.1-beta"
+        versionCode 8
+        versionName "1.4.2-beta"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

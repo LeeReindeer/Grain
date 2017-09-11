@@ -49,17 +49,84 @@ public class CardFragment extends Fragment {
     @BindView(R.id.cd_money) Button mBalance;
     @BindView(R.id.cd_progress) ProgressBar mProgressView;
 
+    private final static QueryType BASEINFO = QueryType.CardUserBaseInfo;
+    private final static QueryType PAYMENT = QueryType.CardUserPayment;
+    private final static QueryType PICTURE = QueryType.CardUserPicture;
     private List<Card> moneyList = new ArrayList<>();
     private List<Card> adapterData = new ArrayList();
     private MoneyListAdapter adapter;
     private SharedPreferences query;
     private SharedPreferences info;
-    private NetWorkTask cTask;
+    //private NetWorkTask cTask;
     private User user;
     private Card baseCardInfo;
-    private final static QueryType BASEINFO = QueryType.CardUserBaseInfo;
-    private final static QueryType PAYMENT = QueryType.CardUserPayment;
-    private final static QueryType PICTURE = QueryType.CardUserPicture;
+
+    //call on baseInfo success return
+    private xyz.leezoom.grain.util.NetWorkTask.NetWorkListener bListener = new xyz.leezoom.grain.util.NetWorkTask.NetWorkListener() {
+        @Override
+        public void onSuccess() {
+            query = getActivity().getSharedPreferences("query", Context.MODE_PRIVATE);
+            String cardData = MyBase64.BASE64ToString(query.getString(BASEINFO.name(),"none"));
+            baseCardInfo = new Card();
+            String [] baseInfo = cardData.split(PackMessage.SplitFields);
+            baseCardInfo.setStatus(baseInfo[4]);
+            baseCardInfo.setBalance(baseInfo[12]);
+            baseCardInfo.setName(baseInfo[0]);
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mName.setText(baseCardInfo.getName());
+                    mStatus.setText(baseCardInfo.getStatus());
+                    mBalance.setText(baseCardInfo.getBalance());
+                }
+            });
+        }
+        @Override
+        public void onFailed() {
+            //SHOW FAILED PAGE
+        }
+    };
+    //call on payment result success return
+    private xyz.leezoom.grain.util.NetWorkTask.NetWorkListener pListener = new xyz.leezoom.grain.util.NetWorkTask.NetWorkListener() {
+        @Override
+        public void onSuccess() {
+            query = getActivity().getSharedPreferences("query", Context.MODE_PRIVATE);
+            final String cardData = MyBase64.BASE64ToString(query.getString(PAYMENT.name(),"none"));
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    String [] allPayment = cardData.split("\n");
+                    for (String e : allPayment) {
+                        String [] singlePay = e.split(PackMessage.SplitFields);
+                        Card card1 = new Card();
+                        card1.setTime(singlePay[1].replace(" ","\n"));
+                        card1.setPlace(singlePay[12]);
+                        card1.setTerminal(singlePay[9].replace("\r",""));
+                        card1.setConsume(singlePay[4].contains("-")?singlePay[4]:"+"+singlePay[4]);
+                        card1.setBalance(singlePay[5]);
+                        moneyList.add(card1);
+                    }
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            adapterData.clear();
+                            adapterData.addAll(moneyList);
+                            adapter.notifyDataSetChanged();
+                            moneyListView.invalidateViews();
+                            moneyList.clear();
+                        }
+                    });
+                }
+            }).start();
+            showProgress(false);
+        }
+
+        @Override
+        public void onFailed() {
+
+        }
+    };
 
     public CardFragment() {
         // Required empty public constructor
@@ -92,13 +159,11 @@ public class CardFragment extends Fragment {
         user.setPassword(pass);
         user.setToken(MyBase64.BASE64ToString(query.getString("ttt","none")));
         user.setHostInfo(hostInfo);
-        initList();
         //gte base info
-        cTask = new NetWorkTask(user, BASEINFO);
+        xyz.leezoom.grain.util.NetWorkTask cTask = new xyz.leezoom.grain.util.NetWorkTask(user, BASEINFO, ServerIp.cardServerPort, bListener, getContext());
+        //cTask = new NetWorkTask(user, BASEINFO);
         cTask.execute((Void)null);
-        //get user info
-        //cTask = new NetWorkTask(user, PICTURE);
-        //cTask.execute((Void)null);
+        initList();
         adapter.notifyDataSetChanged();
         return  view;
     }
@@ -141,7 +206,7 @@ public class CardFragment extends Fragment {
             mUserPic.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
-    
+
     private void initList(){
         //test
         //Card card =new Card();
@@ -151,120 +216,8 @@ public class CardFragment extends Fragment {
         //card.setConsume("-1.0");
         //card.setBalance("217.22");
         //moneyList.add(card);
-        NetWorkTask payTask = new NetWorkTask(user,PAYMENT);
+        //NetWorkTask payTask = new NetWorkTask(user,PAYMENT);
+        xyz.leezoom.grain.util.NetWorkTask payTask = new xyz.leezoom.grain.util.NetWorkTask(user, PAYMENT, ServerIp.cardServerPort, pListener, getContext());
         payTask.execute((Void)null);
     }
-
-    public class NetWorkTask extends AsyncTask<Void, Void, Boolean> {
-
-        private User user;
-        private SharedPreferences query;
-        private QueryType queryType;
-
-        /**
-         * @param user
-         * @param queryType
-         */
-        public NetWorkTask(User user, QueryType queryType) {
-            this.user = user;
-            this.queryType = queryType;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-
-            PackMessage packMessage = null;
-            if (queryType == PAYMENT){
-                Date date = new Date();
-                SimpleDateFormat ft = new SimpleDateFormat("yyyyMMdd");
-                System.out.println(ft.format(date));
-                packMessage=new PackMessage(queryType.name(), user.getName(), user.getSchoolId(), user.getAccount(), user.getPassword(),
-                        user.getPhoneNumber(), user.getCertCard(), user.getToken(), user.getExtend()+","+ft.format(date)+",0",user.getHostInfo(),user.getVersion(),user.getOthers());
-            }else if (queryType == BASEINFO){
-                packMessage=new PackMessage(queryType.name(), user.getName(), user.getSchoolId(), user.getAccount(), user.getPassword(),
-                        user.getPhoneNumber(), user.getCertCard(), user.getToken(), user.getExtend(),user.getHostInfo(),user.getVersion(),user.getOthers());
-            }
-            TcpUtil tcpUtil= new  TcpUtil(ServerIp.cardServerPort,packMessage);
-            String receiveMsg = tcpUtil.receiveString();
-            query = getActivity().getSharedPreferences("query", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = query.edit();
-            editor.putString(queryType.name(), MyBase64.stringToBASE64(receiveMsg));
-            // commit
-            editor.apply();
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute( Boolean success) {
-            cTask = null;
-
-            if (success) {
-                query = getActivity().getSharedPreferences("query", Context.MODE_PRIVATE);
-                final String cardData = MyBase64.BASE64ToString(query.getString(queryType.name(),"none"));
-                if (cardData == null || cardData.equals("false")) {
-                    //todo show failed page or send broadcast to show dialog
-                    Toast.makeText(getContext(), "Failed.Try to sign again.",Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (queryType == BASEINFO){
-                    baseCardInfo = new Card();
-                    String [] baseInfo = cardData.split(PackMessage.SplitFields);
-                    baseCardInfo.setStatus(baseInfo[4]);
-                    baseCardInfo.setBalance(baseInfo[12]);
-                    baseCardInfo.setName(baseInfo[0]);
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mName.setText(baseCardInfo.getName());
-                            mStatus.setText(baseCardInfo.getStatus());
-                            mBalance.setText(baseCardInfo.getBalance());
-                        }
-                    });
-                }else if (queryType == PAYMENT){
-
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            String [] allPayment = cardData.split("\n");
-                            for (String e : allPayment) {
-                                String [] singlePay = e.split(PackMessage.SplitFields);
-                                Card card1 = new Card();
-                                card1.setTime(singlePay[1].replace(" ","\n"));
-                                card1.setPlace(singlePay[12]);
-                                card1.setTerminal(singlePay[9].replace("\r",""));
-                                card1.setConsume(singlePay[4].contains("-")?singlePay[4]:"+"+singlePay[4]);
-                                card1.setBalance(singlePay[5]);
-                                moneyList.add(card1);
-                            }
-
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    adapterData.clear();
-                                    adapterData.addAll(moneyList);
-                                    adapter.notifyDataSetChanged();
-                                    moneyListView.invalidateViews();
-                                    moneyList.clear();
-                                }
-                            });
-                        }
-                    }).start();
-
-                }else if (queryType == PICTURE){
-                    // TODO: 9/8/17 get user pic
-
-                }
-                showProgress(false);
-                //add data to list
-            } else {
-                //show failed fragment
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            //show failed fragment
-        }
-    }
-
 }
