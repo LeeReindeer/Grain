@@ -1,12 +1,8 @@
 package xyz.leezoom.grain.ui.fragment;
 
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -17,9 +13,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+
+import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -31,19 +32,21 @@ import xyz.leezoom.grain.module.ServerIp;
 import xyz.leezoom.grain.module.User;
 import xyz.leezoom.grain.ui.MarkAdapter;
 import xyz.leezoom.grain.util.MyBase64;
-import xyz.leezoom.grain.util.NetWorkTask;
 import xyz.leezoom.grain.util.PackMessage;
-import xyz.leezoom.grain.util.TcpUtil;
 /**
  * A simple {@link Fragment} subclass.
  */
 public class MarkFragment extends Fragment {
 
+    private String sortStatus = SORTBYDEFAULT;
+    private final static String SORTBYNAME = "SORTBYNAME";
+    private final static String SORTBYSCORE = "SORTBYSCORE";
+    private final static String SORTBYDEFAULT = "SORTBYDEFAULT";
     private List<Mark> markList = new ArrayList<>();
+    private List<Mark> defaultMarkList = new ArrayList<>();
     private MarkAdapter adapter;
     private SharedPreferences info;
     private SharedPreferences query;
-
     private String [] markSplitArray;
     private final static QueryType queryType = QueryType.ZFQueryXueshengChengji;
     private xyz.leezoom.grain.util.NetWorkTask.NetWorkListener listener = new xyz.leezoom.grain.util.NetWorkTask.NetWorkListener() {
@@ -52,9 +55,8 @@ public class MarkFragment extends Fragment {
             markList.clear();
             query = getActivity().getSharedPreferences("query", Context.MODE_PRIVATE);
             String marks = MyBase64.BASE64ToString(query.getString(queryType.name(),"none"));
-            getMarkDataFromLocal(marks);
+            getMarkDataFromLocal(marks,true);
             adapter.notifyDataSetChanged();
-            refreshLayout.setRefreshing(false);
         }
 
         @Override
@@ -64,6 +66,9 @@ public class MarkFragment extends Fragment {
     };
     //get user info from MainActivity
     private User user;
+
+    private FloatingActionButton fab;
+    private FloatingActionsMenu fabMenu;
     @BindView(R.id.mk_recycler_view) RecyclerView recyclerView;
     @BindView(R.id.mk_refresh_view) SwipeRefreshLayout refreshLayout;
 
@@ -77,13 +82,43 @@ public class MarkFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_mark, container, false);
         ButterKnife.bind(this,view);
+
+        fab = getActivity().findViewById(R.id.fab_b);
+        fabMenu = getActivity().findViewById(R.id.multiple_actions);
+        fab.setVisibility(View.VISIBLE);
+        fab.setIcon(R.drawable.ic_sort_white_48dp);
+        fab.setTitle("Sort by Default");
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                markList.clear();
+                refreshLayout.setRefreshing(true);
+                if (sortStatus.equals(SORTBYDEFAULT)){
+                    fab.setTitle("Sort by Name");
+                    sortStatus = SORTBYNAME;
+                    getMarkDataFromLocal(null, false);
+                }else if (sortStatus.equals(SORTBYNAME)){
+                    fab.setTitle("Sort by score");
+                    sortStatus = SORTBYSCORE;
+                    getMarkDataFromLocal(null, false);
+                }else {
+                    fab.setTitle("Sort by Default");
+                    sortStatus = SORTBYDEFAULT;
+                    markList.addAll(defaultMarkList);
+                    refreshLayout.setRefreshing(false);
+                }
+                fabMenu.collapse();
+                adapter.notifyDataSetChanged();
+            }
+        });
+
         adapter = new MarkAdapter(getActivity(), markList);
         LinearLayoutManager layoutManager=new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
         refreshLayout.setColorSchemeResources(R.color.colorPrimary);
-        //switch down to refresh
+        //pull down to refresh
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -159,30 +194,76 @@ public class MarkFragment extends Fragment {
      * @param netMarks marks from internet
      * @return
      */
-    private void getMarkDataFromLocal(String netMarks){
+    private void getMarkDataFromLocal(String netMarks, boolean isFromNet){
         markList.clear();
-        query = getActivity().getSharedPreferences("query", Context.MODE_PRIVATE);
-        String marks = MyBase64.BASE64ToString(query.getString(queryType.name(),"none"));
-        String [] allMarks = netMarks.split("\n");
-        List<String> processed = new ArrayList<>();
+        //sort
+        String sortStatus = this.sortStatus;
+        String [] allMarks;
+        if (isFromNet){
+            allMarks = netMarks.split("\n");
+        }else {
+            query = getActivity().getSharedPreferences("query", Context.MODE_PRIVATE);
+            String marks = MyBase64.BASE64ToString(query.getString(queryType.name(),"none"));
+            allMarks = marks.split("\n");
+        }
+
+        List<Mark> processedMark = new ArrayList<>();
         for (String e: allMarks){
             Log.d("mark",e);
             markSplitArray = e.split(PackMessage.SplitFields);
-            //get Not repeat scores
-            if (!processed.contains(markSplitArray[5])) {
-                processed.add(markSplitArray[5]);
-                Mark mark = new Mark();
-                mark.setSchoolId(markSplitArray[0]);
-                mark.setYear(markSplitArray[2]);
-                mark.setSemester(markSplitArray[3]);
-                mark.setTeacherName(markSplitArray[4]);
-                mark.setName(markSplitArray[5]);
-                mark.setScore(markSplitArray[6]);
-                mark.setCredit(markSplitArray[7]);
-                mark.setGp(markSplitArray[8]);
+            Mark mark = new Mark();
+            mark.setSchoolId(markSplitArray[0]);
+            mark.setYear(markSplitArray[2]);
+            mark.setSemester(markSplitArray[3]);
+            mark.setTeacherName(markSplitArray[4]);
+            mark.setName(markSplitArray[5]);
+            mark.setScore(markSplitArray[6]);
+            mark.setCredit(markSplitArray[7]);
+            mark.setGp(markSplitArray[8]);
+            boolean isProcessed = false;
+            //ensure to get Not repeat scores
+            for (int i = 0; i < processedMark.size(); i++) {
+                if (processedMark.get(i).getName().equals(mark.getName()) &&
+                        processedMark.get(i).getScore().equals(mark.getScore()) &&
+                        processedMark.get(i).getSemester().equals(mark.getSemester())){
+                    isProcessed = true;
+                    break;
+                }
+            }
+            if (!isProcessed) {
                 markList.add(mark);
+                processedMark.add(mark);
             }
         }
-        processed.clear();
+        //sort list
+        if (sortStatus.equals(SORTBYDEFAULT)){
+            defaultMarkList.clear();
+            defaultMarkList.addAll(markList);
+        }else if (sortStatus.equals(SORTBYNAME)){
+            Collections.sort(markList, new SortByName());
+        }else {
+            Collections.sort(markList, new SortBySore());
+        }
+        refreshLayout.setRefreshing(false);
+        processedMark.clear();
+    }
+
+    class  SortBySore implements Comparator{
+
+        @Override
+        public int compare(Object o1, Object o2) {
+            Mark m1 = (Mark) o1;
+            Mark m2 = (Mark) o2;
+            return Integer.valueOf(m1.getScore()) - Integer.valueOf(m2.getScore());
+        }
+    }
+    class SortByName implements Comparator{
+
+        @Override
+        public int compare(Object o1, Object o2) {
+            Mark m1 = (Mark) o1;
+            Mark m2 = (Mark) o2;
+            return m1.getName().compareTo(m2.getName());
+        }
     }
 }

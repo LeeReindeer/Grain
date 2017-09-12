@@ -29,4 +29,5 @@
     <string name="drawer_title_schedule">课程表</string>
     <string name="drawer_title_card">校园卡</string>
     <string name="fun_title_schedule">课程表</string>
+    <string name="about_text">怪小助(Grain)的诞生最初只是为了方便自己查成绩.经过一番折腾,完成了成绩查询,校园卡信息查询,图书查询功能.\n\n由于学校课表接口的问题,课表功能的开发将延后.\n\n感谢 吃番茄的外星人 设计的图标</string>
 </resources>

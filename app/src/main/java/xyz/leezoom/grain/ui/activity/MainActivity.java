@@ -209,9 +209,9 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_update:
                 //check update
-                Toast.makeText(this,"This is the last version",Toast.LENGTH_SHORT).show();
-                //Intent update = new Intent(Intent.ACTION_VIEW,Uri.parse(getString(R.string.update_page)));
-                //startActivity(update);
+                //Toast.makeText(this,"This is the last version",Toast.LENGTH_SHORT).show();
+                Intent update = new Intent(Intent.ACTION_VIEW,Uri.parse(getString(R.string.update_page)));
+                startActivity(update);
                 break;
             case R.id.nav_about:
                 //show about page
@@ -268,7 +268,7 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.card_class:
                 //toolbar.setTitle("Course Table");
-                Toast.makeText(this,"Coming soon",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"This function is unavailable now",Toast.LENGTH_SHORT).show();
                 break;
             case R.id.card_card:
                 toolbar.setTitle(R.string.fun_title_your_card);
