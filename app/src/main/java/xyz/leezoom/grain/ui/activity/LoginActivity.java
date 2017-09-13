@@ -222,12 +222,16 @@ public class LoginActivity extends AppCompatActivity{
         protected Boolean doInBackground(Void... params) {
             try {
                 // Simulate network access.
-                Thread.sleep(2000);
+                Thread.sleep(1000);
                 //first time validation
                 User user=new User(mName,mAccount,mPassword,"","",getDeviceInfo(),""); // get token
                 PackMessage packMessage=new PackMessage(QueryType.Validation.name(), mName, mAccount, user.getAccount(), user.getPassword(),
                         user.getPhoneNumber(), user.getCertCard(), user.getToken(), user.getExtend(),user.getHostInfo(),user.getVersion(),user.getOthers());
                 TcpUtil tcp = new TcpUtil(ServerIp.baseServerPort,packMessage);
+                //check login
+                if (tcp.receiveString().equals("false")){
+                    return false;
+                }
                 String [] tokens = tcp.receiveString().split(PackMessage.SplitFields);
                 String firstToken = tokens[3];
                 String certCard = tokens[1];

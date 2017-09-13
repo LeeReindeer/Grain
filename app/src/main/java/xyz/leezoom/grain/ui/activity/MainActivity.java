@@ -276,7 +276,6 @@ public class MainActivity extends AppCompatActivity
                 transaction.replace(R.id.tab_content,mCard);
                 break;
             case R.id.card_library:
-                // TODO: 9/8/17 library
                 //Toast.makeText(this,"Coming soon",Toast.LENGTH_SHORT).show();
                 //Intent libraryIntent = new Intent(MainActivity.this,LibraryActivity.class);
                 //startActivity(libraryIntent);
