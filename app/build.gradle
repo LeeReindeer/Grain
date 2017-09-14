@@ -7,8 +7,8 @@ android {
         applicationId "xyz.leezoom.grain"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 10
-        versionName "1.5.1"
+        versionCode 12
+        versionName "1.5.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -26,6 +26,7 @@ dependencies {
     })
 
     compile files('libs/sun.misc.BASE64Decoder.jar')
+    compile files('libs/jsoup-1.10.3.jar')
     compile 'com.pgyersdk:sdk:2.7.4'
     compile 'com.android.support:appcompat-v7:26.0.0-alpha1'
     compile 'com.android.support:design:26.0.0-alpha1'

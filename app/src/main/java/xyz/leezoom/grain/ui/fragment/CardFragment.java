@@ -61,7 +61,7 @@ public class CardFragment extends Fragment {
     //private NetWorkTask cTask;
     private User user;
     private Card baseCardInfo;
-
+    xyz.leezoom.grain.util.NetWorkTask cTask;
     //call on baseInfo success return
     private xyz.leezoom.grain.util.NetWorkTask.NetWorkListener bListener = new xyz.leezoom.grain.util.NetWorkTask.NetWorkListener() {
         @Override
@@ -161,7 +161,7 @@ public class CardFragment extends Fragment {
         user.setToken(MyBase64.BASE64ToString(query.getString("ttt","none")));
         user.setHostInfo(hostInfo);
         //gte base info
-        xyz.leezoom.grain.util.NetWorkTask cTask = new xyz.leezoom.grain.util.NetWorkTask(user, BASEINFO, ServerIp.cardServerPort, bListener, getContext());
+        cTask = new xyz.leezoom.grain.util.NetWorkTask(user, BASEINFO, ServerIp.cardServerPort, bListener, getContext());
         //cTask = new NetWorkTask(user, BASEINFO);
         cTask.execute((Void)null);
         initList();
@@ -172,11 +172,12 @@ public class CardFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        cTask.cancel(true);
         Toolbar toolbar=getActivity().findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.app_name));
     }
 
-    
+
     //show progress bar
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {

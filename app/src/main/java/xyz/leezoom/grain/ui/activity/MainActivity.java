@@ -37,6 +37,7 @@ import xyz.leezoom.grain.ui.fragment.CardFragment;
 import xyz.leezoom.grain.ui.fragment.FunctionFragment;
 import xyz.leezoom.grain.ui.fragment.LibraryFragment;
 import xyz.leezoom.grain.ui.fragment.MarkFragment;
+import xyz.leezoom.grain.ui.fragment.ScheduleFragment;
 import xyz.leezoom.grain.util.MyBase64;
 
 public class MainActivity extends AppCompatActivity
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity
     private MarkFragment mMark;
     private CardFragment mCard;
     private LibraryFragment mLibrary;
+    private ScheduleFragment mSchedule;
     private Toolbar toolbar;
     @BindView(R.id.multiple_actions) FloatingActionsMenu mulitiAction;
     @BindView(R.id.fab_a) com.getbase.floatingactionbutton.FloatingActionButton actionA;
@@ -247,6 +249,9 @@ public class MainActivity extends AppCompatActivity
                 transaction.replace(R.id.tab_content,mLibrary);
                 break;
             case R.id.nav_schedule:
+                toolbar.setTitle(getString(R.string.fun_title_schedule));
+                if (mSchedule == null) mSchedule = new ScheduleFragment();
+                transaction.replace(R.id.tab_content,mSchedule);
                 break;
         }
         transaction.addToBackStack(null);

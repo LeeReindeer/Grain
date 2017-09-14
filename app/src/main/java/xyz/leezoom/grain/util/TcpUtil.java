@@ -37,6 +37,7 @@ public class TcpUtil {
             Socket socket=new Socket(ServerIp.mainIp,Integer.valueOf(this.port));
             socket.setSoTimeout(5000);
             InputStream in=socket.getInputStream();
+            //client send message
             OutputStream out=socket.getOutputStream();
             tcpCommon.SendString(out,packMsg);
             receiveMsg=tcpCommon.ReceiveString(in);
