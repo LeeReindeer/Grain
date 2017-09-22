@@ -99,7 +99,7 @@ public class ScheduleFragment extends Fragment {
             //getScheduleUrl();
             //load schedule page
             //webView.loadUrl(scheduleUrl);
-            //use js to change style
+            //inject js to change style
             //webView.setWebChromeClient(mWebChromeClient);
         }
         return view;

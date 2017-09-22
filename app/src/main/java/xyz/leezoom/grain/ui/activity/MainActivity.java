@@ -249,9 +249,11 @@ public class MainActivity extends AppCompatActivity
                 transaction.replace(R.id.tab_content,mLibrary);
                 break;
             case R.id.nav_schedule:
-                toolbar.setTitle(getString(R.string.fun_title_schedule));
-                if (mSchedule == null) mSchedule = new ScheduleFragment();
-                transaction.replace(R.id.tab_content,mSchedule);
+                //toolbar.setTitle(getString(R.string.fun_title_schedule));
+                //if (mSchedule == null) mSchedule = new ScheduleFragment();
+                //transaction.replace(R.id.tab_content,mSchedule);
+                break;
+            default:
                 break;
         }
         transaction.addToBackStack(null);
