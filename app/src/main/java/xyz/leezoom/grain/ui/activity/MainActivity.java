@@ -63,10 +63,11 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         PgyUpdateManager.setIsForced(false);
         PgyUpdateManager.register(this,"xyz.leezoom.grain");
-        checkLogin();
-        loadData();
-        initUI();
-        checkPermission();
+        if (checkLogin()) {
+            loadData();
+            initUI();
+            checkPermission();
+        }
     }
 
     @OnClick (R.id.fab_a) void fabA(){
@@ -78,13 +79,16 @@ public class MainActivity extends AppCompatActivity
     }
 
     //if not login ,start login
-    private void checkLogin(){
+    private boolean checkLogin(){
         info =getSharedPreferences("info",MODE_PRIVATE);
         isLogin= info.getBoolean("isLogin",false);
-        if (isLogin) return;
+        if (isLogin) {
+            return true;
+        }
         Intent intent=new Intent(MainActivity.this,LoginActivity.class);
         startActivity(intent);
         finish();
+        return false;
     }
 
     private void checkPermission(){
@@ -109,6 +113,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void loadData(){
+        // TODO: 9/22/17 share user data to fragment
         user=new User();
         info = getSharedPreferences("info", Context.MODE_PRIVATE);
         query = getSharedPreferences("query",Context.MODE_PRIVATE);
@@ -249,9 +254,10 @@ public class MainActivity extends AppCompatActivity
                 transaction.replace(R.id.tab_content,mLibrary);
                 break;
             case R.id.nav_schedule:
-                //toolbar.setTitle(getString(R.string.fun_title_schedule));
-                //if (mSchedule == null) mSchedule = new ScheduleFragment();
-                //transaction.replace(R.id.tab_content,mSchedule);
+                //Toast.makeText(this,"Coming soon",Toast.LENGTH_SHORT).show();
+                toolbar.setTitle(getString(R.string.fun_title_schedule));
+                if (mSchedule == null) mSchedule = new ScheduleFragment();
+                transaction.replace(R.id.tab_content,mSchedule);
                 break;
             default:
                 break;

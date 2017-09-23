@@ -20,6 +20,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.getbase.floatingactionbutton.FloatingActionButton;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -140,6 +142,8 @@ public class CardFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_card, container, false);
         ButterKnife.bind(this,view);
+        FloatingActionButton fab = getActivity().findViewById(R.id.fab_b);
+        fab.setVisibility(View.GONE);
         showProgress(true);
         adapter = new MoneyListAdapter(getContext(),adapterData);
         moneyListView.setAdapter(adapter);

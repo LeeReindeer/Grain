@@ -1,10 +1,5 @@
 package xyz.leezoom.grain.util;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -68,106 +63,6 @@ public class TcpCommon {
             e.printStackTrace();
             return 0;
         }
-    }
-
-    public byte[] ReadBytes(InputStream inS) {
-        try {
-            int count = (int) GetSize(inS);
-            FileLength = count;
-            if (count == 0) {
-                return new byte[0];
-            }
-            byte[] buffer = new byte[count];
-            int index = 0;
-            try {
-                byte[] bufferBytes = new byte[_blockLength];
-                while (index < count) {
-                    try {
-                        int receivedBytesLen = inS.read(bufferBytes);
-                        if (receivedBytesLen == -1) {
-                            break;
-                        }
-                        System.arraycopy(bufferBytes, 0, buffer, index, receivedBytesLen);
-                        index += receivedBytesLen;
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                return buffer;
-            } catch (Exception e2) {
-                return new byte[0];
-            }
-        } catch (Exception e3) {
-            return new byte[0];
-        }
-    }
-
-    public int SendFile(OutputStream outS, String sendFile) {
-        int sendbytes = 0;
-        byte[] buffer = new byte[_blockLength];
-        try {
-            BufferedInputStream fi = new BufferedInputStream(new FileInputStream(new File(sendFile)));
-            SendSize(outS, fi.available());
-            while (true) {
-                int len = fi.read(buffer);
-                if (len <= 0) {
-                    break;
-                }
-                outS.write(buffer, 0, len);
-                outS.flush();
-                sendbytes += len;
-            }
-            fi.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return sendbytes;
-    }
-
-    public static void DeleteFile(String filename) {
-        File file = new File(filename);
-        if (file.exists()) {
-            file.delete();
-        }
-    }
-
-    public static boolean ExistFile(String filename) {
-        if (new File(filename).exists()) {
-            return true;
-        }
-        return false;
-    }
-
-    public int ReceiveFile(InputStream inS, String receiveFile) {
-        int readlens = 0;
-        byte[] buffer = new byte[_blockLength];
-        try {
-            int count = (int) GetSize(inS);
-            FileLength = count;
-            if (count <= 0) {
-                return 0;
-            }
-            DeleteFile(receiveFile);
-            BufferedOutputStream fo = new BufferedOutputStream(new FileOutputStream(new File(receiveFile)));
-            while (readlens < count) {
-                try {
-                    int bytesRead = inS.read(buffer);
-                    if (bytesRead == -1) {
-                        break;
-                    }
-                    fo.write(buffer, 0, bytesRead);
-                    readlens += bytesRead;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            fo.flush();
-            fo.close();
-            return readlens;
-        } catch (IOException e2) {
-            e2.printStackTrace();
-        }
-        return readlens;
     }
 
     private void SendSize(OutputStream outS, int length) {

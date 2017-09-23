@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.getbase.floatingactionbutton.FloatingActionButton;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import xyz.leezoom.grain.R;
@@ -45,6 +47,8 @@ public class FunctionFragment extends Fragment implements View.OnClickListener{
         cardView2.setOnClickListener(this);
         cardView3.setOnClickListener(this);
         cardView4.setOnClickListener(this);
+        FloatingActionButton fab = getActivity().findViewById(R.id.fab_b);
+        fab.setVisibility(View.GONE);
         return view;
     }
 
