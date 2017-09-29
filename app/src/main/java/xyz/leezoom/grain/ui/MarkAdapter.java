@@ -15,6 +15,7 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import xyz.leezoom.grain.R;
 import xyz.leezoom.grain.module.Mark;
+import xyz.leezoom.grain.ui.view.BigCharView;
 
 /**
  * @Author lee
@@ -47,15 +48,15 @@ public class MarkAdapter extends RecyclerView.Adapter<MarkAdapter.ViewHolder>{
         holder.mCredit.setText(mark.getCredit());
         holder.mGP.setText(mark.getGp());
         //set first char
-        holder.firstChar.setText(mark.getName().substring(0,1));
-        holder.colorImage.setImageResource(getImageColor(mark.getScore()));
+        holder.bigCharView.setColor(getImageColor(mark.getScore()));
+        holder.bigCharView.setFirstCHar(mark.getName().substring(0,1));
     }
 
     private int getImageColor(String score){
         int mark = Integer.parseInt(score);
         int color=-1;
         int colors [] ={R.color.pink_700,R.color.brown_700,R.color.blue_700,R.color.teal_700};
-        //change color depend on your score;
+        //change color depends on your score;
         if (mark >= 90){
             color = colors[3];
         }else if (mark >= 75){
@@ -75,8 +76,7 @@ public class MarkAdapter extends RecyclerView.Adapter<MarkAdapter.ViewHolder>{
 
     static class ViewHolder extends RecyclerView.ViewHolder{
         View mView;
-        @BindView(R.id.mk_logo) CircleImageView colorImage;
-        @BindView(R.id.mk_first_char) TextView firstChar;
+        @BindView(R.id.big_char_view) BigCharView bigCharView;
         @BindView(R.id.mk_name) AppCompatTextView mClassName;
         @BindView(R.id.mk_teacher) AppCompatTextView mTeacher;
         @BindView(R.id.mk_score) AppCompatTextView mScore;
