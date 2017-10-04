@@ -49,16 +49,16 @@
     <string name="about_page" translatable="false">https://github.com/LeeReindeer/Grain/</string>
     <string name="update_page" translatable="false">https://www.pgyer.com/grain</string>
     <string name="about_text">This is Grain which is my personal work.I hope it will bring you a nice experience.\n\nDue to the school curriculum interface problems, the development of curriculum functions will be delayed.\n\nAnd thanks 吃番茄的外星人 design this pretty icon.\n\nTo be continued...</string>
-    <string name="empty" />
+    <string name="empty" translatable="false" />
 
     <!--About Schedule-->
-    <string name="sun">Sun</string>
-    <string name="sta">Sta</string>
-    <string name="fri">Fri</string>
-    <string name="thu">Thu</string>
-    <string name="wen">Wed</string>
-    <string name="tue">Tue</string>
-    <string name="mon">Mon</string>
+    <string name="sun" translatable="false">Sun</string>
+    <string name="sta" translatable="false">Sta</string>
+    <string name="fri" translatable="false">Fri</string>
+    <string name="thu" translatable="false">Thu</string>
+    <string name="wen" translatable="false">Wed</string>
+    <string name="tue" translatable="false">Tue</string>
+    <string name="mon" translatable="false">Mon</string>
 
 
 </resources>
