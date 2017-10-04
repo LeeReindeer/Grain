@@ -1,9 +1,12 @@
 language: android
 
+notifications:
+  email: false
+
 jdk:
   - oraclejdk8
 
-sudo: true
+sudo: false
 
 android:
   components:
@@ -15,6 +18,9 @@ android:
     - android-26
     - extra-android-m2repository
     - extra-android-support
+
+before_install:
+ - chmod +x gradlew
 
 before_cache:
   - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
