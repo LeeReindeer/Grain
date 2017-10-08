@@ -1,3 +1,10 @@
+/*
+ * Created by Lee.
+ * Copyright (c) 2017. All rights reserved.
+ *
+ * Last modified 9/9/17 5:52 PM
+ */
+
 package xyz.leezoom.grain.ui;
 
 import android.content.Context;
@@ -15,6 +22,7 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import xyz.leezoom.grain.R;
 import xyz.leezoom.grain.module.Book;
+import xyz.leezoom.grain.ui.view.BigCharView;
 
 /**
  * @Author lee
@@ -46,9 +54,8 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         holder.param1.setText(book.getParam1());
         holder.param2.setText(book.getParam2());
         holder.place.setText(book.getPlace());
-
-        holder.firstChar.setText(book.getName().substring(0,1));
-        holder.colorImage.setImageResource(R.color.brown_500);
+        holder.bigCharView.setFirstCHar(book.getName().substring(0,1));
+        holder.bigCharView.setColor(R.color.brown_500);
         holder.textView1.setText("Borrow: ");
         holder.textView2.setText("Back: ");
         holder.textView3.setText("Place: ");
@@ -65,8 +72,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
 
     static class ViewHolder extends RecyclerView.ViewHolder{
         View mView;
-        @BindView(R.id.bk_logo) CircleImageView colorImage;
-        @BindView(R.id.bk_first_char) TextView firstChar;
+        @BindView(R.id.mk_big_char_view) BigCharView bigCharView;
         @BindView(R.id.bk_name) AppCompatTextView name;
         @BindView(R.id.bk_author) AppCompatTextView author;
         @BindView(R.id.bk_param1) AppCompatTextView param1;

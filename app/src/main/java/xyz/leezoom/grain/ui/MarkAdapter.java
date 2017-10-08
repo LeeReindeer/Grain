@@ -1,3 +1,10 @@
+/*
+ * Created by Lee.
+ * Copyright (c) 2017. All rights reserved.
+ *
+ * Last modified 9/29/17 8:27 PM
+ */
+
 package xyz.leezoom.grain.ui;
 
 import android.content.Context;
@@ -76,7 +83,7 @@ public class MarkAdapter extends RecyclerView.Adapter<MarkAdapter.ViewHolder>{
 
     static class ViewHolder extends RecyclerView.ViewHolder{
         View mView;
-        @BindView(R.id.big_char_view) BigCharView bigCharView;
+        @BindView(R.id.mk_big_char_view) BigCharView bigCharView;
         @BindView(R.id.mk_name) AppCompatTextView mClassName;
         @BindView(R.id.mk_teacher) AppCompatTextView mTeacher;
         @BindView(R.id.mk_score) AppCompatTextView mScore;

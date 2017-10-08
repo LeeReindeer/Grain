@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Created by Lee.
+  ~ Copyright (c) 2017. All rights reserved.
+  ~
+  ~ Last modified 9/29/17 8:06 PM
+  -->
+
 <FrameLayout android:id="@+id/bc_root_view"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
