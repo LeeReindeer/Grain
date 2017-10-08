@@ -72,7 +72,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
 
     static class ViewHolder extends RecyclerView.ViewHolder{
         View mView;
-        @BindView(R.id.mk_big_char_view) BigCharView bigCharView;
+        @BindView(R.id.bk_big_char_view) BigCharView bigCharView;
         @BindView(R.id.bk_name) AppCompatTextView name;
         @BindView(R.id.bk_author) AppCompatTextView author;
         @BindView(R.id.bk_param1) AppCompatTextView param1;

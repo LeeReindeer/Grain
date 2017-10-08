@@ -1,3 +1,10 @@
+/*
+ * Created by Lee.
+ * Copyright (c) 2017. All rights reserved.
+ *
+ * Last modified 9/11/17 3:27 PM
+ */
+
 package xyz.leezoom.grain.ui.fragment;
 
 

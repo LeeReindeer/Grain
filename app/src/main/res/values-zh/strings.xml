@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Created by Lee.
+  ~ Copyright (c) 2017. All rights reserved.
+  ~
+  ~ Last modified 9/11/17 4:49 PM
+  -->
+
 <resources>
     <string name="action_settings">设置</string>
     <string name="action_sign_in">登录</string>

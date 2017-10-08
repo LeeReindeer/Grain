@@ -1,3 +1,10 @@
+/*
+ * Created by Lee.
+ * Copyright (c) 2017. All rights reserved.
+ *
+ * Last modified 10/8/17 1:41 PM
+ */
+
 package xyz.leezoom.grain.ui.activity;
 
 import android.content.Intent;

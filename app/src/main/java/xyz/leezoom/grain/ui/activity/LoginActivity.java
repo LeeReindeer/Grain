@@ -1,3 +1,10 @@
+/*
+ * Created by Lee.
+ * Copyright (c) 2017. All rights reserved.
+ *
+ * Last modified 10/8/17 1:41 PM
+ */
+
 package xyz.leezoom.grain.ui.activity;
 
 import android.animation.Animator;
@@ -31,9 +38,7 @@ import xyz.leezoom.grain.util.MyBase64;
 import xyz.leezoom.grain.util.PackMessage;
 import xyz.leezoom.grain.util.TcpUtil;
 
-/**
- * A login screen that offers login via email/password.
- */
+
 public class LoginActivity extends AppCompatActivity{
 
     /**
@@ -49,6 +54,7 @@ public class LoginActivity extends AppCompatActivity{
     @BindView(R.id.name) EditText mNameView;
     @BindView(R.id.login_form) View mLoginFormView;
     @BindView(R.id.login_progress) View mProgressView;
+    @BindView(R.id.sign_in_button) Button SignInButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +72,6 @@ public class LoginActivity extends AppCompatActivity{
             }
         });
 
-        Button SignInButton = (Button) findViewById(R.id.sign_in_button);
         SignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {

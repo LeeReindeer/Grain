@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Created by Lee.
+  ~ Copyright (c) 2017. All rights reserved.
+  ~
+  ~ Last modified 9/29/17 8:06 PM
+  -->
+
 <resources>
     <declare-styleable name="BigCharView">
         <attr name="color" format="color"/>

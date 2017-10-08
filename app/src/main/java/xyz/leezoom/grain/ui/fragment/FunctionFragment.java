@@ -1,3 +1,10 @@
+/*
+ * Created by Lee.
+ * Copyright (c) 2017. All rights reserved.
+ *
+ * Last modified 9/23/17 9:47 PM
+ */
+
 package xyz.leezoom.grain.ui.fragment;
 
 import android.os.Bundle;

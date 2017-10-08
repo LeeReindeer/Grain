@@ -1,3 +1,10 @@
+/*
+ * Created by Lee.
+ * Copyright (c) 2017. All rights reserved.
+ *
+ * Last modified 9/5/17 4:28 PM
+ */
+
 package xyz.leezoom.grain.util;
 
 import java.io.IOException;

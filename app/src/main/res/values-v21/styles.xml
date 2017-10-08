@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Created by Lee.
+  ~ Copyright (c) 2017. All rights reserved.
+  ~
+  ~ Last modified 9/8/17 8:49 PM
+  -->
+
 <resources>
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">

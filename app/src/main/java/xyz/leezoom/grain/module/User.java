@@ -1,3 +1,10 @@
+/*
+ * Created by Lee.
+ * Copyright (c) 2017. All rights reserved.
+ *
+ * Last modified 9/7/17 9:21 PM
+ */
+
 package xyz.leezoom.grain.module;
 
 import android.content.Context;
