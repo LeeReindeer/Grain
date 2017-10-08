@@ -44,13 +44,13 @@ android:
     - 'android-sdk-license-.+'
     - 'google-gdk-license-.+'
   before_cache:
-    - "rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock",
-    - "rm -fr $HOME/.gradle/caches/*/plugin-resolution/"
+    - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+    - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
 
   before_install:
     - chmod +x gradlew
 
-   before_script:
+  before_script:
       - echo no | android create avd --force -n test -t android-26 --abi armeabi-v7a
       - emulator -avd test -no-skin -no-audio -no-window &
       - android-wait-for-emulator
