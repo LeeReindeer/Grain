@@ -13,7 +13,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -25,13 +24,10 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -45,7 +41,6 @@ import xyz.leezoom.grain.module.User;
 import xyz.leezoom.grain.ui.MoneyListAdapter;
 import xyz.leezoom.grain.util.MyBase64;
 import xyz.leezoom.grain.util.PackMessage;
-import xyz.leezoom.grain.util.TcpUtil;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -67,10 +62,11 @@ public class CardFragment extends Fragment {
     private MoneyListAdapter adapter;
     private SharedPreferences query;
     private SharedPreferences info;
-    //private NetWorkTask cTask;
+    //private NetWorkTask baseTask;
     private User user;
     private Card baseCardInfo;
-    xyz.leezoom.grain.util.NetWorkTask cTask;
+    xyz.leezoom.grain.util.NetWorkTask baseTask;
+    xyz.leezoom.grain.util.NetWorkTask payTask;
     //call on baseInfo success return
     private xyz.leezoom.grain.util.NetWorkTask.NetWorkListener bListener = new xyz.leezoom.grain.util.NetWorkTask.NetWorkListener() {
         @Override
@@ -80,7 +76,7 @@ public class CardFragment extends Fragment {
             baseCardInfo = new Card();
             String [] baseInfo = cardData.split(PackMessage.SplitFields);
             baseCardInfo.setStatus(baseInfo[4]);
-            baseCardInfo.setBalance(baseInfo[12]);
+            baseCardInfo.setBalance(baseInfo[11] + ":" + baseInfo[13]);
             baseCardInfo.setName(baseInfo[0]);
             getActivity().runOnUiThread(new Runnable() {
                 @Override
@@ -172,9 +168,8 @@ public class CardFragment extends Fragment {
         user.setToken(MyBase64.BASE64ToString(query.getString("ttt","none")));
         user.setHostInfo(hostInfo);
         //gte base info
-        cTask = new xyz.leezoom.grain.util.NetWorkTask(user, BASEINFO, ServerIp.cardServerPort, bListener, getContext());
-        //cTask = new NetWorkTask(user, BASEINFO);
-        cTask.execute((Void)null);
+        baseTask = new xyz.leezoom.grain.util.NetWorkTask(user, BASEINFO, ServerIp.cardServerPort, bListener, getContext());
+        baseTask.execute((Void)null);
         initList();
         adapter.notifyDataSetChanged();
         return  view;
@@ -183,7 +178,8 @@ public class CardFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        cTask.cancel(true);
+        baseTask.cancel(true);
+        payTask.cancel(true);
         Toolbar toolbar=getActivity().findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.app_name));
     }
@@ -230,7 +226,7 @@ public class CardFragment extends Fragment {
         //card.setBalance("217.22");
         //moneyList.add(card);
         //NetWorkTask payTask = new NetWorkTask(user,PAYMENT);
-        xyz.leezoom.grain.util.NetWorkTask payTask = new xyz.leezoom.grain.util.NetWorkTask(user, PAYMENT, ServerIp.cardServerPort, pListener, getContext());
+        payTask = new xyz.leezoom.grain.util.NetWorkTask(user, PAYMENT, ServerIp.cardServerPort, pListener, getContext());
         payTask.execute((Void)null);
     }
 }
