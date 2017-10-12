@@ -58,7 +58,6 @@ public class BooksFragment extends Fragment {
                 String singleData [] = e.split(PackMessage.SplitFields);
                 Book book = new Book();
                 book.setName(singleData[0]);
-                book.setAuthor(singleData[1].replace("著","").replace("编",""));
                 book.setParam1(singleData[9]);
                 book.setParam2(singleData[10]);
                 book.setPlace(singleData[5]);

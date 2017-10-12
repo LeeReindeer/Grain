@@ -77,6 +77,8 @@ implements ViewPager.OnPageChangeListener, TabLayout.OnTabSelectedListener{
         mTitleList = new ArrayList<>();
         mTitleList.add("My Books");
         mTitleList.add("Search");
+        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_book_white_48dp));
+        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_stars_white_48dp));
         //use getChildFragmentManager
         ViewPageAdapter adapter = new ViewPageAdapter(getChildFragmentManager(),mFragmentList,mTitleList);
         viewPager.setAdapter(adapter);
@@ -85,7 +87,6 @@ implements ViewPager.OnPageChangeListener, TabLayout.OnTabSelectedListener{
         tabLayout.addOnTabSelectedListener(this);
         return  view;
     }
-
 
 
     @Override
@@ -164,8 +165,6 @@ implements ViewPager.OnPageChangeListener, TabLayout.OnTabSelectedListener{
         public int getCount() {
             return fragmentList.size();
         }
-
-
     }
 
 }

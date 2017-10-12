@@ -13,13 +13,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import de.hdodenhof.circleimageview.CircleImageView;
 import xyz.leezoom.grain.R;
 import xyz.leezoom.grain.module.Book;
 import xyz.leezoom.grain.ui.view.BigCharView;
@@ -50,15 +48,13 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         Book book= mBooks.get(position);
         holder.name.setText(book.getName());
-        holder.author.setText(book.getAuthor());
+        //holder.author.setText(book.getAuthor());
         holder.param1.setText(book.getParam1());
         holder.param2.setText(book.getParam2());
         holder.place.setText(book.getPlace());
         holder.bigCharView.setFirstCHar(book.getName().substring(0,1));
         holder.bigCharView.setColor(R.color.brown_500);
-        holder.textView1.setText("Borrow: ");
-        holder.textView2.setText("Back: ");
-        holder.textView3.setText("Place: ");
+
     }
 
     @Override
@@ -74,13 +70,10 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         View mView;
         @BindView(R.id.bk_big_char_view) BigCharView bigCharView;
         @BindView(R.id.bk_name) AppCompatTextView name;
-        @BindView(R.id.bk_author) AppCompatTextView author;
+        //@BindView(R.id.bk_author) AppCompatTextView author;
         @BindView(R.id.bk_param1) AppCompatTextView param1;
         @BindView(R.id.bk_param2) AppCompatTextView param2;
         @BindView(R.id.bk_place) AppCompatTextView place;
-        @BindView(R.id.gr_bk_param1) TextView textView1;
-        @BindView(R.id.gr_bk_param2) TextView textView2;
-        @BindView(R.id.gr_bk_param3) TextView textView3;
         public ViewHolder(View view){
             super(view);
             mView = view;
