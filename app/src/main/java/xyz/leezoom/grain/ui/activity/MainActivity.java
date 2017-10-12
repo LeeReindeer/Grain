@@ -8,10 +8,14 @@
 package xyz.leezoom.grain.ui.activity;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -44,6 +48,7 @@ import xyz.leezoom.grain.ui.fragment.CardFragment;
 import xyz.leezoom.grain.ui.fragment.FunctionFragment;
 import xyz.leezoom.grain.ui.fragment.LibraryFragment;
 import xyz.leezoom.grain.ui.fragment.MarkFragment;
+import xyz.leezoom.grain.ui.fragment.NetWorkFailedFragment;
 import xyz.leezoom.grain.ui.fragment.ScheduleFragment;
 import xyz.leezoom.grain.util.MyBase64;
 
@@ -54,11 +59,18 @@ public class MainActivity extends AppCompatActivity
     private SharedPreferences info;
     private SharedPreferences query;
     private User user;
+
+    private IntentFilter intentFilter;
+    private NetWorkChangeReceiver netWorkChangeReceiver;
+    private NetworkInfo networkInfo;
+
     private FunctionFragment mainFunction;
     private MarkFragment mMark;
     private CardFragment mCard;
     private LibraryFragment mLibrary;
     private ScheduleFragment mSchedule;
+    private NetWorkFailedFragment mFailtrue;
+
     private Toolbar toolbar;
     @BindView(R.id.multiple_actions) FloatingActionsMenu mulitiAction;
     @BindView(R.id.fab_a) com.getbase.floatingactionbutton.FloatingActionButton actionA;
@@ -70,6 +82,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         PgyUpdateManager.setIsForced(false);
         PgyUpdateManager.register(this,"xyz.leezoom.grain");
+        registerNetWork();
         if (checkLogin()) {
             loadData();
             initUI();
@@ -139,6 +152,12 @@ public class MainActivity extends AppCompatActivity
         user.setHostInfo(hostInfo);
     }
 
+    private void registerNetWork() {
+        intentFilter = new IntentFilter();
+        intentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+        netWorkChangeReceiver = new NetWorkChangeReceiver();
+        registerReceiver(netWorkChangeReceiver, intentFilter);
+    }
 
     private void initUI(){
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -186,6 +205,7 @@ public class MainActivity extends AppCompatActivity
     protected void onDestroy() {
         super.onDestroy();
         PgyUpdateManager.unregister();
+        unregisterReceiver(netWorkChangeReceiver);
     }
 
     @Override
@@ -217,59 +237,64 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
-        switch (id){
-            case R.id.nav_feedback:
-                PgyFeedback.getInstance().showDialog(MainActivity.this);
-                break;
-            case R.id.nav_update:
-                //check update
-                //Toast.makeText(this,"This is the last version",Toast.LENGTH_SHORT).show();
-                Intent update = new Intent(Intent.ACTION_VIEW,Uri.parse(getString(R.string.update_page)));
-                startActivity(update);
-                break;
-            case R.id.nav_about:
-                //show about page
-                Intent about = new Intent(MainActivity.this, AboutActivity.class);
-                startActivity(about);
-                break;
-            case R.id.nav_exit:
-                //finish();
-                info = getSharedPreferences("info",MODE_PRIVATE);
-                SharedPreferences.Editor editor = info.edit();
-                editor.putString("aaa","");
-                editor.putString("nnn","");
-                editor.putString("ppp","");
-                editor.putBoolean("isLogin",false);
-                editor.apply();
-                Intent exit = new Intent(MainActivity.this,LoginActivity.class);
-                startActivity(exit);
-                finish();
-                break;
-            case R.id.nav_mark:
-                toolbar.setTitle(R.string.fun_title_your_mark);
-                if (mMark == null) mMark = new MarkFragment();
-                transaction.replace(R.id.tab_content,mMark);
-                break;
-            case R.id.nav_card:
-                toolbar.setTitle(R.string.fun_title_your_card);
-                if (mCard == null) mCard = new CardFragment();
-                transaction.replace(R.id.tab_content,mCard);
-                break;
-            case R.id.nav_library:
-                toolbar.setTitle(getString(R.string.fun_title_library));
-                if (mLibrary == null) mLibrary = new LibraryFragment();
-                transaction.replace(R.id.tab_content,mLibrary);
-                break;
-            case R.id.nav_schedule:
-                //Toast.makeText(this,"Coming soon",Toast.LENGTH_SHORT).show();
-                toolbar.setTitle(getString(R.string.fun_title_schedule));
-                if (mSchedule == null) mSchedule = new ScheduleFragment();
-                transaction.replace(R.id.tab_content,mSchedule);
-                break;
-            default:
-                break;
+        if (networkInfo !=null && networkInfo.isAvailable()) {
+            switch (id) {
+                case R.id.nav_feedback:
+                    PgyFeedback.getInstance().showDialog(MainActivity.this);
+                    break;
+                case R.id.nav_update:
+                    //check update
+                    //Toast.makeText(this,"This is the last version",Toast.LENGTH_SHORT).show();
+                    Intent update = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.update_page)));
+                    startActivity(update);
+                    break;
+                case R.id.nav_about:
+                    //show about page
+                    Intent about = new Intent(MainActivity.this, AboutActivity.class);
+                    startActivity(about);
+                    break;
+                case R.id.nav_exit:
+                    //finish();
+                    info = getSharedPreferences("info", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = info.edit();
+                    editor.putString("aaa", "");
+                    editor.putString("nnn", "");
+                    editor.putString("ppp", "");
+                    editor.putBoolean("isLogin", false);
+                    editor.apply();
+                    Intent exit = new Intent(MainActivity.this, LoginActivity.class);
+                    startActivity(exit);
+                    finish();
+                    break;
+                case R.id.nav_mark:
+                    toolbar.setTitle(R.string.fun_title_your_mark);
+                    if (mMark == null) mMark = new MarkFragment();
+                    transaction.replace(R.id.tab_content, mMark);
+                    break;
+                case R.id.nav_card:
+                    toolbar.setTitle(R.string.fun_title_your_card);
+                    if (mCard == null) mCard = new CardFragment();
+                    transaction.replace(R.id.tab_content, mCard);
+                    break;
+                case R.id.nav_library:
+                    toolbar.setTitle(getString(R.string.fun_title_library));
+                    if (mLibrary == null) mLibrary = new LibraryFragment();
+                    transaction.replace(R.id.tab_content, mLibrary);
+                    break;
+                case R.id.nav_schedule:
+                    //Toast.makeText(this,"Coming soon",Toast.LENGTH_SHORT).show();
+                    toolbar.setTitle(getString(R.string.fun_title_schedule));
+                    if (mSchedule == null) mSchedule = new ScheduleFragment();
+                    transaction.replace(R.id.tab_content, mSchedule);
+                    break;
+                default:
+                    break;
+            }
+            transaction.addToBackStack(null);
+        } else {
+            if (mFailtrue == null) mFailtrue = new NetWorkFailedFragment();
+            transaction.replace(R.id.tab_content, mFailtrue);
         }
-        transaction.addToBackStack(null);
         transaction.commit();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -280,33 +305,56 @@ public class MainActivity extends AppCompatActivity
     public void onFClick(int id) {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
-        switch (id){
-            case R.id.card_mark:
-                toolbar.setTitle(R.string.fun_title_your_mark);
-                if (mMark == null) mMark = new MarkFragment();
-                transaction.replace(R.id.tab_content,mMark);
-                break;
-            case R.id.card_class:
-                //toolbar.setTitle("Course Table");
-                Toast.makeText(this,"This function is unavailable now",Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.card_card:
-                toolbar.setTitle(R.string.fun_title_your_card);
-                if (mCard == null) mCard = new CardFragment();
-                transaction.replace(R.id.tab_content,mCard);
-                break;
-            case R.id.card_library:
-                //Toast.makeText(this,"Coming soon",Toast.LENGTH_SHORT).show();
-                //Intent libraryIntent = new Intent(MainActivity.this,LibraryActivity.class);
-                //startActivity(libraryIntent);
-                toolbar.setTitle(getString(R.string.fun_title_library));
-                if (mLibrary == null) mLibrary = new LibraryFragment();
-                transaction.replace(R.id.tab_content,mLibrary);
-                break;
+        if (networkInfo != null && networkInfo.isAvailable()) {
+            switch (id) {
+                case R.id.card_mark:
+                    toolbar.setTitle(R.string.fun_title_your_mark);
+                    if (mMark == null) mMark = new MarkFragment();
+                    transaction.replace(R.id.tab_content, mMark);
+                    break;
+                case R.id.card_class:
+                    //toolbar.setTitle("Course Table");
+                    Toast.makeText(this, "This function is unavailable now", Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.card_card:
+                    toolbar.setTitle(R.string.fun_title_your_card);
+                    if (mCard == null) mCard = new CardFragment();
+                    transaction.replace(R.id.tab_content, mCard);
+                    break;
+                case R.id.card_library:
+                    //Toast.makeText(this,"Coming soon",Toast.LENGTH_SHORT).show();
+                    //Intent libraryIntent = new Intent(MainActivity.this,LibraryActivity.class);
+                    //startActivity(libraryIntent);
+                    toolbar.setTitle(getString(R.string.fun_title_library));
+                    if (mLibrary == null) mLibrary = new LibraryFragment();
+                    transaction.replace(R.id.tab_content, mLibrary);
+                    break;
+            }
+            transaction.addToBackStack(null);
+        } else {
+            if (mFailtrue == null) mFailtrue = new NetWorkFailedFragment();
+            transaction.replace(R.id.tab_content, mFailtrue);
         }
-        //add to stack
-        transaction.addToBackStack(null);
         transaction.commit();
+        //add to stack
     }
 
+    class NetWorkChangeReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            ConnectivityManager connectivityManager = (ConnectivityManager)
+                    getSystemService(Context.CONNECTIVITY_SERVICE);
+            networkInfo= connectivityManager.getActiveNetworkInfo();
+            if (networkInfo != null && networkInfo.isAvailable()) {
+                //have network, do nothing.
+                //Toast.makeText(context, "Network is available",Toast.LENGTH_SHORT).show();
+                //Log.d("Network", "1");
+            } else {
+                //show failed fragment
+                Toast.makeText(context, "Network is unavailable",Toast.LENGTH_SHORT).show();
+                //Log.d("Network", "0");
+            }
+        }
+    }
 }

@@ -57,6 +57,7 @@
     <string name="update_page" translatable="false">https://www.pgyer.com/grain</string>
     <string name="about_text">This is Grain which is my personal work.I hope it will bring you a nice experience.\n\nDue to the school curriculum interface problems, the development of curriculum functions will be delayed.\n\nAnd thanks 吃番茄的外星人 design this pretty icon.\n\nTo be continued...</string>
     <string name="empty" translatable="false" />
+    <string name="about_license" translatable="false">License</string>
 
     <!--About Schedule-->
     <string name="sun" translatable="false">Sun</string>
@@ -66,6 +67,6 @@
     <string name="wen" translatable="false">Wed</string>
     <string name="tue" translatable="false">Tue</string>
     <string name="mon" translatable="false">Mon</string>
-
+    <string name="network_is_unavailable">Oops,Your network is unavailable</string>
 
 </resources>
