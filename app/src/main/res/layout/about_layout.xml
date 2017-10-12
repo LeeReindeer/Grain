@@ -58,7 +58,6 @@
 
         </LinearLayout>
 
-
         <TextView
             android:id="@+id/about_text"
             android:layout_width="match_parent"
@@ -77,6 +76,16 @@
             android:layout_marginTop="16dp"
             android:textColor="@color/blue_700"
             android:text="@string/about_page"/>
+
+        <TextView
+            android:id="@+id/about_license"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp"
+            android:textColor="@color/blue_700"
+            android:text="@string/about_license"/>
     </LinearLayout>
 
 </LinearLayout>

@@ -7,7 +7,6 @@
   -->
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -71,49 +70,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                    tools:text="College English 1" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/bk_author"
-                    android:layout_marginRight="12dp"
-                    android:layout_marginLeft="12dp"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    tools:text="Xiao Ming"/>
+                    tools:text="Book 1" />
 
             </LinearLayout>
 
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/gr_bk_param1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:layout_marginTop="16dp"
-                    tools:text="Score: "/>
-                <TextView
-                    android:id="@+id/gr_bk_param2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginLeft="16dp"
-                    tools:text="Credit: "/>
-                <TextView
-                    android:id="@+id/gr_bk_param3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginLeft="16dp"
-                    tools:text="GP: "/>
-            </LinearLayout>
 
             <LinearLayout
                 android:orientation="horizontal"
