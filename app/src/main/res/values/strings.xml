@@ -67,6 +67,6 @@
     <string name="wen" translatable="false">Wed</string>
     <string name="tue" translatable="false">Tue</string>
     <string name="mon" translatable="false">Mon</string>
-    <string name="network_is_unavailable">Oops,Your network is unavailable</string>
+    <string name="network_is_unavailable" translatable="false">Oops,Your network is unavailable</string>
 
 </resources>
