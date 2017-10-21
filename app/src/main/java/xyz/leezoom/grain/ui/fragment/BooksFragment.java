@@ -30,6 +30,7 @@ import xyz.leezoom.grain.module.QueryType;
 import xyz.leezoom.grain.module.ServerIp;
 import xyz.leezoom.grain.module.User;
 import xyz.leezoom.grain.ui.BookAdapter;
+import xyz.leezoom.grain.util.FragmentUtil;
 import xyz.leezoom.grain.util.MyBase64;
 import xyz.leezoom.grain.util.NetWorkTask;
 import xyz.leezoom.grain.util.PackMessage;
@@ -68,9 +69,16 @@ public class BooksFragment extends Fragment {
 
         @Override
         public void onFailed() {
+            FragmentUtil.showFailedPage(getActivity(), true, BooksFragment.this);
             Toast.makeText(getContext(), "Failed.Try to sign again.",Toast.LENGTH_SHORT).show();
         }
     };
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        FragmentUtil.showFailedPage(getActivity(), false, this);
+    }
 
     public BooksFragment() {
         // Required empty public constructor

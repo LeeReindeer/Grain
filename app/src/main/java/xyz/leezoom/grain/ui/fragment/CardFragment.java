@@ -24,6 +24,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 
@@ -39,12 +40,11 @@ import xyz.leezoom.grain.module.QueryType;
 import xyz.leezoom.grain.module.ServerIp;
 import xyz.leezoom.grain.module.User;
 import xyz.leezoom.grain.ui.MoneyListAdapter;
+import xyz.leezoom.grain.util.FragmentUtil;
 import xyz.leezoom.grain.util.MyBase64;
 import xyz.leezoom.grain.util.PackMessage;
 
-/**
- * A simple {@link Fragment} subclass.
- */
+
 public class CardFragment extends Fragment {
 
     @BindView(R.id.cd_recent_money_list) ListView moneyListView;
@@ -53,6 +53,8 @@ public class CardFragment extends Fragment {
     @BindView(R.id.cd_status) Button mStatus;
     @BindView(R.id.cd_money) Button mBalance;
     @BindView(R.id.cd_progress) ProgressBar mProgressView;
+
+    private NetWorkFailedFragment failedFragment;
 
     private final static QueryType BASEINFO = QueryType.CardUserBaseInfo;
     private final static QueryType PAYMENT = QueryType.CardUserPayment;
@@ -90,6 +92,9 @@ public class CardFragment extends Fragment {
         @Override
         public void onFailed() {
             //SHOW FAILED PAGE
+            showProgress(false);
+            FragmentUtil.showFailedPage(getActivity(), true, CardFragment.this);
+            Toast.makeText(getContext(), "Get card info failed", Toast.LENGTH_SHORT).show();
         }
     };
     //call on payment result success return
@@ -130,7 +135,6 @@ public class CardFragment extends Fragment {
 
         @Override
         public void onFailed() {
-
         }
     };
 
@@ -167,17 +171,22 @@ public class CardFragment extends Fragment {
         user.setPassword(pass);
         user.setToken(MyBase64.BASE64ToString(query.getString("ttt","none")));
         user.setHostInfo(hostInfo);
-        //gte base info
+        //get base info
         baseTask = new xyz.leezoom.grain.util.NetWorkTask(user, BASEINFO, ServerIp.cardServerPort, bListener, getContext());
         baseTask.execute((Void)null);
+        //set more info to list
         initList();
         adapter.notifyDataSetChanged();
-        return  view;
+        return view;
     }
 
+
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+    public void onDetach() {
+        super.onDetach();
+        showProgress(false);
+        FragmentUtil.showFailedPage(getActivity(), false, this);
+        failedFragment = null;
         baseTask.cancel(true);
         payTask.cancel(true);
         Toolbar toolbar=getActivity().findViewById(R.id.toolbar);

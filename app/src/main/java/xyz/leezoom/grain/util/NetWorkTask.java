@@ -11,17 +11,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.Socket;
-import java.net.SocketException;
-import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import xyz.leezoom.grain.module.QueryType;
-import xyz.leezoom.grain.module.ServerIp;
 import xyz.leezoom.grain.module.User;
 
 /**
@@ -76,7 +69,7 @@ public class NetWorkTask extends AsyncTask<Void, Void, Boolean> {
         editor.putString(queryType.name(),MyBase64.stringToBASE64(receiveMsg));
         // commit
         editor.apply();
-        return !(receiveMsg == null || receiveMsg.equals("false"));
+        return !(receiveMsg == null || receiveMsg.equals("false") || receiveMsg.isEmpty());
     }
 
     @Override

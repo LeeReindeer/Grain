@@ -19,7 +19,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +32,7 @@ import xyz.leezoom.grain.module.QueryType;
 import xyz.leezoom.grain.module.ServerIp;
 import xyz.leezoom.grain.module.User;
 import xyz.leezoom.grain.ui.BookAdapter;
+import xyz.leezoom.grain.util.FragmentUtil;
 import xyz.leezoom.grain.util.MyBase64;
 import xyz.leezoom.grain.util.NetWorkTask;
 import xyz.leezoom.grain.util.PackMessage;
@@ -77,7 +77,7 @@ public class BookSearchFragment extends Fragment {
 
         @Override
         public void onFailed() {
-
+            FragmentUtil.showFailedPage(getActivity(), true, BookSearchFragment.this);
         }
     };
 
@@ -90,6 +90,12 @@ public class BookSearchFragment extends Fragment {
         // Required empty public constructor
     }
 
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        FragmentUtil.showFailedPage(getActivity(), false, this);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

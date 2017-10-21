@@ -22,7 +22,7 @@ import android.widget.ScrollView;
  * @Author lee
  * @Time 9/23/17.
  */
-
+// TODO: 10/8/17
 public class ScheduleView extends ScrollView {
 
     private final static int DAY_TEXT_HEIGHT = 50;

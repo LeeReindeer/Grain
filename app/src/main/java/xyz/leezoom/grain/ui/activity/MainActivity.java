@@ -284,8 +284,9 @@ public class MainActivity extends AppCompatActivity
                 case R.id.nav_schedule:
                     //Toast.makeText(this,"Coming soon",Toast.LENGTH_SHORT).show();
                     toolbar.setTitle(getString(R.string.fun_title_schedule));
-                    if (mSchedule == null) mSchedule = new ScheduleFragment();
-                    transaction.replace(R.id.tab_content, mSchedule);
+                    //if (mSchedule == null) mSchedule = new ScheduleFragment();
+                    //transaction.replace(R.id.tab_content, mSchedule);
+                    Toast.makeText(this, "This function is unavailable now", Toast.LENGTH_SHORT).show();
                     break;
                 default:
                     break;
@@ -313,7 +314,7 @@ public class MainActivity extends AppCompatActivity
                     transaction.replace(R.id.tab_content, mMark);
                     break;
                 case R.id.card_class:
-                    //toolbar.setTitle("Course Table");
+                    toolbar.setTitle(R.string.fun_title_schedule);
                     Toast.makeText(this, "This function is unavailable now", Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.card_card:

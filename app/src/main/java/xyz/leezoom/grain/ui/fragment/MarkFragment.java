@@ -25,7 +25,6 @@ import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -38,6 +37,7 @@ import xyz.leezoom.grain.module.QueryType;
 import xyz.leezoom.grain.module.ServerIp;
 import xyz.leezoom.grain.module.User;
 import xyz.leezoom.grain.ui.MarkAdapter;
+import xyz.leezoom.grain.util.FragmentUtil;
 import xyz.leezoom.grain.util.MyBase64;
 import xyz.leezoom.grain.util.PackMessage;
 /**
@@ -68,7 +68,7 @@ public class MarkFragment extends Fragment {
 
         @Override
         public void onFailed() {
-            //todo show failed page or send broadcast to show dialog
+            FragmentUtil.showFailedPage(getActivity(), true, MarkFragment.this);
         }
     };
     //get user info from MainActivity
@@ -95,6 +95,7 @@ public class MarkFragment extends Fragment {
         fab.setVisibility(View.VISIBLE);
         fab.setIcon(R.drawable.ic_sort_white_48dp);
         fab.setTitle("Sort by Default");
+        //sort mark
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -158,8 +159,9 @@ public class MarkFragment extends Fragment {
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+    public void onDetach() {
+        super.onDetach();
+        FragmentUtil.showFailedPage(getActivity(), false, this);
         Toolbar toolbar=getActivity().findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.app_name));
     }

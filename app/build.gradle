@@ -7,7 +7,7 @@ android {
         applicationId "xyz.leezoom.grain"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 13
+        versionCode 14
         versionName "1.5.${versionCode}"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }

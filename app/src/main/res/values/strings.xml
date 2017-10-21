@@ -41,7 +41,7 @@
     <string name="fun_title_your_mark" translatable="false">君の成绩</string>
     <string name="fun_title_your_card">Your card</string>
     <string name="fun_title_library">Library</string>
-    <string name="fun_title_schedule">Schedule</string>
+    <string name="fun_title_schedule">TimeTable</string>
 
     <!-- card title -->
     <string name="cd_title_time">Time</string>
@@ -67,6 +67,6 @@
     <string name="wen" translatable="false">Wed</string>
     <string name="tue" translatable="false">Tue</string>
     <string name="mon" translatable="false">Mon</string>
-    <string name="network_is_unavailable" translatable="false">Oops,Your network is unavailable</string>
+    <string name="network_is_unavailable" translatable="false">Oops,Bad network.\n</string>
 
 </resources>
