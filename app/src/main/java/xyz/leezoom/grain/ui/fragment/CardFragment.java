@@ -186,7 +186,6 @@ public class CardFragment extends Fragment {
         super.onDetach();
         showProgress(false);
         FragmentUtil.showFailedPage(getActivity(), false, this);
-        failedFragment = null;
         baseTask.cancel(true);
         payTask.cancel(true);
         Toolbar toolbar=getActivity().findViewById(R.id.toolbar);

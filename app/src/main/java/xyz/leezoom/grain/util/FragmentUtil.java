@@ -22,21 +22,18 @@ import xyz.leezoom.grain.ui.fragment.NetWorkFailedFragment;
 
 public class FragmentUtil {
 
-    private static NetWorkFailedFragment failedFragment;
+    private static final NetWorkFailedFragment failedFragment = new NetWorkFailedFragment();
+
+    private FragmentUtil() {}
 
     public static void showFailedPage(FragmentActivity activity, boolean key, Fragment fThis) {
         FragmentManager fm = activity.getSupportFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
         if (key) {
-            if (failedFragment == null) {
-                failedFragment = new NetWorkFailedFragment();
-            }
             transaction.hide(fThis);
             transaction.add(R.id.tab_content,failedFragment);
         } else {
-            if (failedFragment != null) {
-                transaction.remove(failedFragment);
-            }
+            transaction.remove(failedFragment);
         }
         transaction.commit();
     }
