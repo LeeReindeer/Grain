@@ -7,3 +7,6 @@
 /build
 /captures
 .externalNativeBuild
+.idea/
+app/app-release.apk
+app/src/main/java/xyz/leezoom/grain/module/ServerIpOld.java
