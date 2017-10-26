@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +32,8 @@ import xyz.leezoom.grain.module.Book;
 import xyz.leezoom.grain.module.QueryType;
 import xyz.leezoom.grain.module.ServerIpOld;
 import xyz.leezoom.grain.module.User;
-import xyz.leezoom.grain.ui.BookAdapter;
 import xyz.leezoom.grain.ui.activity.MainActivity;
+import xyz.leezoom.grain.ui.adapter.BookAdapter;
 import xyz.leezoom.grain.util.FragmentUtil;
 import xyz.leezoom.grain.util.MyBase64;
 import xyz.leezoom.grain.util.NetWorkTask;
@@ -65,11 +66,16 @@ public class BookSearchFragment extends Fragment {
             for (String e : splitData1) {
                 String singleData [] = e.split(PackMessage.SplitFields);
                 Book book = new Book();
-                book.setName(singleData[1]);
-                book.setAuthor(singleData[2].replace("著","").replace("编",""));
-                book.setParam1(singleData[3]);
-                book.setParam2(singleData[4]);
-                book.setPlace(singleData[5]);
+                try {
+                    book.setName(singleData[1]);
+                    book.setAuthor(singleData[2].replace("著","").replace("编",""));
+                    book.setParam1(singleData[3]);
+                    book.setParam2(singleData[4]);
+                    book.setPlace(singleData[5]);
+                } catch (ArrayIndexOutOfBoundsException t) {
+                    Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
+                    t.printStackTrace();
+                }
                 bookList.add(book);
             }
             adapterList.addAll(bookList);

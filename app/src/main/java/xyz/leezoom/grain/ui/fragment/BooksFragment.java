@@ -29,8 +29,8 @@ import xyz.leezoom.grain.module.Book;
 import xyz.leezoom.grain.module.QueryType;
 import xyz.leezoom.grain.module.ServerIpOld;
 import xyz.leezoom.grain.module.User;
-import xyz.leezoom.grain.ui.BookAdapter;
 import xyz.leezoom.grain.ui.activity.MainActivity;
+import xyz.leezoom.grain.ui.adapter.BookAdapter;
 import xyz.leezoom.grain.util.FragmentUtil;
 import xyz.leezoom.grain.util.MyBase64;
 import xyz.leezoom.grain.util.NetWorkTask;
@@ -59,10 +59,15 @@ public class BooksFragment extends Fragment {
             for (String e : splitData1) {
                 String singleData [] = e.split(PackMessage.SplitFields);
                 Book book = new Book();
-                book.setName(singleData[0]);
-                book.setParam1(singleData[9]);
-                book.setParam2(singleData[10]);
-                book.setPlace(singleData[5]);
+                try {
+                    book.setName(singleData[0]);
+                    book.setParam1(singleData[9]);
+                    book.setParam2(singleData[10]);
+                    book.setPlace(singleData[5]);
+                } catch (ArrayIndexOutOfBoundsException t) {
+                    Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
+                    t.printStackTrace();
+                }
                 bookList.add(book);
             }
             adapter.notifyDataSetChanged();
@@ -91,7 +96,7 @@ public class BooksFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_my_books, container, false);
         ButterKnife.bind(this,view);
-        initList();
+        initData();
         adapter = new BookAdapter(getContext(),bookList);
         LinearLayoutManager layoutManager=new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -100,7 +105,7 @@ public class BooksFragment extends Fragment {
         return view;
     }
 
-    private void initList(){
+    private void initData(){
         bookList = new ArrayList<>();
         bookList.clear();
         user = MainActivity.getUser();

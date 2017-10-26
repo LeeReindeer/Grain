@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
@@ -36,8 +37,8 @@ import xyz.leezoom.grain.module.Mark;
 import xyz.leezoom.grain.module.QueryType;
 import xyz.leezoom.grain.module.ServerIpOld;
 import xyz.leezoom.grain.module.User;
-import xyz.leezoom.grain.ui.MarkAdapter;
 import xyz.leezoom.grain.ui.activity.MainActivity;
+import xyz.leezoom.grain.ui.adapter.MarkAdapter;
 import xyz.leezoom.grain.util.FragmentUtil;
 import xyz.leezoom.grain.util.MyBase64;
 import xyz.leezoom.grain.util.PackMessage;
@@ -171,7 +172,7 @@ public class MarkFragment extends Fragment {
         markList.clear();
         user = MainActivity.getUser();
         refreshLayout.setRefreshing(true);
-        xyz.leezoom.grain.util.NetWorkTask mTask = new xyz.leezoom.grain.util.NetWorkTask(user, queryType, ServerIpOld.mainServerPort, listener, getContext());
+        xyz.leezoom.grain.util.NetWorkTask mTask = new xyz.leezoom.grain.util.NetWorkTask(user, queryType, ServerIpOld.classServerPort, listener, getContext());
         mTask.execute((Void) null);
         /*Mark mark = new Mark();
         mark.setName("大学英语1");
@@ -205,14 +206,19 @@ public class MarkFragment extends Fragment {
             Log.d("mark",e);
             markSplitArray = e.split(PackMessage.SplitFields);
             Mark mark = new Mark();
-            mark.setSchoolId(markSplitArray[0]);
-            mark.setYear(markSplitArray[2]);
-            mark.setSemester(markSplitArray[3]);
-            mark.setTeacherName(markSplitArray[4]);
-            mark.setName(markSplitArray[5]);
-            mark.setScore(markSplitArray[6]);
-            mark.setCredit(markSplitArray[7]);
-            mark.setGp(markSplitArray[8]);
+            try {
+                mark.setSchoolId(markSplitArray[0]);
+                mark.setYear(markSplitArray[2]);
+                mark.setSemester(markSplitArray[3]);
+                mark.setTeacherName(markSplitArray[4]);
+                mark.setName(markSplitArray[5]);
+                mark.setScore(markSplitArray[6]);
+                mark.setCredit(markSplitArray[7]);
+                mark.setGp(markSplitArray[8]);
+            } catch (ArrayIndexOutOfBoundsException t) {
+                Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
+                t.printStackTrace();
+            }
             boolean isProcessed = false;
             //ensure to get Not repeat scores
             for (int i = 0; i < processedMark.size(); i++) {
