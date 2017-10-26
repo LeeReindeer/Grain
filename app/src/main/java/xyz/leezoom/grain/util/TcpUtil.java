@@ -7,9 +7,6 @@
 
 package xyz.leezoom.grain.util;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -17,7 +14,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
-import xyz.leezoom.grain.module.ServerIp;
+import xyz.leezoom.grain.module.ServerIpOld;
 
 /**
  * @Author lee
@@ -41,7 +38,7 @@ public class TcpUtil {
             //PackMessage packMessage=new PackMessage(user.getAccount(),user.getCertCard(),user.getExtend(),user.getHostInfo(),user.getOthers(),user.getPassword(),user.getSchoolId(),user.getPhoneNumber(),queryType.name(),user.getToken(),user.getName(),user.getVersion());
             String packMsg= MyBase64.stringToBASE64(packMessage.PackQuestMessage());
             TcpCommon tcpCommon=new TcpCommon();
-            Socket socket=new Socket(ServerIp.mainIp,Integer.valueOf(this.port));
+            Socket socket=new Socket(ServerIpOld.mainIp,Integer.valueOf(this.port));
             socket.setSoTimeout(5000);
             InputStream in=socket.getInputStream();
             //client send message

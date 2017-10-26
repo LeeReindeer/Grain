@@ -12,12 +12,10 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
-
 import android.os.AsyncTask;
-
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -32,7 +30,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import xyz.leezoom.grain.R;
 import xyz.leezoom.grain.module.QueryType;
-import xyz.leezoom.grain.module.ServerIp;
+import xyz.leezoom.grain.module.ServerIpOld;
 import xyz.leezoom.grain.module.User;
 import xyz.leezoom.grain.util.MyBase64;
 import xyz.leezoom.grain.util.PackMessage;
@@ -232,7 +230,7 @@ public class LoginActivity extends AppCompatActivity{
                 User user=new User(mName,mAccount,mPassword,"","",getDeviceInfo(),""); // get token
                 PackMessage packMessage=new PackMessage(QueryType.Validation.name(), mName, mAccount, user.getAccount(), user.getPassword(),
                         user.getPhoneNumber(), user.getCertCard(), user.getToken(), user.getExtend(),user.getHostInfo(),user.getVersion(),user.getOthers());
-                TcpUtil tcp = new TcpUtil(ServerIp.baseServerPort,packMessage);
+                TcpUtil tcp = new TcpUtil(ServerIpOld.baseServerPort,packMessage);
                 //check login
                 if (tcp.receiveString().equals("false")){
                     return false;
@@ -244,7 +242,7 @@ public class LoginActivity extends AppCompatActivity{
                 User realUser = new User(mName,mAccount,mPassword,certCard,mAccount,getDeviceInfo(),firstToken);
                 PackMessage realMessage=new PackMessage(QueryType.Validation.name(), mName, mAccount, realUser.getAccount(), realUser.getPassword(),
                         realUser.getPhoneNumber(), realUser.getCertCard(), realUser.getToken(), realUser.getExtend(),realUser.getHostInfo(),realUser.getVersion(),realUser.getOthers());
-                TcpUtil realTcp = new TcpUtil(ServerIp.baseServerPort,realMessage);
+                TcpUtil realTcp = new TcpUtil(ServerIpOld.baseServerPort,realMessage);
                 String realToken = realTcp.receiveString().split(PackMessage.SplitFields)[3];
                 info = getSharedPreferences("info",MODE_PRIVATE);
                 query = getSharedPreferences("query",MODE_PRIVATE);

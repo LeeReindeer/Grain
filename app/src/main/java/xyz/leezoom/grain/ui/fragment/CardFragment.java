@@ -37,7 +37,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import xyz.leezoom.grain.R;
 import xyz.leezoom.grain.module.Card;
 import xyz.leezoom.grain.module.QueryType;
-import xyz.leezoom.grain.module.ServerIp;
+import xyz.leezoom.grain.module.ServerIpOld;
 import xyz.leezoom.grain.module.User;
 import xyz.leezoom.grain.ui.MoneyListAdapter;
 import xyz.leezoom.grain.util.FragmentUtil;
@@ -172,7 +172,7 @@ public class CardFragment extends Fragment {
         user.setToken(MyBase64.BASE64ToString(query.getString("ttt","none")));
         user.setHostInfo(hostInfo);
         //get base info
-        baseTask = new xyz.leezoom.grain.util.NetWorkTask(user, BASEINFO, ServerIp.cardServerPort, bListener, getContext());
+        baseTask = new xyz.leezoom.grain.util.NetWorkTask(user, BASEINFO, ServerIpOld.cardServerPort, bListener, getContext());
         baseTask.execute((Void)null);
         //set more info to list
         initList();
@@ -234,7 +234,7 @@ public class CardFragment extends Fragment {
         //card.setBalance("217.22");
         //moneyList.add(card);
         //NetWorkTask payTask = new NetWorkTask(user,PAYMENT);
-        payTask = new xyz.leezoom.grain.util.NetWorkTask(user, PAYMENT, ServerIp.cardServerPort, pListener, getContext());
+        payTask = new xyz.leezoom.grain.util.NetWorkTask(user, PAYMENT, ServerIpOld.cardServerPort, pListener, getContext());
         payTask.execute((Void)null);
     }
 }

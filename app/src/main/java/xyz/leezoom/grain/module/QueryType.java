@@ -12,18 +12,19 @@ package xyz.leezoom.grain.module;
  * @Time 9/4/17.
  */
 public enum QueryType {
-    //query mark
-    ZFQueryXueshengChengji,
-    //token
-    Validation,
-    //get  last version number
-    VersionNumber,
+
+    ZFQueryXueshengChengji, //query mark
+
+    ZFQueryCengkeToday, //query today's class
+
+    Validation, //token
+    VersionNumber, //get  last version number
     Version,
-    CardUserBaseInfo,
-    //user pic
-    CardUserPicture,
-    CardUserPayment,
-    //query book
-    TsgQueryBooks,
+
+    CardUserBaseInfo, //user's card base info
+    CardUserPicture, //user's pic
+    CardUserPayment, //user's payment
+
+    TsgQueryBooks, //query book
     TsgUserLibrarys
 }

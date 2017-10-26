@@ -27,7 +27,7 @@ import butterknife.ButterKnife;
 import xyz.leezoom.grain.R;
 import xyz.leezoom.grain.module.Book;
 import xyz.leezoom.grain.module.QueryType;
-import xyz.leezoom.grain.module.ServerIp;
+import xyz.leezoom.grain.module.ServerIpOld;
 import xyz.leezoom.grain.module.User;
 import xyz.leezoom.grain.ui.BookAdapter;
 import xyz.leezoom.grain.util.FragmentUtil;
@@ -118,7 +118,7 @@ public class BooksFragment extends Fragment {
         user.setPassword(pass);
         user.setToken(MyBase64.BASE64ToString(query.getString("ttt","none")));
         user.setHostInfo(hostInfo);
-        netWorkTask = new NetWorkTask(user, QueryType.TsgUserLibrarys, ServerIp.libraryServerPort,mListener,getContext());
+        netWorkTask = new NetWorkTask(user, QueryType.TsgUserLibrarys, ServerIpOld.libraryServerPort,mListener,getContext());
         netWorkTask.execute((Void) null);
     }
 

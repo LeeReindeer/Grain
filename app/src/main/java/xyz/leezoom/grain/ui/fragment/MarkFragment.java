@@ -34,7 +34,7 @@ import butterknife.ButterKnife;
 import xyz.leezoom.grain.R;
 import xyz.leezoom.grain.module.Mark;
 import xyz.leezoom.grain.module.QueryType;
-import xyz.leezoom.grain.module.ServerIp;
+import xyz.leezoom.grain.module.ServerIpOld;
 import xyz.leezoom.grain.module.User;
 import xyz.leezoom.grain.ui.MarkAdapter;
 import xyz.leezoom.grain.util.FragmentUtil;
@@ -187,7 +187,7 @@ public class MarkFragment extends Fragment {
         //markTask = new NetWorkTask(user, queryType);
         //markTask.execute((Void) null);
         refreshLayout.setRefreshing(true);
-        xyz.leezoom.grain.util.NetWorkTask mTask = new xyz.leezoom.grain.util.NetWorkTask(user, queryType, ServerIp.mainServerPort, listener, getContext());
+        xyz.leezoom.grain.util.NetWorkTask mTask = new xyz.leezoom.grain.util.NetWorkTask(user, queryType, ServerIpOld.mainServerPort, listener, getContext());
         mTask.execute((Void) null);
         /*Mark mark = new Mark();
         mark.setName("大学英语1");
