@@ -32,6 +32,7 @@ import xyz.leezoom.grain.module.QueryType;
 import xyz.leezoom.grain.module.ServerIpOld;
 import xyz.leezoom.grain.module.User;
 import xyz.leezoom.grain.ui.BookAdapter;
+import xyz.leezoom.grain.ui.activity.MainActivity;
 import xyz.leezoom.grain.util.FragmentUtil;
 import xyz.leezoom.grain.util.MyBase64;
 import xyz.leezoom.grain.util.NetWorkTask;
@@ -116,22 +117,7 @@ public class BookSearchFragment extends Fragment {
     private void doSearch(){
         bookList = new ArrayList<>();
         bookList.clear();
-        info = getActivity().getSharedPreferences("info", Context.MODE_PRIVATE);
-        query = getActivity().getSharedPreferences("query",Context.MODE_PRIVATE);
-        String name = MyBase64.BASE64ToString(info.getString("nnn","none"));
-        String account = MyBase64.BASE64ToString(info.getString("aaa","none"));
-        String pass = MyBase64.BASE64ToString(info.getString("ppp","none"));
-        String hostInfo = MyBase64.BASE64ToString(info.getString("hhh","none"));
-        String idCard = MyBase64.BASE64ToString(info.getString("ccc","none"));
-        user = new User();
-        user.setName(name);
-        user.setAccount(account);
-        user.setSchoolId(account);
-        user.setCertCard(idCard);
-        user.setExtend(searchString+",,,0");
-        user.setPassword(pass);
-        user.setToken(MyBase64.BASE64ToString(query.getString("ttt","none")));
-        user.setHostInfo(hostInfo);
+        user = MainActivity.getUser();
         netWorkTask = new NetWorkTask(user, QueryType.TsgQueryBooks, ServerIpOld.libraryServerPort, listener, getContext());
         netWorkTask.execute((Void)null);
     }

@@ -37,6 +37,7 @@ import xyz.leezoom.grain.module.QueryType;
 import xyz.leezoom.grain.module.ServerIpOld;
 import xyz.leezoom.grain.module.User;
 import xyz.leezoom.grain.ui.MarkAdapter;
+import xyz.leezoom.grain.ui.activity.MainActivity;
 import xyz.leezoom.grain.util.FragmentUtil;
 import xyz.leezoom.grain.util.MyBase64;
 import xyz.leezoom.grain.util.PackMessage;
@@ -168,24 +169,7 @@ public class MarkFragment extends Fragment {
 
     private void initList(boolean fromNet){
         markList.clear();
-        user = new User();
-        info = getActivity().getSharedPreferences("info",Context.MODE_PRIVATE);
-        query = getActivity().getSharedPreferences("query",Context.MODE_PRIVATE);
-        String name = MyBase64.BASE64ToString(info.getString("nnn","none"));
-        String account = MyBase64.BASE64ToString(info.getString("aaa","none"));
-        String pass = MyBase64.BASE64ToString(info.getString("ppp","none"));
-        String hostInfo = MyBase64.BASE64ToString(info.getString("hhh","none"));
-        String idCard = MyBase64.BASE64ToString(info.getString("ccc","none"));
-        user.setName(name);
-        user.setAccount(account);
-        user.setSchoolId(account);
-        user.setCertCard(idCard);
-        user.setExtend(account);
-        user.setPassword(pass);
-        user.setToken(MyBase64.BASE64ToString(query.getString("ttt","none")));
-        user.setHostInfo(hostInfo);
-        //markTask = new NetWorkTask(user, queryType);
-        //markTask.execute((Void) null);
+        user = MainActivity.getUser();
         refreshLayout.setRefreshing(true);
         xyz.leezoom.grain.util.NetWorkTask mTask = new xyz.leezoom.grain.util.NetWorkTask(user, queryType, ServerIpOld.mainServerPort, listener, getContext());
         mTask.execute((Void) null);

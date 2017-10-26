@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity
     private boolean isLogin=false;
     private SharedPreferences info;
     private SharedPreferences query;
-    private User user;
+    private static User user;
 
     private IntentFilter intentFilter;
     private NetWorkChangeReceiver netWorkChangeReceiver;
@@ -130,6 +130,14 @@ public class MainActivity extends AppCompatActivity
                 Toast.makeText(MainActivity.this,"You denied me",Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+
+    public static User getUser() {
+        if (MainActivity.user == null) {
+            return null;
+        }
+        return MainActivity.user;
     }
 
     private void loadData(){
