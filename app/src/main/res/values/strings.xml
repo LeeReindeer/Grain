@@ -32,16 +32,16 @@
     <string name="drawer_title_about">About</string>
     <string name="drawer_title_exit">Login out</string>
     <string name="drawer_title_mark">Mark</string>
-    <string name="drawer_title_schedule">Schedule</string>
+    <string name="drawer_title_schedule">Today</string>
     <string name="drawer_title_card">Card</string>
     <string name="drawer_title_library">Library</string>
     <string name="drawer_title_others">Others</string>
 
     <!-- fun title-->
     <string name="fun_title_your_mark" translatable="false">君の成绩</string>
-    <string name="fun_title_your_card">Your card</string>
+    <string name="fun_title_your_card">Card</string>
     <string name="fun_title_library">Library</string>
-    <string name="fun_title_schedule">TimeTable</string>
+    <string name="fun_title_schedule">Today</string>
 
     <!-- card title -->
     <string name="cd_title_time">Time</string>

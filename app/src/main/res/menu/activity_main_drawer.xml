@@ -10,13 +10,13 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_mark"
-            android:icon="@drawable/ic_mark_black_48dp"
-            android:title="@string/drawer_title_mark" />
-        <item
             android:id="@+id/nav_schedule"
             android:icon="@drawable/ic_schedule_black_48dp"
             android:title="@string/drawer_title_schedule"/>
+        <item
+            android:id="@+id/nav_mark"
+            android:icon="@drawable/ic_mark_black_48dp"
+            android:title="@string/drawer_title_mark" />
         <item
             android:id="@+id/nav_card"
             android:icon="@drawable/ic_card_black_48dp"
@@ -25,18 +25,14 @@
             android:id="@+id/nav_library"
             android:icon="@drawable/ic_library_black_48dp"
             android:title="@string/drawer_title_library"/>
-        <item
-            android:id="@+id/nav_exit"
-            android:icon="@drawable/ic_exit_to_app_black_48dp"
-            android:title="@string/drawer_title_exit" />
     </group>
 
     <item android:title="@string/drawer_title_others">
         <menu>
             <item
-                android:id="@+id/nav_feedback"
-                android:icon="@drawable/ic_bug_report_black_48dp"
-                android:title="@string/drawer_title_feedback" />
+                android:id="@+id/nav_exit"
+                android:icon="@drawable/ic_exit_to_app_black_48dp"
+                android:title="@string/drawer_title_exit" />
             <item
                 android:id="@+id/nav_update"
                 android:icon="@drawable/ic_update_black_48dp"

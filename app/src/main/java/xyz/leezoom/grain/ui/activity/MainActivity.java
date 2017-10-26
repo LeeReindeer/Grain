@@ -141,7 +141,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void loadData(){
-        // TODO: 9/22/17 share user data to fragment
         user=new User();
         info = getSharedPreferences("info", Context.MODE_PRIVATE);
         query = getSharedPreferences("query",Context.MODE_PRIVATE);
@@ -247,9 +246,6 @@ public class MainActivity extends AppCompatActivity
         FragmentTransaction transaction = fm.beginTransaction();
         if (networkInfo !=null && networkInfo.isAvailable()) {
             switch (id) {
-                case R.id.nav_feedback:
-                    PgyFeedback.getInstance().showDialog(MainActivity.this);
-                    break;
                 case R.id.nav_update:
                     //check update
                     //Toast.makeText(this,"This is the last version",Toast.LENGTH_SHORT).show();
