@@ -63,7 +63,7 @@ public class AboutActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         webView = new WebView(AboutActivity.this);
         webView.setWebViewClient(new WebViewClient());
-        mVersion.setText("v"+getVersionName());
+        mVersion.setText("V"+getVersionName());
     }
 
     private String getVersionName(){

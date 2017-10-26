@@ -39,12 +39,12 @@
         </activity>
         <activity
             android:name=".ui.activity.LoginActivity"
-            android:label="@string/title_activity_login"></activity>
+            android:label="@string/title_activity_login" />
 
         <!-- AppID -->
         <meta-data
             android:name="PGYER_APPID"
-            android:value="47da7ed79771a1ece96b91862fc7c71b"></meta-data>
+            android:value="47da7ed79771a1ece96b91862fc7c71b" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"

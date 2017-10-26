@@ -80,14 +80,21 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        PgyUpdateManager.setIsForced(false);
-        PgyUpdateManager.register(this,"xyz.leezoom.grain");
-        registerNetWork();
         if (checkLogin()) {
             loadData();
             initUI();
             checkPermission();
         }
+        //do after UI load
+        getWindow().getDecorView().post(new Runnable() {
+            @Override
+            public void run() {
+                registerNetWork();
+                //register pgy update service
+                PgyUpdateManager.setIsForced(false);
+                PgyUpdateManager.register(MainActivity.this,"xyz.leezoom.grain");
+            }
+        });
     }
 
     @OnClick (R.id.fab_a) void fabA(){
@@ -169,6 +176,7 @@ public class MainActivity extends AppCompatActivity
     private void initUI(){
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        setDefaultFragment();
         ButterKnife.bind(this);
         actionA.setTitle(getString(R.string.drawer_title_feedback));
         actionB.setVisibility(View.GONE);
@@ -183,7 +191,6 @@ public class MainActivity extends AppCompatActivity
         View header = navigationView.getHeaderView(0);
         TextView  navAccountName= (TextView) header.findViewById(R.id.account_name);
         navAccountName.setText(user.getName());
-        setDefaultFragment();
     }
 
     private void setDefaultFragment(){
