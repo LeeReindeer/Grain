@@ -5,7 +5,7 @@
  * Last modified 9/9/17 5:52 PM
  */
 
-package xyz.leezoom.grain.ui;
+package xyz.leezoom.grain.ui.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.AppCompatTextView;
