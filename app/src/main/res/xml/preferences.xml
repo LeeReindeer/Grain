@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Created by Lee.
+  ~ Copyright (c) 2017. All rights reserved.
+  ~
+  ~ Last modified 10/27/17 4:30 PM
+  -->
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="@string/setting_title_general"
+        android:key="pre_key_general">
+
+        <CheckBoxPreference
+            android:key="pre_key_auto_update"
+            android:title="Auto update"
+            android:summary="Check update when app open"
+            android:defaultValue="true" />
+
+        <Preference
+            android:key="pre_key_check_update"
+            android:title="Check update"
+            android:summary="Check update manual">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="@string/update_page"/>
+        </Preference>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/setting_title_profile"
+        android:key="pre_key_profile">
+
+        <ListPreference
+            android:title="@string/setting_title_faculty"
+            android:key="pre_key_faculty"
+            android:summary="Set your faculty"
+            android:entries="@array/faculty_entry_and_value"
+            android:entryValues="@array/faculty_entry_and_value"/>
+
+        <EditTextPreference
+            android:title="@string/setting_title_class"
+            android:key="pre_key_class"
+            android:summary="Enter your class, like this:A17计算机"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

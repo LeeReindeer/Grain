@@ -2,7 +2,7 @@
  * Created by Lee.
  * Copyright (c) 2017. All rights reserved.
  *
- * Last modified 9/23/17 9:50 PM
+ * Last modified 10/26/17 10:16 PM
  */
 
 package xyz.leezoom.grain.ui.fragment;
@@ -159,7 +159,7 @@ public class CardFragment extends Fragment {
         user = MainActivity.getUser();
         //get base info
         baseTask = new xyz.leezoom.grain.util.NetWorkTask(user, BASEINFO, ServerIpOld.cardServerPort, bListener, getContext());
-        baseTask.execute((Void)null);
+        baseTask.execute((String) null);
         //set more info to list
         initList();
         adapter.notifyDataSetChanged();
@@ -221,6 +221,6 @@ public class CardFragment extends Fragment {
         //moneyList.add(card);
         //NetWorkTask payTask = new NetWorkTask(user,PAYMENT);
         payTask = new xyz.leezoom.grain.util.NetWorkTask(user, PAYMENT, ServerIpOld.cardServerPort, pListener, getContext());
-        payTask.execute((Void)null);
+        payTask.execute((String) null);
     }
 }

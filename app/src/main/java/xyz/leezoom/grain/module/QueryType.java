@@ -2,7 +2,7 @@
  * Created by Lee.
  * Copyright (c) 2017. All rights reserved.
  *
- * Last modified 9/7/17 9:59 PM
+ * Last modified 10/27/17 3:54 PM
  */
 
 package xyz.leezoom.grain.module;
@@ -14,8 +14,9 @@ package xyz.leezoom.grain.module;
 public enum QueryType {
 
     ZFQueryXueshengChengji, //query mark
-
     ZFQueryCengkeToday, //query today's class
+    ZFQueryCengkeXYMC, //query faculty
+    ZFAllClassnames, //query all class name
 
     Validation, //token
     VersionNumber, //get  last version number

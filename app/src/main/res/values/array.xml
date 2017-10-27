@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Created by Lee.
+  ~ Copyright (c) 2017. All rights reserved.
+  ~
+  ~ Last modified 10/27/17 4:30 PM
+  -->
+
+<resources>
+    <string-array name="faculty_entry_and_value">
+        <item>船舶与机电工程学院</item><!--1-->
+        <item>港航与交通运输工程学院</item><!--2-->
+        <item>海洋科学与技术学院</item><!--3-->
+        <item>经济与管理学院</item><!--4-->
+        <item>人文学院、教师教育学院</item><!--5-->
+        <item>石化与能源工程学院</item><!--6-->
+        <item>食品与医药学院</item><!--7-->
+        <item>数理与信息学院</item><!--8-->
+        <item>水产学院</item><!--9-->
+        <item>外国语学院</item><!--10-->
+    </string-array>
+
+</resources>

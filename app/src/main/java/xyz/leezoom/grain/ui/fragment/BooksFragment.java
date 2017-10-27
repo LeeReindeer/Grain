@@ -2,7 +2,7 @@
  * Created by Lee.
  * Copyright (c) 2017. All rights reserved.
  *
- * Last modified 9/11/17 3:27 PM
+ * Last modified 10/26/17 10:16 PM
  */
 
 package xyz.leezoom.grain.ui.fragment;
@@ -110,7 +110,7 @@ public class BooksFragment extends Fragment {
         bookList.clear();
         user = MainActivity.getUser();
         netWorkTask = new NetWorkTask(user, QueryType.TsgUserLibrarys, ServerIpOld.libraryServerPort,mListener,getContext());
-        netWorkTask.execute((Void) null);
+        netWorkTask.execute((String) null);
     }
 
 }

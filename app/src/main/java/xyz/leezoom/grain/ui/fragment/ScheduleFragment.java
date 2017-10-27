@@ -2,7 +2,7 @@
  * Created by Lee.
  * Copyright (c) 2017. All rights reserved.
  *
- * Last modified 9/24/17 1:49 PM
+ * Last modified 10/26/17 8:34 PM
  */
 
 package xyz.leezoom.grain.ui.fragment;
@@ -70,7 +70,7 @@ public class ScheduleFragment extends Fragment {
         fabB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: 9/23/17\
+                // TODO: 10/26/17
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 AlertDialog dialog= builder
                         .setTitle("Your course info")

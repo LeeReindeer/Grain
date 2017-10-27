@@ -2,7 +2,7 @@
  * Created by Lee.
  * Copyright (c) 2017. All rights reserved.
  *
- * Last modified 9/12/17 2:59 PM
+ * Last modified 10/27/17 12:15 PM
  */
 
 package xyz.leezoom.grain.ui.fragment;
@@ -41,6 +41,7 @@ import xyz.leezoom.grain.ui.activity.MainActivity;
 import xyz.leezoom.grain.ui.adapter.MarkAdapter;
 import xyz.leezoom.grain.util.FragmentUtil;
 import xyz.leezoom.grain.util.MyBase64;
+import xyz.leezoom.grain.util.NetWorkTask;
 import xyz.leezoom.grain.util.PackMessage;
 /**
  * A simple {@link Fragment} subclass.
@@ -54,7 +55,6 @@ public class MarkFragment extends Fragment {
     private List<Mark> markList = new ArrayList<>();
     private List<Mark> defaultMarkList = new ArrayList<>();
     private MarkAdapter adapter;
-    private SharedPreferences info;
     private SharedPreferences query;
     private String [] markSplitArray;
     private final static QueryType queryType = QueryType.ZFQueryXueshengChengji;
@@ -63,7 +63,7 @@ public class MarkFragment extends Fragment {
         public void onSuccess() {
             markList.clear();
             query = getActivity().getSharedPreferences("query", Context.MODE_PRIVATE);
-            String marks = MyBase64.BASE64ToString(query.getString(queryType.name(),"none"));
+            String marks = MyBase64.BASE64ToString(query.getString(queryType.name(),""));
             getMarkDataFromLocal(marks,true);
             adapter.notifyDataSetChanged();
         }
@@ -135,7 +135,7 @@ public class MarkFragment extends Fragment {
                 refreshMarks();
             }
         });
-        initList(false);
+        initList();
         return view;
     }
 
@@ -151,7 +151,7 @@ public class MarkFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        initList(true);
+                        initList();
                         refreshLayout.setRefreshing(false);
                     }
                 });
@@ -168,12 +168,12 @@ public class MarkFragment extends Fragment {
         toolbar.setTitle(getString(R.string.app_name));
     }
 
-    private void initList(boolean fromNet){
+    private void initList(){
         markList.clear();
         user = MainActivity.getUser();
         refreshLayout.setRefreshing(true);
-        xyz.leezoom.grain.util.NetWorkTask mTask = new xyz.leezoom.grain.util.NetWorkTask(user, queryType, ServerIpOld.classServerPort, listener, getContext());
-        mTask.execute((Void) null);
+        NetWorkTask mTask = new NetWorkTask(user, queryType, ServerIpOld.classServerPort, listener, getContext());
+        mTask.execute((String) null);
         /*Mark mark = new Mark();
         mark.setName("大学英语1");
         mark.setTeacherName(" ming");
@@ -185,7 +185,7 @@ public class MarkFragment extends Fragment {
 
     /**
      *
-     * @param netMarks marks from internet
+     * @param netMarks marks from internet or local
      * @return
      */
     private void getMarkDataFromLocal(String netMarks, boolean isFromNet){
@@ -194,8 +194,10 @@ public class MarkFragment extends Fragment {
         String sortStatus = this.sortStatus;
         String [] allMarks;
         if (isFromNet){
+            //get from net
             allMarks = netMarks.split("\n");
         }else {
+            //get from local
             query = getActivity().getSharedPreferences("query", Context.MODE_PRIVATE);
             String marks = MyBase64.BASE64ToString(query.getString(queryType.name(),"none"));
             allMarks = marks.split("\n");

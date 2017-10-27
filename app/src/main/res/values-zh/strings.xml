@@ -3,7 +3,7 @@
   ~ Created by Lee.
   ~ Copyright (c) 2017. All rights reserved.
   ~
-  ~ Last modified 9/11/17 4:49 PM
+  ~ Last modified 10/27/17 2:41 PM
   -->
 
 <resources>
@@ -27,14 +27,16 @@
     <string name="fun_title_library">图书馆</string>
     <string name="fun_title_your_card">校园卡</string>
     <string name="login_id">学号</string>
-    <string name="login_name">你的名字</string>
     <string name="login_pass">密码</string>
     <string name="title_activity_login">登录</string>
     <string name="app_name">怪小助</string>
     <string name="drawer_title_library">图书馆</string>
     <string name="drawer_title_mark">成绩单</string>
-    <string name="drawer_title_schedule">课程表</string>
+    <string name="drawer_title_schedule">今日</string>
     <string name="drawer_title_card">校园卡</string>
-    <string name="fun_title_schedule">课程表</string>
     <string name="about_text">怪小助(Grain)的诞生最初只是为了方便自己查成绩.经过一番折腾,完成了成绩查询,校园卡信息查询,图书查询功能.\n\n由于学校课表接口的问题,课表功能的开发将延后.\n\n感谢 吃番茄的外星人 设计的图标</string>
+    <string name="title_activity_settings">设置</string>
+    <string name="drawer_title_settings">设置</string>
+    <string name="fun_title_schedule">今日</string>
+    <string name="login_name">姓名</string>
 </resources>

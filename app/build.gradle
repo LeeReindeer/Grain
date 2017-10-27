@@ -1,3 +1,10 @@
+/*
+ * Created by Lee.
+ * Copyright (c) 2017. All rights reserved.
+ *
+ * Last modified 10/27/17 1:05 PM
+ */
+
 apply plugin: 'com.android.application'
 
 android {
@@ -7,9 +14,10 @@ android {
         applicationId "xyz.leezoom.grain"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 14
+        versionCode 15
         versionName "1.5.${versionCode}"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {

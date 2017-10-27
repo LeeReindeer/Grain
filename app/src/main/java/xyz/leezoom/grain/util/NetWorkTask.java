@@ -2,11 +2,12 @@
  * Created by Lee.
  * Copyright (c) 2017. All rights reserved.
  *
- * Last modified 9/9/17 5:43 PM
+ * Last modified 10/27/17 3:52 PM
  */
 
 package xyz.leezoom.grain.util;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -23,7 +24,7 @@ import xyz.leezoom.grain.module.User;
  *
  */
 
-public class NetWorkTask extends AsyncTask<Void, Void, Boolean> {
+public class NetWorkTask extends AsyncTask<String, Void, Boolean> {
 
     private User user;
     private NetWorkTask mTask;
@@ -48,25 +49,36 @@ public class NetWorkTask extends AsyncTask<Void, Void, Boolean> {
     }
 
     @Override
-    protected Boolean doInBackground(Void... params) {
+    protected Boolean doInBackground(String... params) {
         PackMessage packMessage = null;
-        if (queryType == QueryType.CardUserPayment){
+
+        String extend = user.getExtend();
+        if (queryType == QueryType.CardUserPayment) {
             Date date = new Date();
+            @SuppressLint("SimpleDateFormat")
             SimpleDateFormat ft = new SimpleDateFormat("yyyyMMdd");
-            //System.out.println(ft.format(date));
-            packMessage=new PackMessage(queryType.name(), user.getName(), user.getSchoolId(), user.getAccount(), user.getPassword(),
-                    user.getPhoneNumber(), user.getCertCard(), user.getToken(), user.getExtend()+","+ft.format(date)+",0",user.getHostInfo(),user.getVersion(),user.getOthers());
-        }else {
-            packMessage=new PackMessage(queryType.name(), user.getName(), user.getSchoolId(), user.getAccount(), user.getPassword(),
-                    user.getPhoneNumber(), user.getCertCard(), user.getToken(), user.getExtend(),user.getHostInfo(),user.getVersion(),user.getOthers());
+            extend = user.getExtend()+","+ft.format(date)+",0";
+        }else if (queryType ==QueryType.ZFQueryCengkeXYMC) {
+            extend = "";
+        } else if (queryType == QueryType.ZFQueryCengkeToday) {
+            extend = params[0]; //faculty.Example: 数理与信息学院,50,0
+        } else if (queryType == QueryType.ZFAllClassnames) {
+            extend = params[0]; //year.Example: 2015
         }
 
+        packMessage=new PackMessage(queryType.name(), user.getName(), user.getSchoolId(), user.getAccount(), user.getPassword(),
+                user.getPhoneNumber(), user.getCertCard(), user.getToken(), extend, user.getHostInfo(), user.getVersion(), user.getOthers());
         String receiveMsg="";
         TcpUtil tcpUtil = new TcpUtil(port, packMessage);
         receiveMsg = tcpUtil.receiveString();
         query = mContext.getSharedPreferences("query",Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = query.edit();
-        editor.putString(queryType.name(),MyBase64.stringToBASE64(receiveMsg));
+        if (queryType == QueryType.ZFQueryCengkeToday) {
+            String key = extend.replaceAll("[\\D]", "");
+            editor.putString(key, MyBase64.stringToBASE64(receiveMsg));
+        } else {
+            editor.putString(queryType.name(), MyBase64.stringToBASE64(receiveMsg));
+        }
         // commit
         editor.apply();
         return !(receiveMsg == null || receiveMsg.equals("false") || receiveMsg.isEmpty());
