@@ -2,7 +2,7 @@
  * Created by Lee.
  * Copyright (c) 2017. All rights reserved.
  *
- * Last modified 10/27/17 5:43 PM
+ * Last modified 10/27/17 7:36 PM
  */
 
 apply plugin: 'com.android.application'
@@ -13,7 +13,7 @@ android {
     defaultConfig {
         applicationId "xyz.leezoom.grain"
         minSdkVersion 16
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 16
         versionName "1.5.${versionCode}"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
