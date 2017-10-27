@@ -3,7 +3,7 @@
   ~ Created by Lee.
   ~ Copyright (c) 2017. All rights reserved.
   ~
-  ~ Last modified 10/27/17 2:41 PM
+  ~ Last modified 10/27/17 6:40 PM
   -->
 
 <resources>
@@ -39,4 +39,9 @@
     <string name="drawer_title_settings">设置</string>
     <string name="fun_title_schedule">今日</string>
     <string name="login_name">姓名</string>
+    <string name="setting_title_general">通用</string>
+    <string name="setting_title_profile">我</string>
+    <string name="setting_title_faculty">学院</string>
+    <string name="setting_title_class">班级</string>
+    <string name="setting_hint">请在设置里设置你的学院和班级</string>
 </resources>

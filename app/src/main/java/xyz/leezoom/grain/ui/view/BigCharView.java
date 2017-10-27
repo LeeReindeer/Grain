@@ -2,11 +2,12 @@
  * Created by Lee.
  * Copyright (c) 2017. All rights reserved.
  *
- * Last modified 9/29/17 8:20 PM
+ * Last modified 10/27/17 6:35 PM
  */
 
 package xyz.leezoom.grain.ui.view;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
@@ -50,6 +51,7 @@ public class BigCharView extends FrameLayout {
         initView(context);
     }
 
+    @SuppressLint("ResourceType")
     private void initView(Context context) {
         View view = LayoutInflater.from(context).inflate(R.layout.big_char, this, true);
         ButterKnife.bind(this, view);

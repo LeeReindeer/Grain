@@ -3,11 +3,11 @@
   ~ Created by Lee.
   ~ Copyright (c) 2017. All rights reserved.
   ~
-  ~ Last modified 10/27/17 4:30 PM
+  ~ Last modified 10/27/17 6:42 PM
   -->
 
 <resources>
-    <string-array name="faculty_entry_and_value">
+    <string-array  name="faculty_entry_and_value" translatable="false">
         <item>船舶与机电工程学院</item><!--1-->
         <item>港航与交通运输工程学院</item><!--2-->
         <item>海洋科学与技术学院</item><!--3-->
