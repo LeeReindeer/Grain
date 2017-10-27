@@ -2,7 +2,7 @@
   ~ Created by Lee.
   ~ Copyright (c) 2017. All rights reserved.
   ~
-  ~ Last modified 10/27/17 1:07 PM
+  ~ Last modified 10/27/17 5:31 PM
   -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="xyz.leezoom.grain">
@@ -13,9 +13,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" /> <!-- 获取设备信息 -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> <!-- 获取MAC地址 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- 读写sdcard，storage等等 -->
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    -->
-    <!-- 允许程序录制音频 -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" /> <!-- 允许程序录制音频 -->
     <uses-permission android:name="android.permission.GET_TASKS" />
 
     <application
@@ -57,7 +55,8 @@
 
         <activity
             android:name=".ui.activity.AboutActivity"
-            android:theme="@style/LibraryTheme"></activity>
+            android:theme="@style/LibraryTheme" />
+        <activity android:name=".ui.activity.SettingActivity" />
     </application>
 
 </manifest>

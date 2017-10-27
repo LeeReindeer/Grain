@@ -3,7 +3,7 @@
   ~ Created by Lee.
   ~ Copyright (c) 2017. All rights reserved.
   ~
-  ~ Last modified 9/8/17 4:49 PM
+  ~ Last modified 10/27/17 5:28 PM
   -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
@@ -34,9 +34,9 @@
                 android:icon="@drawable/ic_exit_to_app_black_48dp"
                 android:title="@string/drawer_title_exit" />
             <item
-                android:id="@+id/nav_update"
-                android:icon="@drawable/ic_update_black_48dp"
-                android:title="@string/drawer_title_update" />
+                android:id="@+id/nav_settings"
+                android:title="@string/drawer_title_settings"
+                android:icon="@drawable/ic_settings_black_48dp"/>
             <item
                 android:id="@+id/nav_about"
                 android:icon="@drawable/ic_about_black_48dp"

@@ -2,7 +2,7 @@
  * Created by Lee.
  * Copyright (c) 2017. All rights reserved.
  *
- * Last modified 10/8/17 1:41 PM
+ * Last modified 10/27/17 5:33 PM
  */
 
 package xyz.leezoom.grain.ui.activity;
@@ -16,8 +16,8 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -29,7 +29,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -49,7 +48,7 @@ import xyz.leezoom.grain.ui.fragment.FunctionFragment;
 import xyz.leezoom.grain.ui.fragment.LibraryFragment;
 import xyz.leezoom.grain.ui.fragment.MarkFragment;
 import xyz.leezoom.grain.ui.fragment.NetWorkFailedFragment;
-import xyz.leezoom.grain.ui.fragment.ScheduleFragment;
+import xyz.leezoom.grain.ui.fragment.TodayFragment;
 import xyz.leezoom.grain.util.MyBase64;
 
 public class MainActivity extends AppCompatActivity
@@ -68,8 +67,8 @@ public class MainActivity extends AppCompatActivity
     private MarkFragment mMark;
     private CardFragment mCard;
     private LibraryFragment mLibrary;
-    private ScheduleFragment mSchedule;
-    private NetWorkFailedFragment mFailtrue;
+    private TodayFragment mToday;
+    private NetWorkFailedFragment mFailPage;
 
     private Toolbar toolbar;
     @BindView(R.id.multiple_actions) FloatingActionsMenu mulitiAction;
@@ -81,7 +80,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (checkLogin()) {
-            loadData();
+            initData();
             initUI();
             checkPermission();
         }
@@ -91,8 +90,12 @@ public class MainActivity extends AppCompatActivity
             public void run() {
                 registerNetWork();
                 //register pgy update service
-                PgyUpdateManager.setIsForced(false);
-                PgyUpdateManager.register(MainActivity.this,"xyz.leezoom.grain");
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+                boolean isAutoCheck = preferences.getBoolean(SettingActivity.KEY_PREF_AUTO, true);
+                if (isAutoCheck) {
+                    PgyUpdateManager.setIsForced(false);
+                    PgyUpdateManager.register(MainActivity.this, "xyz.leezoom.grain");
+                }
             }
         });
     }
@@ -147,7 +150,7 @@ public class MainActivity extends AppCompatActivity
         return MainActivity.user;
     }
 
-    private void loadData(){
+    private void initData(){
         user=new User();
         info = getSharedPreferences("info", Context.MODE_PRIVATE);
         query = getSharedPreferences("query",Context.MODE_PRIVATE);
@@ -223,29 +226,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Toast.makeText(this,"Coming soon",Toast.LENGTH_SHORT).show();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
@@ -253,11 +233,9 @@ public class MainActivity extends AppCompatActivity
         FragmentTransaction transaction = fm.beginTransaction();
         if (networkInfo !=null && networkInfo.isAvailable()) {
             switch (id) {
-                case R.id.nav_update:
-                    //check update
-                    //Toast.makeText(this,"This is the last version",Toast.LENGTH_SHORT).show();
-                    Intent update = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.update_page)));
-                    startActivity(update);
+                case R.id.nav_settings:
+                   Intent intent = new Intent(this, SettingActivity.class);
+                   startActivity(intent);
                     break;
                 case R.id.nav_about:
                     //show about page
@@ -265,7 +243,6 @@ public class MainActivity extends AppCompatActivity
                     startActivity(about);
                     break;
                 case R.id.nav_exit:
-                    //finish();
                     info = getSharedPreferences("info", MODE_PRIVATE);
                     SharedPreferences.Editor editor = info.edit();
                     editor.putString("aaa", "");
@@ -293,19 +270,23 @@ public class MainActivity extends AppCompatActivity
                     transaction.replace(R.id.tab_content, mLibrary);
                     break;
                 case R.id.nav_schedule:
-                    //Toast.makeText(this,"Coming soon",Toast.LENGTH_SHORT).show();
                     toolbar.setTitle(getString(R.string.fun_title_schedule));
-                    //if (mSchedule == null) mSchedule = new ScheduleFragment();
-                    //transaction.replace(R.id.tab_content, mSchedule);
-                    Toast.makeText(this, "This function is unavailable now", Toast.LENGTH_SHORT).show();
+                    if (mToday == null) mToday = new TodayFragment();
+                    transaction.replace(R.id.tab_content, mToday);
+                    //Toast.makeText(this, "This function is unavailable now", Toast.LENGTH_SHORT).show();
                     break;
                 default:
                     break;
             }
             transaction.addToBackStack(null);
         } else {
-            if (mFailtrue == null) mFailtrue = new NetWorkFailedFragment();
-            transaction.replace(R.id.tab_content, mFailtrue);
+            if (mFailPage == null) {
+                mFailPage = new NetWorkFailedFragment();
+                transaction.replace(R.id.tab_content, mFailPage);
+                // TODO: 10/26/17 send error message to failedPage
+                //mFailPage.setArguments((Bundle) );
+            }
+            transaction.replace(R.id.tab_content, mFailPage);
         }
         transaction.commit();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -326,7 +307,9 @@ public class MainActivity extends AppCompatActivity
                     break;
                 case R.id.card_class:
                     toolbar.setTitle(R.string.fun_title_schedule);
-                    Toast.makeText(this, "This function is unavailable now", Toast.LENGTH_SHORT).show();
+                    if (mToday == null) mToday = new TodayFragment();
+                    transaction.replace(R.id.tab_content, mToday);
+                    //Toast.makeText(this, "This function is unavailable now", Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.card_card:
                     toolbar.setTitle(R.string.fun_title_your_card);
@@ -344,8 +327,8 @@ public class MainActivity extends AppCompatActivity
             }
             transaction.addToBackStack(null);
         } else {
-            if (mFailtrue == null) mFailtrue = new NetWorkFailedFragment();
-            transaction.replace(R.id.tab_content, mFailtrue);
+            if (mFailPage == null) mFailPage = new NetWorkFailedFragment();
+            transaction.replace(R.id.tab_content, mFailPage);
         }
         transaction.commit();
         //add to stack
