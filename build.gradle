@@ -1,8 +1,16 @@
+/*
+ * Created by Lee.
+ * Copyright (c) 2017. All rights reserved.
+ *
+ * Last modified 10/27/17 7:23 PM
+ */
+
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
     repositories {
         jcenter()
+        google()
         //mavenCentral()
     }
     dependencies {
