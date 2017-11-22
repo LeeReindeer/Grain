@@ -2,7 +2,7 @@
  * Created by Lee.
  * Copyright (c) 2017. All rights reserved.
  *
- * Last modified 10/27/17 5:33 PM
+ * Last modified 10/28/17 11:32 AM
  */
 
 package xyz.leezoom.grain.ui.activity;
@@ -221,8 +221,13 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        PgyUpdateManager.unregister();
-        unregisterReceiver(netWorkChangeReceiver);
+        try {
+            PgyUpdateManager.unregister();
+            unregisterReceiver(netWorkChangeReceiver);
+        } catch (NullPointerException e) {
+            //Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        }
     }
 
     @Override

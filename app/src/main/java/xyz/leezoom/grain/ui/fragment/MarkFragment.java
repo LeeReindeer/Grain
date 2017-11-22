@@ -2,7 +2,7 @@
  * Created by Lee.
  * Copyright (c) 2017. All rights reserved.
  *
- * Last modified 10/27/17 12:15 PM
+ * Last modified 11/22/17 8:47 PM
  */
 
 package xyz.leezoom.grain.ui.fragment;
@@ -16,7 +16,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -205,7 +204,7 @@ public class MarkFragment extends Fragment {
 
         List<Mark> processedMark = new ArrayList<>();
         for (String e: allMarks){
-            Log.d("mark",e);
+            //Log.d("mark",e);
             markSplitArray = e.split(PackMessage.SplitFields);
             Mark mark = new Mark();
             try {

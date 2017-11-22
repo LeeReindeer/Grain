@@ -2,7 +2,7 @@
  * Created by Lee.
  * Copyright (c) 2017. All rights reserved.
  *
- * Last modified 10/27/17 7:36 PM
+ * Last modified 11/22/17 8:40 PM
  */
 
 apply plugin: 'com.android.application'
@@ -14,7 +14,7 @@ android {
         applicationId "xyz.leezoom.grain"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 16
+        versionCode 17
         versionName "1.5.${versionCode}"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
@@ -38,6 +38,7 @@ dependencies {
 
     compile files('libs/sun.misc.BASE64Decoder.jar')
     compile 'com.pgyersdk:sdk:2.7.4'
+    //noinspection GradleCompatible
     compile 'com.android.support:appcompat-v7:26.0.0-alpha1'
     compile 'com.android.support:design:26.0.0-alpha1'
     compile 'com.android.support:support-v4:26.0.0-alpha1'

@@ -2,7 +2,7 @@
  * Created by Lee.
  * Copyright (c) 2017. All rights reserved.
  *
- * Last modified 10/26/17 10:16 PM
+ * Last modified 10/28/17 12:25 PM
  */
 
 package xyz.leezoom.grain.ui.fragment;
@@ -83,6 +83,9 @@ public class BooksFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+        if (netWorkTask != null && !netWorkTask.isCancelled()) {
+            netWorkTask.cancel(true);
+        }
         FragmentUtil.showFailedPage(getActivity(), false, this);
     }
 

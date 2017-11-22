@@ -3,7 +3,7 @@
  * Created by Lee.
  * Copyright (c) 2017. All rights reserved.
  *
- * Last modified 10/27/17 5:26 PM
+ * Last modified 10/28/17 11:40 AM
  */
 package xyz.leezoom.grain.ui.fragment;
 
@@ -164,7 +164,10 @@ public class TodayFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        tTask.cancel(true);
+        if (tTask != null && t2Task != null) {
+            tTask.cancel(true);
+            t2Task.cancel(true);
+        }
         FragmentUtil.showFailedPage(getActivity(), false, TodayFragment.this);
         Toolbar toolbar=getActivity().findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.app_name));
