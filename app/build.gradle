@@ -2,7 +2,7 @@
  * Created by Lee.
  * Copyright (c) 2017. All rights reserved.
  *
- * Last modified 11/22/17 8:40 PM
+ * Last modified 11/22/17 8:53 PM
  */
 
 apply plugin: 'com.android.application'
@@ -39,9 +39,9 @@ dependencies {
     compile files('libs/sun.misc.BASE64Decoder.jar')
     compile 'com.pgyersdk:sdk:2.7.4'
     //noinspection GradleCompatible
-    compile 'com.android.support:appcompat-v7:26.0.0-alpha1'
-    compile 'com.android.support:design:26.0.0-alpha1'
-    compile 'com.android.support:support-v4:26.0.0-alpha1'
+    compile 'com.android.support:appcompat-v7:26.+'
+    compile 'com.android.support:design:26.+'
+    compile 'com.android.support:support-v4:26.+'
     compile 'com.android.support:cardview-v7:26.+'
     compile 'com.jakewharton:butterknife:8.8.1'
     compile 'de.hdodenhof:circleimageview:2.1.0'

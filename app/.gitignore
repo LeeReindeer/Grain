@@ -1,5 +1,5 @@
 /build
 /androidTest/
 /test/
-/main/java/xyz/leezoom/grain/module/ServerIp.java
+/main/java/xyz/leezoom/grain/module/ServerIpOld.java
 /main/java/xyz/leezoom/grain/ui/fragment/ScheduleFragment
