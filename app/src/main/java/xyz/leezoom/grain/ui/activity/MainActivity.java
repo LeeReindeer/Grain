@@ -2,7 +2,7 @@
  * Created by Lee.
  * Copyright (c) 2017. All rights reserved.
  *
- * Last modified 10/28/17 11:32 AM
+ * Last modified 11/23/17 2:27 PM
  */
 
 package xyz.leezoom.grain.ui.activity;
@@ -35,6 +35,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
+import com.pgyersdk.crash.PgyCrashManager;
 import com.pgyersdk.feedback.PgyFeedback;
 import com.pgyersdk.update.PgyUpdateManager;
 
@@ -54,9 +55,11 @@ import xyz.leezoom.grain.util.MyBase64;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, FunctionFragment.FOnClickListener {
 
-    private boolean isLogin=false;
+    private boolean isLogin = false;
+    boolean isAutoCheck = true;
     private SharedPreferences info;
     private SharedPreferences query;
+    private SharedPreferences settings;
     private static User user;
 
     private IntentFilter intentFilter;
@@ -84,17 +87,24 @@ public class MainActivity extends AppCompatActivity
             initUI();
             checkPermission();
         }
+        settings = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        isAutoCheck = settings.getBoolean(SettingActivity.KEY_PREF_AUTO, true);
         //do after UI load
         getWindow().getDecorView().post(new Runnable() {
             @Override
             public void run() {
                 registerNetWork();
+                PgyCrashManager.register(getApplicationContext());
                 //register pgy update service
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-                boolean isAutoCheck = preferences.getBoolean(SettingActivity.KEY_PREF_AUTO, true);
+
                 if (isAutoCheck) {
-                    PgyUpdateManager.setIsForced(false);
-                    PgyUpdateManager.register(MainActivity.this, "xyz.leezoom.grain");
+                    try {
+                        PgyUpdateManager.setIsForced(false);
+                        PgyUpdateManager.register(MainActivity.this, "xyz.leezoom.grain");
+                    } catch (RuntimeException e) {
+                        PgyCrashManager.reportCaughtException(getApplicationContext(), e);
+                        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -222,10 +232,13 @@ public class MainActivity extends AppCompatActivity
     protected void onDestroy() {
         super.onDestroy();
         try {
-            PgyUpdateManager.unregister();
             unregisterReceiver(netWorkChangeReceiver);
-        } catch (NullPointerException e) {
-            //Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+            if (isAutoCheck) {
+                PgyUpdateManager.unregister();
+            }
+            PgyCrashManager.unregister();
+        } catch (RuntimeException e ) {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
     }
