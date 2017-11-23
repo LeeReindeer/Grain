@@ -2,7 +2,7 @@
  * Created by Lee.
  * Copyright (c) 2017. All rights reserved.
  *
- * Last modified 10/8/17 1:41 PM
+ * Last modified 11/24/17 1:05 AM
  */
 
 package xyz.leezoom.grain.ui.activity;
@@ -225,14 +225,14 @@ public class LoginActivity extends AppCompatActivity{
         protected Boolean doInBackground(Void... params) {
             try {
                 // Simulate network access.
-                Thread.sleep(1000);
+                Thread.sleep(500);
                 //first time validation
                 User user=new User(mName,mAccount,mPassword,"","",getDeviceInfo(),""); // get token
                 PackMessage packMessage=new PackMessage(QueryType.Validation.name(), mName, mAccount, user.getAccount(), user.getPassword(),
                         user.getPhoneNumber(), user.getCertCard(), user.getToken(), user.getExtend(),user.getHostInfo(),user.getVersion(),user.getOthers());
                 TcpUtil tcp = new TcpUtil(ServerIpOld.baseServerPort,packMessage);
                 //check login
-                if (tcp.receiveString().equals("false")){
+                if (tcp.receiveString().equals("false") || tcp.receiveString().isEmpty()){
                     return false;
                 }
                 String [] tokens = tcp.receiveString().split(PackMessage.SplitFields);
@@ -258,6 +258,8 @@ public class LoginActivity extends AppCompatActivity{
                 Log.d("device",getDeviceInfo());
                 editor.apply();
             } catch (InterruptedException e) {
+                return false;
+            } catch (ArrayIndexOutOfBoundsException e) {
                 return false;
             }
             return true;
