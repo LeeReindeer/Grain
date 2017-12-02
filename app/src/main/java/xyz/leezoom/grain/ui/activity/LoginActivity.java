@@ -2,7 +2,7 @@
  * Created by Lee.
  * Copyright (c) 2017. All rights reserved.
  *
- * Last modified 11/24/17 1:05 AM
+ * Last modified 12/2/17 3:21 PM
  */
 
 package xyz.leezoom.grain.ui.activity;
@@ -25,6 +25,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -258,8 +259,10 @@ public class LoginActivity extends AppCompatActivity{
                 Log.d("device",getDeviceInfo());
                 editor.apply();
             } catch (InterruptedException e) {
+                Toast.makeText(LoginActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                 return false;
             } catch (ArrayIndexOutOfBoundsException e) {
+                Toast.makeText(LoginActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                 return false;
             }
             return true;

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Created by Lee.
+  ~ Copyright (c) 2017. All rights reserved.
+  ~
+  ~ Last modified 12/2/17 3:47 PM
+  -->
+
+<full-backup-content>
+    <exclude
+        domain="sharedpref"
+        path="query.xml" />
+    <exclude
+        domain="sharedpref"
+        path="info.xml" />
+</full-backup-content>

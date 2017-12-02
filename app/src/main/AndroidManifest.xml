@@ -2,19 +2,14 @@
   ~ Created by Lee.
   ~ Copyright (c) 2017. All rights reserved.
   ~
-  ~ Last modified 10/27/17 5:31 PM
+  ~ Last modified 12/2/17 3:47 PM
   -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="xyz.leezoom.grain">
 
-    <!-- 蒲公英sdk必选 -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- 获取网络状态 -->
-    <uses-permission android:name="android.permission.INTERNET" /> <!-- 网络通信 -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" /> <!-- 获取设备信息 -->
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> <!-- 获取MAC地址 -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- 读写sdcard，storage等等 -->
-    <uses-permission android:name="android.permission.RECORD_AUDIO" /> <!-- 允许程序录制音频 -->
-    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -22,7 +17,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_reindeer_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:fullBackupContent="@xml/backup_descriptor"
+        tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name=".ui.activity.MainActivity"
             android:label="@string/app_name"
@@ -37,21 +34,6 @@
         <activity
             android:name=".ui.activity.LoginActivity"
             android:label="@string/title_activity_login" />
-
-        <!-- AppID -->
-        <meta-data
-            android:name="PGYER_APPID"
-            android:value="47da7ed79771a1ece96b91862fc7c71b" />
-
-        <provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="xyz.leezoom.grain"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths" />
-        </provider>
 
         <activity
             android:name=".ui.activity.AboutActivity"

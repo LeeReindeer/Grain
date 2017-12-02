@@ -2,7 +2,7 @@
   ~ Created by Lee.
   ~ Copyright (c) 2017. All rights reserved.
   ~
-  ~ Last modified 10/27/17 5:26 PM
+  ~ Last modified 12/2/17 3:44 PM
   -->
 
 <resources>
@@ -55,7 +55,7 @@
     <!--my info-->
     <string name="dev_email" translatable="false">reindeerlee.work@gmail.com</string>
     <string name="about_page" translatable="false">https://github.com/LeeReindeer/Grain/</string>
-    <string name="update_page" translatable="false">https://www.pgyer.com/grain</string>
+    <string name="update_page" translatable="false">https://www.coolapk.com/apk/xyz.leezoom.grain</string>
     <string name="about_text">This is Grain which is my personal work.I hope it will bring you a nice experience.\n\nDue to the school curriculum interface problems, the development of curriculum functions will be delayed.\n\nAnd thanks 吃番茄的外星人 design this pretty icon.\n\nTo be continued...</string>
     <string name="empty" translatable="false" />
     <string name="about_license" translatable="false">License</string>

@@ -2,7 +2,7 @@
  * Created by Lee.
  * Copyright (c) 2017. All rights reserved.
  *
- * Last modified 10/26/17 8:34 PM
+ * Last modified 12/2/17 3:57 PM
  */
 
 package xyz.leezoom.grain.ui.fragment;
@@ -74,7 +74,7 @@ public class ScheduleFragment extends Fragment {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 AlertDialog dialog= builder
                         .setTitle("Your course info")
-                        .setIcon(R.mipmap.ic_reindeer)
+                        .setIcon(R.mipmap.ic_reindeer_round)
                         .setCancelable(true)
                         .setView(scheduleView.setInputEdit(editText = new EditText(getContext())))
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {

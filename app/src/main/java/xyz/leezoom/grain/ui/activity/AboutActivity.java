@@ -2,7 +2,7 @@
  * Created by Lee.
  * Copyright (c) 2017. All rights reserved.
  *
- * Last modified 10/8/17 1:41 PM
+ * Last modified 12/2/17 3:57 PM
  */
 
 package xyz.leezoom.grain.ui.activity;
@@ -42,7 +42,7 @@ public class AboutActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(AboutActivity.this);
         AlertDialog dialog= builder
                 .setTitle("Attributions")
-                .setIcon(R.mipmap.ic_reindeer)
+                .setIcon(R.mipmap.ic_reindeer_round)
                 .setCancelable(true)
                 .setView(webView)
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {

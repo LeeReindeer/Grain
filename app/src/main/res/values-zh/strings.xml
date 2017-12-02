@@ -3,42 +3,49 @@
   ~ Created by Lee.
   ~ Copyright (c) 2017. All rights reserved.
   ~
-  ~ Last modified 10/27/17 6:40 PM
+  ~ Last modified 12/2/17 3:44 PM
   -->
 
 <resources>
+    <string name="app_name">海大助手</string>
     <string name="action_settings">设置</string>
     <string name="action_sign_in">登录</string>
     <string name="action_sign_in_short">登录</string>
+
     <string name="cd_title_balance">余额</string>
     <string name="cd_title_consume">消费</string>
     <string name="cd_title_place">地点</string>
     <string name="cd_title_terminal">终端</string>
     <string name="cd_title_time">时间</string>
+
     <string name="drawer_title_about">关于</string>
     <string name="drawer_title_exit">登出</string>
     <string name="drawer_title_feedback">反馈</string>
     <string name="drawer_title_others">其他</string>
     <string name="drawer_title_update">更新</string>
-    <string name="error_field_required">请填写</string>
-    <string name="error_incorrect_password">密码不正确</string>
-    <string name="error_invalid_password">如果你没有更改密码,初始密码是你的身份证号码最后九位</string>
-    <string name="error_invalid_schoolId">学号格式不正确</string>
-    <string name="fun_title_library">图书馆</string>
-    <string name="fun_title_your_card">校园卡</string>
-    <string name="login_id">学号</string>
-    <string name="login_pass">密码</string>
-    <string name="title_activity_login">登录</string>
-    <string name="app_name">怪小助</string>
     <string name="drawer_title_library">图书馆</string>
     <string name="drawer_title_mark">成绩单</string>
     <string name="drawer_title_schedule">今日</string>
     <string name="drawer_title_card">校园卡</string>
+    <string name="drawer_title_settings">设置</string>
+
+    <string name="error_field_required">请填写</string>
+    <string name="error_incorrect_password">密码不正确</string>
+    <string name="error_invalid_password">如果你没有更改密码,初始密码是你的身份证号码最后九位</string>
+    <string name="error_invalid_schoolId">学号格式不正确</string>
+
+    <string name="fun_title_library">图书馆</string>
+    <string name="fun_title_your_card">校园卡</string>
+    <string name="fun_title_schedule">今日</string>
+    <string name="login_id">学号</string>
+    <string name="login_pass">密码</string>
+    <string name="login_name">姓名</string>
+
+    <string name="title_activity_login">登录</string>
+
     <string name="about_text">怪小助(Grain)的诞生最初只是为了方便自己查成绩.经过一番折腾,完成了成绩查询,校园卡信息查询,图书查询功能.\n\n由于学校课表接口的问题,课表功能的开发将延后.\n\n感谢 吃番茄的外星人 设计的图标</string>
     <string name="title_activity_settings">设置</string>
-    <string name="drawer_title_settings">设置</string>
-    <string name="fun_title_schedule">今日</string>
-    <string name="login_name">姓名</string>
+
     <string name="setting_title_general">通用</string>
     <string name="setting_title_profile">我</string>
     <string name="setting_title_faculty">学院</string>

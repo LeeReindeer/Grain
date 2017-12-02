@@ -2,28 +2,24 @@
  * Created by Lee.
  * Copyright (c) 2017. All rights reserved.
  *
- * Last modified 11/23/17 2:27 PM
+ * Last modified 12/2/17 4:07 PM
  */
 
 package xyz.leezoom.grain.ui.activity;
 
-import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -35,9 +31,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
-import com.pgyersdk.crash.PgyCrashManager;
-import com.pgyersdk.feedback.PgyFeedback;
-import com.pgyersdk.update.PgyUpdateManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,15 +51,12 @@ public class MainActivity extends AppCompatActivity
     private boolean isLogin = false;
     boolean isAutoCheck = true;
     private SharedPreferences info;
-    private SharedPreferences query;
     private SharedPreferences settings;
     private static User user;
 
-    private IntentFilter intentFilter;
     private NetWorkChangeReceiver netWorkChangeReceiver;
     private NetworkInfo networkInfo;
 
-    private FunctionFragment mainFunction;
     private MarkFragment mMark;
     private CardFragment mCard;
     private LibraryFragment mLibrary;
@@ -85,33 +75,22 @@ public class MainActivity extends AppCompatActivity
         if (checkLogin()) {
             initData();
             initUI();
-            checkPermission();
-        }
-        settings = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-        isAutoCheck = settings.getBoolean(SettingActivity.KEY_PREF_AUTO, true);
-        //do after UI load
-        getWindow().getDecorView().post(new Runnable() {
-            @Override
-            public void run() {
-                registerNetWork();
-                PgyCrashManager.register(getApplicationContext());
-                //register pgy update service
-
-                if (isAutoCheck) {
-                    try {
-                        PgyUpdateManager.setIsForced(false);
-                        PgyUpdateManager.register(MainActivity.this, "xyz.leezoom.grain");
-                    } catch (RuntimeException e) {
-                        PgyCrashManager.reportCaughtException(getApplicationContext(), e);
-                        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
+            //do after UI load
+            getWindow().getDecorView().post(new Runnable() {
+                @Override
+                public void run() {
+                    settings = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+                    isAutoCheck = settings.getBoolean(SettingActivity.KEY_PREF_AUTO, true);
+                    registerNetWork();
                 }
-            }
-        });
+            });
+        }
     }
 
     @OnClick (R.id.fab_a) void fabA(){
-        PgyFeedback.getInstance().showDialog(MainActivity.this);
+        //to coolApk
+        Intent coolIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.coolapk.com/apk/xyz.leezoom.grain"));
+        startActivity(coolIntent);
     }
 
     @OnClick (R.id.fab_b) void fabB(){
@@ -131,28 +110,6 @@ public class MainActivity extends AppCompatActivity
         return false;
     }
 
-    private void checkPermission(){
-        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
-                PackageManager.PERMISSION_GRANTED){
-            Toast.makeText(MainActivity.this,getString(R.string.app_name)+"need write storage permission to run.",Toast.LENGTH_LONG).show();
-            ActivityCompat.requestPermissions(MainActivity.this,new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
-        }else {
-            return;
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == 1){
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                //do nothing
-            }else {
-                Toast.makeText(MainActivity.this,"You denied me",Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-
     public static User getUser() {
         if (MainActivity.user == null) {
             return null;
@@ -163,7 +120,7 @@ public class MainActivity extends AppCompatActivity
     private void initData(){
         user=new User();
         info = getSharedPreferences("info", Context.MODE_PRIVATE);
-        query = getSharedPreferences("query",Context.MODE_PRIVATE);
+        SharedPreferences query = getSharedPreferences("query", Context.MODE_PRIVATE);
         String name = MyBase64.BASE64ToString(info.getString("nnn","none"));
         String account = MyBase64.BASE64ToString(info.getString("aaa","none"));
         String pass = MyBase64.BASE64ToString(info.getString("ppp","none"));
@@ -180,7 +137,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void registerNetWork() {
-        intentFilter = new IntentFilter();
+        IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
         netWorkChangeReceiver = new NetWorkChangeReceiver();
         registerReceiver(netWorkChangeReceiver, intentFilter);
@@ -209,7 +166,7 @@ public class MainActivity extends AppCompatActivity
     private void setDefaultFragment(){
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
-        mainFunction = new FunctionFragment();
+        FunctionFragment mainFunction = new FunctionFragment();
         transaction.replace(R.id.tab_content, mainFunction);
         transaction.commit();
     }
@@ -230,17 +187,15 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
-        try {
-            unregisterReceiver(netWorkChangeReceiver);
-            if (isAutoCheck) {
-                PgyUpdateManager.unregister();
+
+        if (isLogin) {
+            try {
+                unregisterReceiver(netWorkChangeReceiver);
+            } catch (RuntimeException e) {
+                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
-            PgyCrashManager.unregister();
-        } catch (RuntimeException e ) {
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
         }
+        super.onDestroy();
     }
 
     @Override

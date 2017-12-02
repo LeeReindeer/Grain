@@ -2,7 +2,7 @@
  * Created by Lee.
  * Copyright (c) 2017. All rights reserved.
  *
- * Last modified 10/27/17 7:23 PM
+ * Last modified 12/2/17 3:18 PM
  */
 
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
@@ -14,7 +14,7 @@ buildscript {
         //mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0'
+        classpath 'com.android.tools.build:gradle:3.0.1'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -25,7 +25,6 @@ allprojects {
     repositories {
         jcenter()
         //mavenCentral()
-        maven { url "https://raw.githubusercontent.com/Pgyer/mvn_repo_pgyer/master" }
         google()
     }
 }
