@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+            android:id="@+id/transcript_dest"
+            android:icon="@drawable/ic_school_black_24dp"
+            android:title="@string/title_transcript"/>
+
+    <item
+            android:id="@+id/card_dest"
+            android:icon="@drawable/ic_card_black_24dp"
+            android:title="@string/title_card"/>
+
+    <item
+            android:id="@+id/profile_dest"
+            android:icon="@drawable/ic_person_black_24dp"
+            android:title="@string/title_me"/>
+
+</menu>
