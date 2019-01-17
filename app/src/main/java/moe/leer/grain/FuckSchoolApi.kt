@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit
  * Copyright (c) 2017 LeeReindeer
  * https://github.com/LeeReindeer
  */
-class FuckSchoolApi private constructor(context: Context) {
+class FuckSchoolApi private constructor(val context: Context) {
 
     private val TAG = "FuckSchoolApi"
 
@@ -46,6 +46,11 @@ class FuckSchoolApi private constructor(context: Context) {
             }
             return INSTANCE!!
         }
+
+        const val LOGIN_NET_ERROR = -1
+        const val LOGIN_ID_PASS_ERROR = 0
+        const val LOGIN_SUCCESS = 1
+        const val LOGIN_PROCESS = 2
     }
 
     init {
@@ -64,6 +69,9 @@ class FuckSchoolApi private constructor(context: Context) {
 
     private fun getExecution(): String {
         var executionStr = ""
+        if (!context.isNetworkAvailable()) {
+            return executionStr
+        }
         httpClient.newCall(executionRequest).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 return
@@ -82,6 +90,7 @@ class FuckSchoolApi private constructor(context: Context) {
             }
         })
 
+        // fixme maybe stick in here
         while (executionStr.isEmpty());
 
         return executionStr
@@ -111,11 +120,19 @@ class FuckSchoolApi private constructor(context: Context) {
         httpClient.newCall(loginRequest).enqueue(callback)
     }
 
-    fun login(user: User): Observable<Response>? {
+
+    /**
+     * @param user user to login with is and password
+     * @return return observable of login status code
+     * @see LOGIN_NET_ERROR -1 -> network error
+     * @see LOGIN_ID_PASS_ERROR 0 -> password error
+     * @see LOGIN_SUCCESS 1 -> success
+     */
+    fun login(user: User): Observable<Int> {
         val execution = getExecution()
         if (execution.isEmpty()) {
             Log.e(TAG, "getExecution failed");
-            return null
+            return Observable.fromCallable { LOGIN_NET_ERROR }
         }
 
         val formBody = FormBody.Builder()
@@ -133,7 +150,18 @@ class FuckSchoolApi private constructor(context: Context) {
             .post(formBody)
             .build()
 
-        return Observable.fromCallable { httpClient.newCall(loginRequest).execute() }
+        return Observable.fromCallable {
+            val response = httpClient.newCall(loginRequest).execute()
+            Log.d(TAG, "login: respose code: ${response.code()}")
+            val doc = Jsoup.parse(response.body()?.string())
+            // password or ID error
+            val statusDiv = doc.getElementById("status")
+            if (statusDiv != null) {
+                LOGIN_ID_PASS_ERROR
+            } else { // login succeed, redirect to home page
+                LOGIN_SUCCESS
+            }
+        }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }
@@ -168,7 +196,7 @@ class FuckSchoolApi private constructor(context: Context) {
         httpClient.newCall(transcriptRequest).enqueue(callback)
     }
 
-    fun getTranscript(): Observable<MutableList<Transcript>?>? {
+    fun getTranscript(): Observable<MutableList<Transcript>?> {
         return Observable.fromCallable {
             val response = httpClient.newCall(transcriptRequest).execute()
             Log.d(TAG, "onResponse: code: ${response.code()}")
@@ -178,7 +206,7 @@ class FuckSchoolApi private constructor(context: Context) {
                 val transcriptResponse = Gson().parseJson<TranscriptResponse>(resp)
                 transcriptResponse?.transcriptList
             } else {
-                null
+                ArrayList<Transcript>()
             }
         }
             .subscribeOn(Schedulers.io())

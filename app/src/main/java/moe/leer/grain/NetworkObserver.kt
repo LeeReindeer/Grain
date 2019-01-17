@@ -1,6 +1,7 @@
 package moe.leer.grain
 
 import android.content.Context
+import android.util.Log
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
 import io.reactivex.internal.disposables.DisposableHelper
@@ -17,6 +18,7 @@ abstract class NetworkObserver<T>(val context: Context) : Observer<T>, AtomicRef
     override fun onSubscribe(d: Disposable) {
         if (!context.isNetworkAvailable()) {
             onNetworkNotAvailable()
+            Log.d("NetworkObserver", "onSubscribe: network not available")
             d.dispose()
         }
     }
@@ -28,7 +30,7 @@ abstract class NetworkObserver<T>(val context: Context) : Observer<T>, AtomicRef
     }
 
     override fun onError(e: Throwable) {
-
+        e.printStackTrace()
     }
 
     override fun isDisposed(): Boolean {

@@ -4,6 +4,7 @@
     <string name="title_transcript">成绩</string>
     <string name="title_card">校园卡</string>
     <string name="title_me">我</string>
+    <string name="text_func">查成绩，校园卡，图书馆</string>
 
     <string-array name="spinner_year">
         <item>不分学年</item>

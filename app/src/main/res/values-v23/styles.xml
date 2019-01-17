@@ -7,4 +7,9 @@
         <!--make status bar icon grey-->
         <item name="android:windowLightStatusBar">true</item>
     </style>
+
+    <style name="AppTheme.LoginTheme" parent="AppTheme.NoActionBar">
+        <item name="android:statusBarColor">@color/lightBlue</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
 </resources>

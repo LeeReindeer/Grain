@@ -4,12 +4,15 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import androidx.core.app.ActivityOptionsCompat
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_home.*
 import moe.leer.grain.App
 import moe.leer.grain.FuckSchoolApi
 import moe.leer.grain.R
+import moe.leer.grain.login.LoginActivity
 import moe.leer.grain.model.User
 import moe.leer.grain.toast
 import okhttp3.Call
@@ -25,6 +28,19 @@ class HomeActivity : BaseActivity() {
 
         initView()
 //        initData()
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (!(this.application as App).isLogin) {
+            Snackbar.make(constraintLayout, "请先登录", Snackbar.LENGTH_LONG)
+                .setAction(R.string.text_login) { view ->
+                    val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, logo, "logo")
+                    startActivity<LoginActivity>(options.toBundle())
+                }
+                .show()
+        }
     }
 
     override fun initData() {

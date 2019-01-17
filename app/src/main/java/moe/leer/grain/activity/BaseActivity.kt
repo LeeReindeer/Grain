@@ -10,6 +10,7 @@ import android.view.Window
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import moe.leer.grain.R
+import moe.leer.grain.Util
 import java.io.Serializable
 
 /**
@@ -26,6 +27,11 @@ abstract class BaseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 //        setFullScreen()
         super.onCreate(savedInstanceState)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Util.closeKeyboard(this, this.window.decorView)
     }
 
     open fun initView() {}

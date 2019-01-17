@@ -4,4 +4,6 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="margin_4dp">4dp</dimen>
     <dimen name="margin_8dp">8dp</dimen>
+    <dimen name="spinner_height">64dp</dimen>
+    <dimen name="margin_16dp">16dp</dimen>
 </resources>
