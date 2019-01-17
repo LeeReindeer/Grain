@@ -1,0 +1,44 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <!-- enable window content transitions -->
+        <item name="android:windowActivityTransitions">true</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:navigationBarColor">@color/white</item>
+    </style>
+
+    <style name="AppTheme.LoginTheme" parent="AppTheme.NoActionBar">
+        <item name="android:statusBarColor">@color/lightBlue</item>
+    </style>
+
+    <style name="text_view_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <!--<item name="android:textAppearance">-->
+        <!--@android:style/TextAppearance.Material.Large</item>-->
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/dark</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:padding">16dp</item>
+    </style>
+
+    <style name="button_style" parent="AppTheme">
+        <item name="colorButtonNormal">@color/blue</item>
+    </style>
+
+    <style name="white_spinner_style" parent="AppTheme">
+        <item name="colorControlNormal"><!--this color is not of importance --></item>
+        <item name="colorControlActivated">@color/white</item>
+    </style>
+
+</resources>

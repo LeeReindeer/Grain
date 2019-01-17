@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">Grain</string>
+
+    <string name="title_transcript">Transcript</string>
+    <string name="title_card">Card</string>
+    <string name="title_me">Me</string>
+    <string name="menu_logout">Logout</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_id">ID</string>
+    <string name="text_login">Login</string>
+    <string name="text_welcome">Welcome!</string>
+
+    <string-array name="spinner_year">
+        <item>All years</item>
+        <item>1st year</item>
+        <item>2st year</item>
+        <item>3st year</item>
+        <item>4st year</item>
+    </string-array>
+
+    <string-array name="spinner_semester">
+        <item>All semesters</item>
+        <item>1st semester</item>
+        <item>2st semester</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="hint_privacy_policy">Haha, relax, we won’t track you</string>
+    <string name="text_privacy_policy">You must agree ours privacy policy</string>
+    <string name="text_func">Transcript, ECard, Library</string>
+    <string name="hint_check_network">Please check network</string>
+</resources>

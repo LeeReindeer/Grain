@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/loginRootView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" tools:context=".login.LoginActivity">
+
+    <LinearLayout
+            android:id="@+id/logoHolder"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:background="@drawable/gradient_bg">
+        <LinearLayout
+                android:gravity="center"
+                android:layout_marginBottom="@dimen/margin_16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/logo"
+                    android:layout_width="64dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="4dp"
+                    android:src="@mipmap/ic_launcher_round"
+                    android:transitionName="logo"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/app_name"
+                    android:textColor="@color/white"
+                    android:layout_marginStart="4dp"
+                    android:textSize="18sp"/>
+        </LinearLayout>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_func"
+                android:textColor="@color/white"
+                android:layout_marginStart="4dp"
+                android:textSize="15sp"/>
+    </LinearLayout>
+
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="200dp"
+            android:background="@drawable/top_radius">
+
+        <TextView
+                android:id="@+id/welcomeLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="30sp"
+                android:textColor="@color/dark"
+                android:text="@string/text_welcome"
+                android:layout_margin="@dimen/margin_16dp"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/usernameInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="@dimen/margin_16dp"
+                android:layout_marginEnd="@dimen/margin_16dp"
+                android:layout_below="@id/welcomeLabel">
+            <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:background="@null"
+                    android:padding="@dimen/margin_8dp"
+                    android:id="@+id/usernameEdit"
+                    android:hint="@string/hint_id"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <View
+                android:layout_below="@id/usernameInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/margin_16dp"
+                android:layout_marginStart="@dimen/margin_16dp"
+                android:layout_marginEnd="@dimen/margin_16dp"
+                android:background="#DEDFE0"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/passwordInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/usernameInputLayout"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="32dp"
+                android:layout_marginStart="@dimen/margin_16dp"
+                android:layout_marginEnd="@dimen/margin_16dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/passwordEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    android:ems="10"
+                    android:padding="@dimen/margin_8dp"
+                    android:background="@null"
+                    android:hint="@string/hint_password"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+                android:id="@+id/loginBtn"
+                android:text="@string/text_login"
+                android:textAllCaps="false"
+                android:textSize="15sp"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_margin="@dimen/margin_16dp"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/circular_button"
+                android:textColor="@color/white"
+                android:layout_below="@id/passwordInputLayout"
+                app:spinning_bar_color="@color/white"/>
+
+        <TextView
+                android:id="@+id/textPrivacyPolicy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/text_privacy_policy"
+                android:layout_below="@id/loginBtn"
+                android:layout_marginStart="@dimen/margin_16dp"
+                android:layout_marginEnd="@dimen/margin_16dp"
+                android:textColor="@color/blue"/>
+
+    </RelativeLayout>
+
+
+</RelativeLayout>
