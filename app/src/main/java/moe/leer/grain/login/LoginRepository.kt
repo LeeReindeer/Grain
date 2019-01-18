@@ -20,22 +20,36 @@ class LoginRepository(val context: Context, val viewModel: LoginViewModel) {
     private lateinit var disposable: Disposable
 
     fun doLogin(id: Int, password: String) {
-        val observer = object : NetworkObserver<Int>(context) {
+        api.getExecution().subscribe(object : NetworkObserver<String>(context) {
             override fun onNetworkNotAvailable() {
                 viewModel.getLoginStatus().value = FuckSchoolApi.LOGIN_NET_ERROR
-            }
-
-            override fun onNext(status: Int) {
-                Log.d(TAG, "onNext: $status")
-                viewModel.getLoginStatus().value = status
             }
 
             override fun onError(e: Throwable) {
                 super.onError(e)
                 viewModel.getLoginStatus().value = FuckSchoolApi.LOGIN_NET_ERROR
             }
-        }
-        disposable = observer
-        api.login(User(id, password)).subscribe(observer)
+
+            override fun onNext(executionStr: String) {
+                val observer = object : NetworkObserver<Int>(context) {
+                    override fun onNetworkNotAvailable() {
+                        viewModel.getLoginStatus().value = FuckSchoolApi.LOGIN_NET_ERROR
+                    }
+
+                    override fun onNext(status: Int) {
+                        Log.d(TAG, "onNext: $status")
+                        viewModel.getLoginStatus().value = status
+                    }
+
+                    override fun onError(e: Throwable) {
+                        super.onError(e)
+                        viewModel.getLoginStatus().value = FuckSchoolApi.LOGIN_NET_ERROR
+                    }
+                }
+                disposable = observer
+                api.login(User(id, password), executionStr).subscribe(observer)
+            }
+        })
+
     }
 }

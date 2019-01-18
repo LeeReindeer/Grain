@@ -67,11 +67,32 @@ class FuckSchoolApi private constructor(val context: Context) {
         .get()
         .build()
 
-    private fun getExecution(): String {
+    fun getExecution(): Observable<String> {
+        return Observable.fromCallable {
+            val response = httpClient.newCall(executionRequest).execute()
+            if (!response.isSuccessful) {
+                ""
+            } else {
+                val respString = response.body()!!.string()
+                val doc = Jsoup.parse(respString)
+                val selected = doc.select("input[type=hidden]")
+                val executionNode = selected[1]
+                val executionStr = executionNode.attr("value")
+                Log.d(TAG, "onResponse: execution: $executionStr")
+                executionStr
+            }
+        }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    @Deprecated("Main thread may stick")
+    fun getExecutionStick(): String {
         var executionStr = ""
         if (!context.isNetworkAvailable()) {
             return executionStr
         }
+
         httpClient.newCall(executionRequest).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 return
@@ -97,7 +118,7 @@ class FuckSchoolApi private constructor(val context: Context) {
     }
 
     fun loginAsync(user: User, callback: Callback) {
-        val execution = getExecution()
+        val execution = getExecutionStick()
         if (execution.isEmpty()) {
             Log.e(TAG, "getExecution failed");
             return
@@ -128,13 +149,12 @@ class FuckSchoolApi private constructor(val context: Context) {
      * @see LOGIN_ID_PASS_ERROR 0 -> password error
      * @see LOGIN_SUCCESS 1 -> success
      */
-    fun login(user: User): Observable<Int> {
-        val execution = getExecution()
+    fun login(user: User, execution: String): Observable<Int> {
+//        val execution = getExecutionStick()
         if (execution.isEmpty()) {
             Log.e(TAG, "getExecution failed");
             return Observable.fromCallable { LOGIN_NET_ERROR }
         }
-
         val formBody = FormBody.Builder()
             .add("authType", "0")
             .add("username", user.id.toString())
