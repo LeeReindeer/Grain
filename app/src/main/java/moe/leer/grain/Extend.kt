@@ -1,7 +1,9 @@
 package moe.leer.grain
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -38,3 +40,10 @@ fun Context.isNetworkAvailable(): Boolean {
     return connectivityManager.activeNetworkInfo != null && connectivityManager.activeNetworkInfo.isConnected
 }
 
+fun Context.getSP(name: String) = this.getSharedPreferences(name, Context.MODE_PRIVATE)
+
+
+@SuppressLint("CommitPrefEdits")
+fun Context.getSPEdit(name: String, edit: SharedPreferences.Editor.() -> Unit) {
+    edit(this.getSharedPreferences(name, Context.MODE_PRIVATE).edit())
+}

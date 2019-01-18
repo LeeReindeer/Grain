@@ -4,22 +4,20 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_login.*
-import moe.leer.grain.App
-import moe.leer.grain.FuckSchoolApi
-import moe.leer.grain.R
-import moe.leer.grain.Util
+import moe.leer.grain.*
 import moe.leer.grain.activity.BaseActivity
-import moe.leer.grain.model.User
 
 
 class LoginActivity : BaseActivity() {
 
-    private lateinit var user: User
     private lateinit var loginViewModel: LoginViewModel
+
+    private val LAST_ID_SP = "lastId"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,10 +34,17 @@ class LoginActivity : BaseActivity() {
 
     override fun initData() {
         loginViewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
+        // restore last try login id
+        usernameEdit.setText(this.getSP(App.USER_SP).getString(LAST_ID_SP, ""))
     }
 
     override fun initView() {
         super.initView()
+        // show keyboard at password edittext
+        if (usernameEdit.text!!.isNotEmpty()) {
+            Util.showKeyboard(this, passwordEdit)
+        }
+
         val handler = Handler()
         loginViewModel.getLoginStatus()
             .observe(this, Observer { status ->
@@ -70,16 +75,15 @@ class LoginActivity : BaseActivity() {
                     }
 
                     FuckSchoolApi.LOGIN_SUCCESS -> {
-//                                loginBtn.isEnabled = false
                         loginBtn.doneLoadingAnimation(
-                            R.color.green,
-                            Util.getBitmapFromVectorDrawable(this, R.drawable.ic_check_black_24dp)
+                            ContextCompat.getColor(this, R.color.green),
+                            Util.getBitmapFromVectorDrawable(this, R.drawable.ic_check_white_24dp)
                         )
                         (application as App).isLogin = true
 
                         handler.postDelayed({
                             finishAfterTransition()
-                        }, 1000)
+                        }, 500)
                     }
                 }
             })
@@ -91,6 +95,10 @@ class LoginActivity : BaseActivity() {
             if (inputValid()) {
                 loginBtn.startAnimation()
 
+                this.getSPEdit(App.USER_SP) {
+                    putString(LAST_ID_SP, usernameEdit.text.toString())
+                    apply()
+                }
                 loginViewModel.doLogin(usernameEdit.text.toString().toInt(), passwordEdit.text.toString())
             }
         }
