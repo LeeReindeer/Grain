@@ -9,15 +9,20 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_login.*
-import moe.leer.grain.*
+import moe.leer.grain.App
+import moe.leer.grain.Constant.SP_LASTID
+import moe.leer.grain.Constant.SP_NAME
+import moe.leer.grain.FuckSchoolApi
+import moe.leer.grain.R
+import moe.leer.grain.Util
 import moe.leer.grain.activity.BaseActivity
+import moe.leer.grain.getSP
+import moe.leer.grain.getSPEdit
 
 
 class LoginActivity : BaseActivity() {
 
     private lateinit var loginViewModel: LoginViewModel
-
-    private val LAST_ID_SP = "lastId"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +40,7 @@ class LoginActivity : BaseActivity() {
     override fun initData() {
         loginViewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
         // restore last try login id
-        usernameEdit.setText(this.getSP(App.USER_SP).getString(LAST_ID_SP, ""))
+        usernameEdit.setText(this.getSP(SP_NAME).getString(SP_LASTID, ""))
     }
 
     override fun initView() {
@@ -95,8 +100,8 @@ class LoginActivity : BaseActivity() {
             if (inputValid()) {
                 loginBtn.startAnimation()
 
-                this.getSPEdit(App.USER_SP) {
-                    putString(LAST_ID_SP, usernameEdit.text.toString())
+                this.getSPEdit(SP_NAME) {
+                    putString(SP_LASTID, usernameEdit.text.toString())
                     apply()
                 }
                 loginViewModel.doLogin(usernameEdit.text.toString().toInt(), passwordEdit.text.toString())

@@ -2,6 +2,7 @@ package moe.leer.grain
 
 import android.app.Application
 import android.content.Context
+import moe.leer.grain.Constant.SP_NAME
 
 /**
  *
@@ -13,8 +14,8 @@ class App : Application() {
     private val TAG = "App"
 
     var isLogin
-        get() = this.getSharedPreferences(USER_SP, Context.MODE_PRIVATE).getBoolean("isLogin", false)
-        set(value) = this.getSharedPreferences(USER_SP, Context.MODE_PRIVATE)
+        get() = this.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE).getBoolean("isLogin", false)
+        set(value) = this.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE)
             .edit()
             .putBoolean("isLogin", value)
             .apply()
@@ -24,8 +25,6 @@ class App : Application() {
     }
 
     companion object {
-        const val USER_SP = "Repository"
-
         fun getApplication(context: Context): App = context as App
     }
 }
