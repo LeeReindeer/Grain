@@ -16,38 +16,38 @@ import moe.leer.grain.model.Transcript
 class TranscriptViewModel(application: Application) : AndroidViewModel(application) {
     private val TAG = "TranscriptViewModel"
     private val repository: TranscriptRepository
-    private var transcript: MutableLiveData<MutableList<Transcript>> = MutableLiveData()
+    private var transcript: MutableLiveData<MutableList<Transcript>>
     private var year = 0
     private var semester = 0
 
     init {
         repository = TranscriptRepository(application)
+        transcript = repository.getTranscript()
     }
 
     fun getTranscript(): MutableLiveData<MutableList<Transcript>> {
-        transcript.value = repository.getTranscript()
         return transcript
     }
 
     fun filterYear(year: Int) {
         this.year = year
-        transcript.value = repository.filter(year, semester)
+        transcript.postValue(repository.filter(year, semester))
     }
 
     fun filterSemester(semester: Int) {
         this.semester = semester
-        transcript.value = repository.filter(year, semester)
+        transcript.postValue(repository.filter(year, semester))
     }
 
 
     fun refresh() {
         repository.getTranscript()
         Log.d(TAG, "refresh: year: $year  semester: $semester")
-        transcript.value = repository.filter(year, semester)
+        transcript.postValue(repository.filter(year, semester))
     }
 
     override fun onCleared() {
         super.onCleared()
-        repository.getNetworkDisposable().dispose()
+        repository.getNetworkDisposable()?.dispose()
     }
 }

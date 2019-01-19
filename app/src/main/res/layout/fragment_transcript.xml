@@ -1,26 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context=".transcript.TranscriptFragment">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context=".transcript.TranscriptFragment">
+
 
     <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="32dp"
+            android:layout_height="@dimen/spinner_height"
+            android:background="@color/blue"
             android:padding="@dimen/margin_4dp">
 
         <androidx.appcompat.widget.AppCompatSpinner
                 android:id="@+id/yearSpinner"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_toStartOf="@id/semesterSpinner"/>
+                android:layout_toStartOf="@id/semesterSpinner"
+                android:theme="@style/white_spinner_style"
+                android:padding="@dimen/margin_8dp"
+                android:entries="@array/spinner_year"/>
 
         <androidx.appcompat.widget.AppCompatSpinner
                 android:id="@+id/semesterSpinner"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_alignParentEnd="true"/>
+                android:layout_alignParentEnd="true"
+                android:theme="@style/white_spinner_style"
+                android:entries="@array/spinner_semester"/>
     </RelativeLayout>
 
 
@@ -28,7 +35,7 @@
             android:id="@+id/transcriptRefresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="32dp">
+            android:layout_marginTop="@dimen/spinner_height">
 
         <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/transcriptRV"
@@ -38,4 +45,15 @@
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-</FrameLayout>
+
+    <!--todo use error image-->
+    <FrameLayout
+            android:id="@+id/errorPage"
+            android:layout_marginTop="@dimen/spinner_height"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:visibility="gone">
+    </FrameLayout>
+
+</RelativeLayout>

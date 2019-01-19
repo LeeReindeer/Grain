@@ -9,10 +9,16 @@ import com.google.gson.Gson
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import moe.leer.grain.model.ECard
 import moe.leer.grain.model.Transcript
 import moe.leer.grain.model.TranscriptResponse
 import moe.leer.grain.model.User
-import okhttp3.*
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.FormBody
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
 import org.jsoup.Jsoup
 import java.io.IOException
 import java.util.concurrent.TimeUnit
@@ -51,6 +57,8 @@ class FuckSchoolApi private constructor(val context: Context) {
         const val LOGIN_ID_PASS_ERROR = 0
         const val LOGIN_SUCCESS = 1
         const val LOGIN_PROCESS = 2
+
+        const val DEFAULT_PAGE_SIZE = 30
     }
 
     init {
@@ -219,7 +227,7 @@ class FuckSchoolApi private constructor(val context: Context) {
     fun getTranscript(): Observable<MutableList<Transcript>?> {
         return Observable.fromCallable {
             val response = httpClient.newCall(transcriptRequest).execute()
-            Log.d(TAG, "onResponse: code: ${response.code()}")
+            Log.d(TAG, "getTranscript: code: ${response.code()}")
             val resp = response.body()?.string()
             if (resp?.startsWith("{") == true) {
                 Log.d(TAG, "onResponse: $resp")
@@ -247,6 +255,57 @@ class FuckSchoolApi private constructor(val context: Context) {
         return Observable.fromCallable { httpClient.newCall(gpaRequest).execute() }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    /**
+     * @param pageIndex page start from 1
+     */
+    fun getECardList(pageIndex: Int, pageSize: Int): Observable<ArrayList<ECard>?> {
+        val form = FormBody.Builder()
+            .add("pageIndex", pageIndex.toString())
+            .add("pageSize", pageSize.toString())
+            .build()
+        val request = Request.Builder()
+            .url("http://portal.zjou.edu.cn/independent.portal?.cs=ZHxjb20uZWR1LmRrLnN0YXJnYXRlLnBvcnRhbC5jb250YWluZXIuY29yZS5pbXBsLlBvcnRsZXRFbnRpdHlXaW5kb3d8aW50ZS1qeXh4fHZpZXd8bm9ybWFsfHBtX2ludGUtanl4eF9hY3Rpb249cXVlcnlKeXh4fHJtX3xwcm1f")
+            .header("User-Agent", USER_AGENT)
+            .post(form)
+            .build()
+
+        return Observable.fromCallable {
+            val response = httpClient.newCall(request).execute()
+            if (!response.isSuccessful || response.body() == null) {
+                ArrayList()
+            } else {
+                parseCardTable(response.body()!!.string())
+            }
+        }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    //fixme not tested
+    private fun parseCardTable(responseString: String): ArrayList<ECard>? {
+        if (responseString.isEmpty()) {
+            return null
+        }
+        val itemList = ArrayList<ECard>(30)
+        val doc = Jsoup.parse(responseString)
+        val table = doc.select("table")[0]
+        val rows = table.select("tr")
+        for (i in 0..rows.size) {
+            val cols = rows[i].select("td")
+            var money = 0.0
+            try {
+                money = cols[5].text().toDouble()
+            } catch (ignore: NumberFormatException) {
+            }
+            if (money != 0.0) {
+                //FIXME
+//                val item = ECard(cols[3].text(), cols[2].text(), money)
+//                itemList.add(item)
+            }
+        }
+        return itemList
     }
 
 }

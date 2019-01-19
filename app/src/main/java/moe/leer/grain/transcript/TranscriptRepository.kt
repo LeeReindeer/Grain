@@ -3,12 +3,16 @@ package moe.leer.grain.transcript
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import io.reactivex.disposables.Disposable
 import moe.leer.grain.App
+import moe.leer.grain.Constant
+import moe.leer.grain.Constant.SP_FETCH_TRANSCRIPT_TIME
 import moe.leer.grain.FuckSchoolApi
 import moe.leer.grain.NetworkObserver
+import moe.leer.grain.getSPEdit
 import moe.leer.grain.model.Transcript
 import moe.leer.grain.model.TranscriptResponse
 
@@ -25,125 +29,85 @@ class TranscriptRepository(val context: Context) {
 
     private val TAG = "TranscriptRepository"
     private val sp: SharedPreferences
-    private var transcriptList: MutableList<Transcript> = ArrayList()
+    private var transcriptList: MutableLiveData<MutableList<Transcript>> = MutableLiveData()
     private val originData: MutableList<Transcript> = ArrayList()
     private val yearSet: HashSet<String> = HashSet()
 
-    private lateinit var disposable: Disposable
+    private var disposable: Disposable? = null
 
     fun getNetworkDisposable() = disposable
 
 
     init {
-        sp = context.getSharedPreferences(App.USER_SP, Context.MODE_PRIVATE)
+        sp = context.getSharedPreferences(Constant.SP_NAME, Context.MODE_PRIVATE)
     }
 
     private val api = FuckSchoolApi.getInstance(context)
 
-    fun getTranscript(): MutableList<Transcript> {
+    /**
+     * Fill data from Shared preference if user login
+     * when:
+     * FETCH_TIMEOUT not timeout or
+     * network error
+     */
+    fun getDataFromSP() {
+        val transcriptJson = sp.getString(Constant.SP_TRANSCRIPT, "")!!
+        Log.d(TAG, "network not available, getTranscript: from sp")
+        if (!transcriptJson.isEmpty()) {
+            try {
+                Log.d(TAG, "getTranscript: from sp: $transcriptJson")
+                val transcriptFromSP = Gson().fromJson(transcriptJson, TranscriptResponse::class.java)
+
+                originData.clear()
+                originData.addAll(transcriptFromSP.transcriptList!!)
+                transcriptList.postValue(transcriptFromSP.transcriptList)
+            } catch (e: JsonSyntaxException) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun getTranscript(): MutableLiveData<MutableList<Transcript>> {
+//        if (System.currentTimeMillis() - context.getSP(Constant.SP_NAME).getLong(
+//                SP_FETCH_TRANSCRIPT_TIME,
+//                0L
+//            ) < FETCH_TIMEOUT
+//        ) { // Get data from SP
+//            getDataFromSP()
+//            return transcriptList
+//        }
+        // Update last fetch time
+        context.getSPEdit(Constant.SP_NAME) {
+            putLong(SP_FETCH_TRANSCRIPT_TIME, 0)
+            apply()
+        }
+
         val observer = object : NetworkObserver<MutableList<Transcript>?>(context) {
             override fun onNetworkNotAvailable() {
                 //try get from SP
                 if ((context as App).isLogin) {
-                    val transcriptJson = sp.getString("Repository", "")!!
-                    Log.d(TAG, "network not available, getTranscript: from sp")
-                    if (!transcriptJson.isEmpty()) {
-                        try {
-                            Log.d(TAG, "getTranscript: from sp: $transcriptJson")
-                            val transcriptFromSP = Gson().fromJson(transcriptJson, TranscriptResponse::class.java)
-
-                            originData.clear()
-                            originData.addAll(transcriptFromSP.transcriptList!!)
-
-                            transcriptList = transcriptFromSP.transcriptList
-                        } catch (e: JsonSyntaxException) {
-                            e.printStackTrace()
-                        }
-                    }
+                    getDataFromSP()
                 }
             }
 
             override fun onNext(transcriptList: MutableList<Transcript>) {
                 originData.clear()
                 originData.addAll(transcriptList)
-                this@TranscriptRepository.transcriptList = transcriptList
+                this@TranscriptRepository.transcriptList.postValue(transcriptList)
+                // save to SP
+                sp.edit().putString(Constant.SP_TRANSCRIPT, Gson().toJson(TranscriptResponse(transcriptList)))
+                    .apply()
             }
 
             override fun onError(e: Throwable) {
                 super.onError(e)
                 originData.clear()
-                transcriptList.clear()
+                transcriptList.value?.clear()
             }
         }
-        api.getTranscript()?.subscribe(observer)
+        api.getTranscript().subscribe(observer)
         disposable = observer
 
-        /*
-        val netAvailable = context.isNetworkAvailable()
-        // load from net
-        var getFromNetSucceed = false
-        if (netAvailable) {
-
-            disposable = api.getTranscript().subscribeBy(
-                onNext = { response ->
-                    Log.d(TAG, "onResponse: code: ${response.code()}")
-                    val resp = response.body()?.string()
-                    if (resp?.startsWith("{") == true) {
-                        Log.d(TAG, "onResponse: $resp")
-                        val transcriptResponse = Gson().parseJson<TranscriptResponse>(resp)
-
-                        originData.clear()
-                        originData.addAll(transcriptResponse?.transcriptList!!)
-                        transcript.postValue(transcriptResponse.transcriptList)
-                        sp.edit().putString("Repository", resp).apply()
-                        getFromNetSucceed = true
-                    } else {
-                        Log.d(TAG, "onResponse: getTranscript failed")
-                    }
-                },
-                onComplete = {},
-                onError = {}
-            )
-//            api.getTranscriptAsync(object : Callback {
-//                override fun onFailure(call: Call, e: IOException) {
-//                }
-//
-//                override fun onResponse(call: Call, response: Response) {
-//                    Log.d(TAG, "onResponse: code: ${response.code()}")
-//                    val resp = response.body()?.string()
-//                    Log.i(TAG, "onResponse: $resp");
-//                    if (resp?.startsWith("{") == true) {
-//                        Log.d(TAG, "onResponse: $resp")
-//                        val transcriptResponse = Gson().parseJson<TranscriptResponse>(resp)
-//
-//                        originData.clear()
-//                        originData.addAll(transcriptResponse?.transcriptList!!)
-//                        transcript.postValue(transcriptResponse.transcriptList)
-//                        sp.edit().putString("Repository", resp).apply()
-//                        getFromNetSucceed = true
-//                    } else {
-//                        Log.d(TAG, "onResponse: getTranscript failed")
-//                    }
-//                }
-//            })
-        }
-        // get from internet failed, try to get from sp
-        if (!getFromNetSucceed && (context as App).isLogin) {
-            val transcriptJson = sp.getString("Repository", "")!!
-            Log.d(TAG, "getTranscriptAsync: from sp")
-            if (!transcriptJson.isEmpty()) {
-                try {
-                    Log.d(TAG, "getTranscriptAsync: from sp: $transcriptJson")
-                    val transcriptFromSP = Gson().fromJson(transcriptJson, TranscriptResponse::class.java)
-
-                    originData.clear()
-                    originData.addAll(transcriptFromSP.transcriptList!!)
-                    transcript.postValue(transcriptFromSP.transcriptList)
-                } catch (e: JsonSyntaxException) {
-                    e.printStackTrace()
-                }
-            }
-        }*/
         return transcriptList
     }
 
@@ -174,7 +138,7 @@ class TranscriptRepository(val context: Context) {
             yearSet.add(it.year)
         }
         if (year > yearSet.size) {
-            transcriptList.clear()
+            transcriptList.value?.clear()
             return null
         }
         val sortedList = yearSet.asSequence().sortedBy { it }.toList()
