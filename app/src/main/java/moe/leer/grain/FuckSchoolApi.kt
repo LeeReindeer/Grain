@@ -59,6 +59,7 @@ class FuckSchoolApi private constructor(val context: Context) {
         const val LOGIN_PROCESS = 2
 
         const val DEFAULT_PAGE_SIZE = 30
+        const val NETWORK_PAGE_SIZE = 100
     }
 
     init {
@@ -283,16 +284,17 @@ class FuckSchoolApi private constructor(val context: Context) {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    //fixme not tested
+    val regex1 = Regex("(消费机|同力|多媒体)[0-9]*")
+    val regexToRemoveNum = Regex("[0-9]+")
     private fun parseCardTable(responseString: String): ArrayList<ECard>? {
         if (responseString.isEmpty()) {
             return null
         }
         val itemList = ArrayList<ECard>(30)
         val doc = Jsoup.parse(responseString)
-        val table = doc.select("table")[0]
+        val table = doc.getElementById("queryGridPluto_inte_jyxx_")
         val rows = table.select("tr")
-        for (i in 0..rows.size) {
+        for (i in 1 until rows.size) {
             val cols = rows[i].select("td")
             var money = 0.0
             try {
@@ -300,12 +302,59 @@ class FuckSchoolApi private constructor(val context: Context) {
             } catch (ignore: NumberFormatException) {
             }
             if (money != 0.0) {
-                //FIXME
-//                val item = ECard(cols[3].text(), cols[2].text(), money)
-//                itemList.add(item)
+                val name = prettyName(cols[3].text())
+                val item = ECard(cols[1].text().toLong(), name, Util.getTimeDate(cols[2].text()), money)
+                itemList.add(item)
             }
         }
         return itemList
     }
 
+    private fun prettyName(name: String): String {
+        var tmp = name
+        tmp = tmp.replace(regex1, "")
+        tmp = tmp.replace(regexToRemoveNum, "")
+        return tmp
+    }
+
+    private fun removeNumberFromString(origin: String): String {
+        return buildString {
+            for (c in origin) {
+                if (!c.isDigit()) {
+                    append(c)
+                }
+            }
+        }
+    }
+
+    fun getUserInfo(): Observable<User> {
+        val request = Request.Builder()
+            .header("User-Agent", USER_AGENT)
+            .url("http://portal.zjou.edu.cn/index.portal")
+            .get()
+            .build()
+        return Observable.fromCallable {
+            val response = httpClient.newCall(request).execute()
+            val user = User(0, "")
+            if (response.body() == null || response.body()?.string()!!.isEmpty()) {
+                user
+            } else {
+                val doc = Jsoup.parse(response.body()?.string())
+                val div = doc.getElementById("user_info").allElements
+                var nameText = div[0].text()
+                nameText = removeAfterChar(nameText, '，')
+                var idText = div[1].text()
+                idText = removeAfterChar(nameText, '：')
+                var classText = div[2].text()
+                classText = removeAfterChar(nameText, '：')
+                User(idText.toInt(), "", nameText, classText)
+            }
+        }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    private fun removeAfterChar(str: String, char: Char): String {
+        TODO()
+    }
 }

@@ -2,6 +2,8 @@ apply plugin: 'com.android.application'
 
 apply plugin: 'kotlin-android'
 
+apply plugin: 'kotlin-kapt'
+
 apply plugin: 'kotlin-android-extensions'
 
 android {
@@ -37,13 +39,19 @@ dependencies {
     // Room components
     def roomVersion = "2.1.0-alpha03"
     implementation 'android.arch.persistence.room:runtime:' + roomVersion
-    annotationProcessor 'android.arch.persistence.room:compiler:' + roomVersion
+    kapt 'android.arch.persistence.room:compiler:' + roomVersion
 
     // Lifecycle components
     def archLifecycleVersion = "2.0.0"
     // ViewModel and LiveData
     implementation 'androidx.lifecycle:lifecycle-extensions:' + archLifecycleVersion
-    annotationProcessor 'androidx.lifecycle:lifecycle-compiler:' + archLifecycleVersion
+    kapt 'androidx.lifecycle:lifecycle-compiler:' + archLifecycleVersion
+
+    // paging
+    def paging_version = "2.1.0-rc01"
+    implementation "androidx.paging:paging-runtime:$paging_version" // use -ktx for Kotlin
+    // optional - RxJava support
+    implementation "androidx.paging:paging-rxjava2:$paging_version" // use -ktx for Kotlin
 
     // Coroutines
 //    def coroutines = "1.1.0"

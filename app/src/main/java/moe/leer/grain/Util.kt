@@ -9,6 +9,9 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 /**
@@ -50,5 +53,19 @@ object Util {
         val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
         imm!!.hideSoftInputFromWindow(view.windowToken, 0)
 //        imm!!.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+    }
+
+    val formatWithSecond = SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.CHINA)
+    val formatIn24 = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA)
+    fun getTimeDate(dateStr: String): Date? {
+        try {
+            return formatWithSecond.parse(dateStr)
+        } catch (ignore: ParseException) {
+        }
+        return null
+    }
+
+    fun getTimeString(date: Date): String {
+        return formatIn24.format(date)
     }
 }

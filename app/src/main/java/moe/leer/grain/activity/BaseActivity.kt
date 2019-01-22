@@ -2,7 +2,11 @@ package moe.leer.grain.activity
 
 import android.app.Activity
 import android.content.Intent
-import android.os.*
+import android.os.Binder
+import android.os.Build
+import android.os.Bundle
+import android.os.Handler
+import android.os.Parcelable
 import android.util.Size
 import android.util.SizeF
 import android.view.View
@@ -37,12 +41,6 @@ abstract class BaseActivity : AppCompatActivity() {
     open fun initView() {}
 
     abstract fun initData()
-
-    companion object {
-        const val EVENT_JSON_PARAM = "events_json"
-        const val EVENT_POST_PARAM = "event_pos"
-        const val EVENT_SHARED = "events"
-    }
 
     inline fun <reified T : Activity> Activity.startActivity(options: Bundle?, vararg args: Pair<String, Any>) {
         val intent = Intent(this, T::class.java)

@@ -27,5 +27,6 @@ hs_err_pid*
 out/
 ohfuckschool/
 .idea/
+local.properties
 *.iml
 
