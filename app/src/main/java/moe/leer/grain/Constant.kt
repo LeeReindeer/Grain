@@ -9,6 +9,7 @@ package moe.leer.grain
 object Constant {
     // const string for shared preference
     const val SP_NAME = "Repository"
+    const val SP_SETTING_NAME = "settings"
     const val SP_TRANSCRIPT = "Repository"
     const val SP_ISLOGIN = "isLogin"
     const val SP_LASTID = "lastId"

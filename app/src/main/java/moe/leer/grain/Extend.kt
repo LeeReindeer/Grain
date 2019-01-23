@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
@@ -22,8 +23,16 @@ fun Activity.toast(msg: String?) {
     Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
 }
 
+fun Activity.toast(@StringRes id: Int) {
+    Toast.makeText(this, id, Toast.LENGTH_SHORT).show()
+}
+
 fun Fragment.toast(msg: String?) {
     Toast.makeText(this.requireContext(), msg, Toast.LENGTH_SHORT).show()
+}
+
+fun Fragment.toast(@StringRes id: Int) {
+    Toast.makeText(this.requireContext(), id, Toast.LENGTH_SHORT).show()
 }
 
 inline fun <reified T> Gson.parseJson(json: String): T? {

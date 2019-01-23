@@ -20,6 +20,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import org.jsoup.Jsoup
+import org.jsoup.select.Elements
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 
@@ -204,13 +205,37 @@ class FuckSchoolApi private constructor(val context: Context) {
         httpClient.newCall(logoutRequest).enqueue(callback)
     }
 
-    fun logout(): Observable<Response> {
+    fun logout(onComplete: () -> Unit, onError: () -> Unit) {
+        logout().subscribe(object : NetworkObserver<Boolean>(context) {
+            override fun onNetworkNotAvailable() {
+                onError()
+            }
+
+            override fun onNext(successful: Boolean) {
+                if (successful) {
+                    onComplete()
+                } else {
+                    onError()
+                }
+            }
+
+            override fun onError(e: Throwable) {
+                super.onError(e)
+                onError()
+            }
+        })
+    }
+
+    fun logout(): Observable<Boolean> {
         val logoutRequest = Request.Builder()
             .url("https://my.zjou.edu.cn/cas/logout?service=http://portal.zjou.edu.cn")
             .header("User-Agent", USER_AGENT)
             .get()
             .build()
-        return Observable.fromCallable { httpClient.newCall(logoutRequest).execute() }
+        return Observable.fromCallable {
+            val response = httpClient.newCall(logoutRequest).execute()
+            response.isSuccessful && response.body() != null
+        }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }
@@ -341,10 +366,15 @@ class FuckSchoolApi private constructor(val context: Context) {
                 user
             } else {
                 val doc = Jsoup.parse(resp)
-                val div = doc.getElementsByClass("user_info")[0].allElements
+                var div: Elements? = null
+                try {
+                    div = doc.getElementsByClass("user_info")[0].allElements
+                } catch (ignore: Exception) {
+                    return@fromCallable user
+                }
 
                 // index 0 is all content text in the div
-                Log.d(TAG, "nameText: ${div[1].text()}")
+                Log.d(TAG, "nameText: ${div!![1].text()}")
                 val nameText = div[1].text().let { str ->
                     val index = str.indexOfFirst { it == '，' }
                     str.substring(0, index)
