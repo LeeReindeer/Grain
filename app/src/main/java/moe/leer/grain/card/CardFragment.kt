@@ -2,6 +2,7 @@ package moe.leer.grain.card
 
 
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +16,7 @@ import moe.leer.grain.FuckSchoolApi
 import moe.leer.grain.NetworkObserver
 import moe.leer.grain.R
 import moe.leer.grain.model.ECard
+import moe.leer.grain.model.User
 import moe.leer.grain.toast
 import java.util.*
 
@@ -31,18 +33,30 @@ class CardFragment : androidx.fragment.app.Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initData()
-//        mockData()
         initView()
     }
 
     private fun initView() {
         ecardRV.layoutManager = LinearLayoutManager(context)
-        refreshLayout.isRefreshing = true
+        refreshLayout.setOnRefreshListener {
+            viewModel.refresh {
+                refreshLayout.isRefreshing = false
+            }
+        }
         initCard()
     }
 
     private fun initCard() {
-
+        viewModel.refreshUserInfo().observe(this, Observer<User?> {
+            if (it == null || it.id == 0) {
+                showEmptyCard(true)
+            } else {
+                showEmptyCard(false)
+                cardIdText.text = it.id.toString(10)
+                cardMoneyText.text = it.moneyRem.toString()
+                cardNameText.text = it.name
+            }
+        })
     }
 
     private fun initData() {
@@ -52,6 +66,13 @@ class CardFragment : androidx.fragment.app.Fragment() {
             showEmptyPage(it == null || it.isEmpty())
             adapter.submitList(it)
         })
+        refreshLayout.isRefreshing = true
+        viewModel.refresh {
+            Log.d(TAG, "initData: refresh finish")
+            Handler().postDelayed({
+                refreshLayout.isRefreshing = false
+            }, 500)
+        }
     }
 
     private fun mockData() {
@@ -74,10 +95,22 @@ class CardFragment : androidx.fragment.app.Fragment() {
     private fun showEmptyPage(show: Boolean) {
         if (show) {
             //todo
-            refreshLayout.isRefreshing = true
             toast("show empty list")
         } else {
-            refreshLayout.isRefreshing = false
+        }
+    }
+
+    private fun showEmptyCard(show: Boolean) {
+        if (show) {
+            cardIdText.visibility = View.INVISIBLE
+            cardNameText.visibility = View.INVISIBLE
+            cardMoneyText.visibility = View.INVISIBLE
+            cardMoneyLabel.visibility = View.INVISIBLE
+        } else {
+            cardIdText.visibility = View.VISIBLE
+            cardNameText.visibility = View.VISIBLE
+            cardMoneyText.visibility = View.VISIBLE
+            cardMoneyLabel.visibility = View.VISIBLE
         }
     }
 }

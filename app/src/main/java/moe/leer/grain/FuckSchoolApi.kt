@@ -284,8 +284,8 @@ class FuckSchoolApi private constructor(val context: Context) {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    val regex1 = Regex("(消费机|同力|多媒体)[0-9]*")
-    val regexToRemoveNum = Regex("[0-9]+")
+    private val regex1 = Regex("(消费机|同力|多媒体)[0-9]*")
+    private val regexToRemoveNum = Regex("[0-9]+")
     private fun parseCardTable(responseString: String): ArrayList<ECard>? {
         if (responseString.isEmpty()) {
             return null
@@ -329,32 +329,60 @@ class FuckSchoolApi private constructor(val context: Context) {
 
     fun getUserInfo(): Observable<User> {
         val request = Request.Builder()
-            .header("User-Agent", USER_AGENT)
             .url("http://portal.zjou.edu.cn/index.portal")
+            .header("User-Agent", USER_AGENT)
             .get()
             .build()
         return Observable.fromCallable {
             val response = httpClient.newCall(request).execute()
             val user = User(0, "")
-            if (response.body() == null || response.body()?.string()!!.isEmpty()) {
+            val resp = response.body()?.string()
+            if (resp.isNullOrEmpty()) {
                 user
             } else {
-                val doc = Jsoup.parse(response.body()?.string())
-                val div = doc.getElementById("user_info").allElements
-                var nameText = div[0].text()
-                nameText = removeAfterChar(nameText, '，')
-                var idText = div[1].text()
-                idText = removeAfterChar(nameText, '：')
-                var classText = div[2].text()
-                classText = removeAfterChar(nameText, '：')
-                User(idText.toInt(), "", nameText, classText)
+                val doc = Jsoup.parse(resp)
+                val div = doc.getElementsByClass("user_info")[0].allElements
+
+                // index 0 is all content text in the div
+                Log.d(TAG, "nameText: ${div[1].text()}")
+                val nameText = div[1].text().let { str ->
+                    val index = str.indexOfFirst { it == '，' }
+                    str.substring(0, index)
+                }
+                Log.d(TAG, "name: $nameText")
+
+                Log.d(TAG, "idText: ${div[2].text()}")
+                val idText = div[2].text().let { str ->
+                    val index = str.indexOfFirst { it == '：' }
+                    str.substring(index + 1, str.length)
+                }
+                Log.d(TAG, "id: $idText")
+
+                Log.d(TAG, "classText: ${div[3].text()}")
+                val classText = div[3].text().let { str ->
+                    val index = str.indexOfFirst { it == '：' }
+                    str.substring(index + 1, str.length)
+                }
+                Log.d(TAG, "class: $classText")
+
+                val cardLi = doc.getElementsByClass("ykt")
+                val libraryLi = doc.getElementsByClass("tsg")
+                val bookRentTexts = libraryLi[0].allElements[0].text().split(" ")
+
+                var moneyRem = 0.0
+                var bookRentNum = 0
+                var bookRentOutDateNum = 0
+                try {
+                    moneyRem = cardLi[0].allElements[0].text().filter { it.isDigit() || it == '.' }.toDouble()
+                    bookRentNum = bookRentTexts[1].toInt()
+                    bookRentOutDateNum = bookRentTexts[2].filter { it.isDigit() }.toInt()
+                } catch (ignore: NumberFormatException) {
+                }
+
+                User(idText.toInt(), "", nameText, classText, moneyRem, bookRentNum, bookRentOutDateNum)
             }
         }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-    }
-
-    private fun removeAfterChar(str: String, char: Char): String {
-        TODO()
     }
 }

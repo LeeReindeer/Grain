@@ -4,9 +4,11 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
+import moe.leer.grain.FuckSchoolApi
 import moe.leer.grain.db.ECardDatabase
 import moe.leer.grain.db.ECardLocalCache
 import moe.leer.grain.model.ECard
+import moe.leer.grain.model.User
 import java.util.*
 import java.util.concurrent.Executors
 
@@ -30,6 +32,18 @@ class ECardViewModel(application: Application) :
 
     val cardList: LiveData<PagedList<ECard>>
         get() = repository.get()
+
+    // fetch the first page again to get new item, also refresh user info
+    fun refresh(afterRefresh: () -> Unit) {
+        repository.refreshUser()
+        repository.fetch(FuckSchoolApi.DEFAULT_PAGE_SIZE) {
+            afterRefresh()
+        }
+    }
+
+    fun refreshUserInfo(): LiveData<User?> {
+        return repository.userData
+    }
 
     fun cardListByDate(from: Date, to: Date): LiveData<PagedList<ECard>> = repository.getByDate(from, to)
 }

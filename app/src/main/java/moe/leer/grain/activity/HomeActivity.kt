@@ -8,10 +8,14 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.snackbar.Snackbar
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_home.*
 import moe.leer.grain.App
+import moe.leer.grain.Constant
 import moe.leer.grain.FuckSchoolApi
+import moe.leer.grain.NetworkObserver
 import moe.leer.grain.R
+import moe.leer.grain.getSPEdit
 import moe.leer.grain.login.LoginActivity
 import moe.leer.grain.model.User
 import moe.leer.grain.toast
@@ -26,8 +30,8 @@ class HomeActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
+        initData()
         initView()
-//        initData()
 
     }
 
@@ -44,19 +48,21 @@ class HomeActivity : BaseActivity() {
     }
 
     override fun initData() {
-        FuckSchoolApi.getInstance(applicationContext).loginAsync(User(160410218, "01282038"), object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-            }
+        // get user info on app start, can be refreshed in user profile page
+        //  save info to SP. So first load data from SP, meantime, fetch fresh data on the background
+        FuckSchoolApi.getInstance(this).getUserInfo()
+            .subscribe(object : NetworkObserver<User>(this.applicationContext) {
+                override fun onNetworkNotAvailable() {
+                }
 
-            override fun onResponse(call: Call, response: Response) {
-                runOnUiThread {
-                    toast(if (response.isSuccessful()) "login successful" else "login failed")
-                    if (response.isSuccessful) {
-                        App.getApplication(applicationContext).isLogin = true
+                override fun onNext(user: User) {
+                    this@HomeActivity.getSPEdit(Constant.SP_NAME) {
+                        putString(Constant.SP_USER_INFO, Gson().toJson(user))
+                        apply()
                     }
                 }
-            }
-        })
+
+            })
     }
 
     override fun initView() {
@@ -70,7 +76,6 @@ class HomeActivity : BaseActivity() {
         }
 
         toolbar.setOnLongClickListener {
-            initData()
             true
         }
     }

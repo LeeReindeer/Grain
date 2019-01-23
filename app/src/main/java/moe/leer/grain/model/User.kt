@@ -9,5 +9,6 @@ package moe.leer.grain.model
 data class User(
     val id: Int, val password: String,
     val name: String = "", val className: String = "",
-    val bookRentNum: Int = 0, val bookRentOutDataNum: Int = 0
+    var moneyRem: Double = 0.0,
+    var bookRentNum: Int = 0, var bookRentOutDataNum: Int = 0
 )

@@ -18,27 +18,32 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-            <TextView
-                    android:id="@+id/cardMoneyText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+            <RelativeLayout
                     android:layout_centerInParent="true"
-                    android:textAlignment="center"
-                    android:textSize="50sp"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    tools:text="43.19"/>
-            <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_alignBaseline="@id/cardMoneyText"
-                    android:layout_toEndOf="@id/cardMoneyText"
-                    android:textAlignment="center"
-                    android:textSize="25sp"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:text="元"/>
+                    android:layout_height="wrap_content">
+                <TextView
+                        android:id="@+id/cardMoneyText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        android:textSize="50sp"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        tools:text="43.19"/>
+                <TextView
+                        android:id="@+id/cardMoneyLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_alignBaseline="@id/cardMoneyText"
+                        android:layout_toEndOf="@id/cardMoneyText"
+                        android:textAlignment="center"
+                        android:textSize="25sp"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:text="元"/>
+            </RelativeLayout>
 
             <TextView
                     android:id="@+id/schoolLabel"
@@ -51,7 +56,7 @@
                     android:textColor="@color/white"/>
 
             <TextView
-                    android:id="@+id/nameText"
+                    android:id="@+id/cardNameText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
@@ -61,7 +66,7 @@
                     tools:text="李驯鹿"/>
 
             <TextView
-                    android:id="@+id/idText"
+                    android:id="@+id/cardIdText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"

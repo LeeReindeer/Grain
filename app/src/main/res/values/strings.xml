@@ -31,4 +31,5 @@
     <string name="text_privacy_policy">You must agree ours privacy policy</string>
     <string name="text_func">Transcript, ECard, Library</string>
     <string name="hint_check_network">Please check network</string>
+    <string name="text_unknown_data">\???</string>
 </resources>
