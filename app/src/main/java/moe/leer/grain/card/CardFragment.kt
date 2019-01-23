@@ -4,9 +4,7 @@ package moe.leer.grain.card
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -17,21 +15,20 @@ import kotlinx.android.synthetic.main.fragment_card.*
 import moe.leer.grain.FuckSchoolApi
 import moe.leer.grain.NetworkObserver
 import moe.leer.grain.R
+import moe.leer.grain.base.BaseFragment
 import moe.leer.grain.model.ECard
 import moe.leer.grain.model.User
 import moe.leer.grain.toast
 import java.util.*
 
 
-class CardFragment : androidx.fragment.app.Fragment() {
+class CardFragment : BaseFragment() {
+    override var layoutId: Int
+        get() = R.layout.fragment_card
+        set(value) {}
 
-    private val TAG = "CardFragment"
     private lateinit var viewModel: ECardViewModel
     private val adapter = ECardAdapter()
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_card, container, false)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initData()

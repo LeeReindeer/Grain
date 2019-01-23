@@ -4,9 +4,7 @@ package moe.leer.grain.transcript
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
@@ -16,27 +14,25 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_transcript.view.*
 import moe.leer.grain.R
+import moe.leer.grain.base.BaseFragment
 import moe.leer.grain.model.Transcript
 
 
-class TranscriptFragment : androidx.fragment.app.Fragment() {
+class TranscriptFragment : BaseFragment() {
 
-    private val TAG = "TranscriptFragment"
+    override var layoutId: Int
+        get() = R.layout.fragment_transcript
+        set(value) {}
 
     private lateinit var transcriptViewModel: TranscriptViewModel
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: TranscriptAdapter
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_transcript, container, false)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         this.adapter = TranscriptAdapter(this@TranscriptFragment.requireContext())
         recyclerView = view.transcriptRV
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this.requireContext())
-
 
         transcriptViewModel = ViewModelProviders.of(this).get(TranscriptViewModel::class.java)
         view.transcriptRefresh.isRefreshing = true

@@ -1,4 +1,4 @@
-package moe.leer.grain.activity
+package moe.leer.grain.base
 
 import android.app.Activity
 import android.content.Intent
