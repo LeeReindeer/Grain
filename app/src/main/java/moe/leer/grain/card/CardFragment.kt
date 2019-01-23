@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.chaychan.viewlib.NumberRunningTextView
 import kotlinx.android.synthetic.main.fragment_card.*
 import moe.leer.grain.FuckSchoolApi
 import moe.leer.grain.NetworkObserver
@@ -53,7 +54,7 @@ class CardFragment : androidx.fragment.app.Fragment() {
             } else {
                 showEmptyCard(false)
                 cardIdText.text = it.id.toString(10)
-                cardMoneyText.text = it.moneyRem.toString()
+                (cardMoneyText as NumberRunningTextView).setContent(it.moneyRem.toString())
                 cardNameText.text = it.name
             }
         })

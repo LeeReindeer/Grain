@@ -9,10 +9,8 @@ import com.google.gson.JsonSyntaxException
 import io.reactivex.disposables.Disposable
 import moe.leer.grain.App
 import moe.leer.grain.Constant
-import moe.leer.grain.Constant.SP_FETCH_TRANSCRIPT_TIME
 import moe.leer.grain.FuckSchoolApi
 import moe.leer.grain.NetworkObserver
-import moe.leer.grain.getSPEdit
 import moe.leer.grain.model.Transcript
 import moe.leer.grain.model.TranscriptResponse
 
@@ -77,10 +75,10 @@ class TranscriptRepository(val context: Context) {
 //            return transcriptList
 //        }
         // Update last fetch time
-        context.getSPEdit(Constant.SP_NAME) {
-            putLong(SP_FETCH_TRANSCRIPT_TIME, 0)
-            apply()
-        }
+//        context.getSPEdit(Constant.SP_NAME) {
+//            putLong(SP_FETCH_TRANSCRIPT_TIME, 0)
+//            apply()
+//        }
 
         val observer = object : NetworkObserver<MutableList<Transcript>?>(context) {
             override fun onNetworkNotAvailable() {
