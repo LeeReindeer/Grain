@@ -1,5 +1,6 @@
 package moe.leer.grain.login
 
+import android.app.Activity
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -7,7 +8,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_login.*
 import moe.leer.grain.App
 import moe.leer.grain.Constant.SP_LASTID
@@ -15,9 +15,10 @@ import moe.leer.grain.Constant.SP_NAME
 import moe.leer.grain.FuckSchoolApi
 import moe.leer.grain.R
 import moe.leer.grain.Util
-import moe.leer.grain.activity.BaseActivity
+import moe.leer.grain.base.BaseActivity
 import moe.leer.grain.getSP
 import moe.leer.grain.getSPEdit
+import moe.leer.grain.toast
 
 
 class LoginActivity : BaseActivity() {
@@ -71,11 +72,7 @@ class LoginActivity : BaseActivity() {
                             loginBtn.revertAnimation {
                                 loginBtn.setBackgroundResource(R.drawable.circular_button)
                             }
-                            Snackbar.make(
-                                loginRootView,
-                                getString(R.string.hint_check_network),
-                                Snackbar.LENGTH_SHORT
-                            ).show()
+                            toast(R.string.hint_check_network)
                         }, 600)
                     }
 
@@ -87,6 +84,7 @@ class LoginActivity : BaseActivity() {
                         (application as App).isLogin = true
 
                         handler.postDelayed({
+                            setResult(Activity.RESULT_OK)
                             finishAfterTransition()
                         }, 500)
                     }

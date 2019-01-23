@@ -17,7 +17,7 @@ class LoginRepository(val context: Context, val viewModel: LoginViewModel) {
     val TAG = "LoginRepository"
 
     private val api = FuckSchoolApi.getInstance(context)
-    lateinit var disposable: Disposable
+    var disposable: Disposable? = null
 
     fun doLogin(id: Int, password: String) {
         api.getExecution().subscribe(object : NetworkObserver<String>(context) {

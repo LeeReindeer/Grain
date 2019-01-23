@@ -29,6 +29,6 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
     override fun onCleared() {
         super.onCleared()
-        repository.disposable.dispose()
+        repository.disposable?.dispose()
     }
 }
