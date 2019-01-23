@@ -72,6 +72,23 @@ class HomeActivity : BaseActivity() {
         val navController = (hostFragment as NavHostFragment).navController
         bottomNav.setupWithNavController(navController)
 
+        Log.d(TAG, "startPage: ${getSP(Constant.SP_SETTING_NAME).getString("key_start_page", "2")}")
+        when (getSP(Constant.SP_SETTING_NAME).getString("key_start_page", "2")) {
+            "0" -> navController.navigate(R.id.action_profile_to_transcript)
+            "1" -> navController.navigate(R.id.action_profile_to_card)
+            else -> {
+            }
+        }
+
+        //https://stackoverflow.com/questions/51929290/is-it-possible-to-set-startdestination-conditionally-using-android-navigation-ar
+//        val graph = navController.navInflater.inflate(R.navigation.navigation)
+//        when (getSP(Constant.SP_SETTING_NAME).getString("key_start_page", "2")) {
+//            "0" -> graph.startDestination = R.id.transcript_dest
+//            "1" -> graph.startDestination = R.id.card_dest
+//            else -> graph.startDestination = R.id.profile_dest
+//        }
+//        navController.graph = graph
+
         toolbar.setOnClickListener {
         }
 
