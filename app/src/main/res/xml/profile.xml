@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Preference
+            android:key="key_info"
+            android:title="@string/text_unknown_data"
+            android:summary="@string/text_unknown_data"
+            android:icon="@drawable/default_avatar_64dp"/>
+
+    <Preference
+            android:key="key_library"
+            android:title="@string/title_library"
+            android:summary="@string/text_unknown_data"
+            android:icon="@drawable/ic_book_black_24dp"/>
+
+    <Preference
+            android:key="key_logout"
+            android:title="@string/title_logout"
+            android:icon="@drawable/ic_poweroff_black_24dp"/>
+
+    <PreferenceCategory android:title="@string/title_setting"
+                        app:iconSpaceReserved="false">
+
+        <ListPreference
+                android:key="key_start_page"
+                android:title="Start page"
+                android:icon="@drawable/ic_home_black_24dp"
+                android:entries="@array/page_entries"
+                android:entryValues="@array/entry_values_three"
+                android:defaultValue="0"
+                android:summary="%s"
+        />
+
+        <ListPreference
+                android:key="key_transcript"
+                android:title="@string/title_transcript_color"
+                android:icon="@drawable/ic_color_24dp"
+                android:entries="@array/color_entries"
+                android:entryValues="@array/entry_values"
+                android:defaultValue="0"
+                android:summary="%s"
+        />
+
+        <ListPreference
+                android:key="key_language"
+                android:title="@string/title_language"
+                android:icon="@drawable/ic_language_24dp"
+                android:entries="@array/language_entries"
+                android:entryValues="@array/entry_values"
+                android:defaultValue="0"
+                android:summary="%s"
+        />
+
+        <SwitchPreference
+                android:title="@string/title_auto_login"
+                android:key="key_relogin"
+                android:summaryOn="@string/summary_relogin_on"
+                android:summaryOff="@string/summary_relogin_off"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/title_about"
+                        app:iconSpaceReserved="false">
+        <Preference
+                android:key="key_authors"
+                android:title="@string/title_authors"
+                android:summary="Created by Kwok and LeeR"
+                app:iconSpaceReserved="false"/>
+
+        <Preference
+                android:key="key_version"
+                android:title="@string/title_version"
+                android:summary="1.0"
+                app:iconSpaceReserved="false"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

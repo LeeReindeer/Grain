@@ -24,12 +24,52 @@
         <item>2st semester</item>
     </string-array>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="language_entries">
+        <item>English(United States)</item>
+        <item>中文(简体)</item>
+    </string-array>
+
+    <string-array name="color_entries">
+        <item>5 colors</item>
+        <item>2 colors</item>
+    </string-array>
+
+    <string-array name="page_entries">
+        <item>Transcript</item>
+        <item>Card</item>
+        <item>Me</item>
+    </string-array>
+
+    <string-array name="entry_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+    <string-array name="entry_values_three">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
     <string name="privacy_policy">Privacy Policy</string>
     <string name="hint_privacy_policy">Haha, relax, we won’t track you</string>
     <string name="text_privacy_policy">You must agree ours privacy policy</string>
     <string name="text_func">Transcript, ECard, Library</string>
     <string name="hint_check_network">Please check network</string>
     <string name="text_unknown_data">\???</string>
+    <string name="summary_relogin_on">Auto relogin when cookie invalid</string>
+    <string name="summary_relogin_off">Recommend to turn on</string>
+    <string name="title_authors">Authors</string>
+    <string name="title_version">Build Version</string>
+    <string name="title_logout">Logout</string>
+    <string name="title_setting">SETTING</string>
+    <string name="title_about">ABOUT</string>
+    <string name="library_summary">Rent: %d | Out of date: %d</string>
+    <string name="hint_login">Please login first</string>
+    <string name="hint_in_logout">logout...</string>
+    <string name="hint_logout_failed">Logout failed, Retry and check network</string>
+    <string name="title_transcript_color">Transcript colors</string>
+    <string name="title_language">Language</string>
+    <string name="title_auto_login">Auto relogin</string>
+    <string name="title_library">Library</string>
 </resources>
