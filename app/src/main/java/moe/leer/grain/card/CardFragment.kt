@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.paging.PagedList
@@ -71,7 +72,9 @@ class CardFragment : androidx.fragment.app.Fragment() {
         viewModel.refresh {
             Log.d(TAG, "initData: refresh finish")
             Handler().postDelayed({
-                refreshLayout.isRefreshing = false
+                if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
+                    refreshLayout.isRefreshing = false
+                }
             }, 500)
         }
     }
