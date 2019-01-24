@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.browser.customtabs.CustomTabsClient
 import androidx.core.app.ActivityOptionsCompat
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.snackbar.Snackbar
@@ -53,10 +54,17 @@ class HomeActivity : BaseActivity() {
         Log.d(TAG, "onActivityResult: requestCode: $requestCode , resultCode: $resultCode")
         if (requestCode == LOGIN_RESULT) {
             if (resultCode == Activity.RESULT_OK) {
-                val navController = (hostFragment as NavHostFragment).navController
-                val dest = navController.currentDestination?.id ?: R.id.profile_dest
-                navController.navigate(dest)
+                Log.d(TAG, "onActivityResult: login successful")
             }
+            //refresh current fragment
+            val navController = (hostFragment as NavHostFragment).navController
+            val startFragmentId = when (getSP(Constant.SP_SETTING_NAME).getString("key_start_page", "2")) {
+                "0" -> R.id.transcript_dest
+                "1" -> R.id.card_dest
+                else -> R.id.profile_dest
+            }
+            val dest = navController.currentDestination?.id ?: startFragmentId
+            navController.navigate(dest, null, NavOptions.Builder().setPopUpTo(startFragmentId, true).build())
         } else {
             super.onActivityResult(requestCode, resultCode, data)
         }

@@ -79,6 +79,16 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
 
+    fun toggleInteraction(enable: Boolean) {
+        if (enable) {
+            window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+        } else {
+            window.setFlags(
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+            )
+        }
+    }
 
     /**
      *

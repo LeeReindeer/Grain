@@ -27,6 +27,10 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
     fun getLoginStatus() = statusLiveData
 
+    fun cancel() {
+        repository.disposable?.dispose()
+    }
+
     override fun onCleared() {
         super.onCleared()
         repository.disposable?.dispose()

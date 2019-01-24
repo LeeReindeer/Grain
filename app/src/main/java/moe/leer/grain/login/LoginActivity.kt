@@ -24,6 +24,7 @@ import moe.leer.grain.toast
 class LoginActivity : BaseActivity() {
 
     private lateinit var loginViewModel: LoginViewModel
+    private var loging = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +56,8 @@ class LoginActivity : BaseActivity() {
         loginViewModel.getLoginStatus()
             .observe(this, Observer { status ->
                 Log.d(TAG, "statusChange: $status")
+                loging = false
+                toggleInteraction(true)
                 when (status) {
                     FuckSchoolApi.LOGIN_PROCESS -> {
                     }
@@ -102,6 +105,8 @@ class LoginActivity : BaseActivity() {
                     putString(SP_LASTID, usernameEdit.text.toString())
                     apply()
                 }
+                loging = true
+                toggleInteraction(false)
                 loginViewModel.doLogin(usernameEdit.text.toString().toInt(), passwordEdit.text.toString())
             }
         }
@@ -117,6 +122,15 @@ class LoginActivity : BaseActivity() {
                 .setMessage(getString(R.string.hint_privacy_policy) + Util.getEmojiByUnicode(0x1F61B))
                 .create()
                 .show()
+        }
+    }
+
+    override fun onBackPressed() {
+        if (loging) {
+            loginBtn.dispose()
+            loginViewModel.cancel()
+        } else {
+            super.onBackPressed()
         }
     }
 
