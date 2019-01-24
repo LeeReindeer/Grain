@@ -12,6 +12,7 @@ import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chaychan.viewlib.NumberRunningTextView
 import kotlinx.android.synthetic.main.fragment_card.*
+import moe.leer.grain.App
 import moe.leer.grain.FuckSchoolApi
 import moe.leer.grain.NetworkObserver
 import moe.leer.grain.R
@@ -63,17 +64,28 @@ class CardFragment : BaseFragment() {
         ecardRV.adapter = adapter
         viewModel.cardList.observe(this, Observer<PagedList<ECard>?> {
             showEmptyPage(it == null || it.isEmpty())
-            adapter.submitList(it)
+            if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)
+                && App.getApplication(requireContext().applicationContext).isLogin
+            ) {
+                adapter.submitList(it)
+            }
         })
         refreshLayout.isRefreshing = true
-        viewModel.refresh {
-            Log.d(TAG, "initData: refresh finish")
-            Handler().postDelayed({
-                if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
-                    refreshLayout.isRefreshing = false
-                }
-            }, 500)
+
+        if (App.getApplication(requireContext().applicationContext).isLogin) {
+            viewModel.refresh {
+                Log.d(TAG, "initData: refresh finish")
+                Handler().postDelayed({
+                    if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
+                        refreshLayout.isRefreshing = false
+                    }
+                }, 100)
+            }
+        } else {
+            refreshLayout.isRefreshing = false
+            toast(R.string.hint_login)
         }
+
     }
 
     private fun mockData() {
@@ -96,7 +108,6 @@ class CardFragment : BaseFragment() {
     private fun showEmptyPage(show: Boolean) {
         if (show) {
             //todo
-            toast("show empty list")
         } else {
         }
     }
