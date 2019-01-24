@@ -4,18 +4,22 @@ package moe.leer.grain.profile
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreference
-import com.google.gson.Gson
-import com.google.gson.JsonSyntaxException
-import moe.leer.grain.*
+import moe.leer.grain.App
+import moe.leer.grain.BuildConfig
+import moe.leer.grain.FuckSchoolApi
+import moe.leer.grain.HomeActivity
+import moe.leer.grain.R
+import moe.leer.grain.Util
 import moe.leer.grain.model.User
+import moe.leer.grain.toast
 
 
 class ProfileFragment : PreferenceFragmentCompat() {
@@ -29,11 +33,15 @@ class ProfileFragment : PreferenceFragmentCompat() {
     private lateinit var authorPreference: Preference
     private lateinit var versionPreference: Preference
 
+    private lateinit var viewModel: ProfileViewModel
+
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         preferenceManager.sharedPreferencesName = "settings"
         preferenceManager.sharedPreferencesMode = Context.MODE_PRIVATE
 
         setPreferencesFromResource(R.xml.profile, null)
+
+        viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
 
         colorListPreference = findPreference("key_transcript") as ListPreference
         languageListPreference = findPreference("key_language") as ListPreference
@@ -56,82 +64,37 @@ class ProfileFragment : PreferenceFragmentCompat() {
                 return@setOnPreferenceClickListener true
             }
             toast(getString(R.string.hint_in_logout))
+
+            App.getApplication(requireContext().applicationContext).isLogin = false
+
             FuckSchoolApi.getInstance(requireContext()).logout(
                 onComplete = {
                     //navigate to Login Activity and clear SP
-                    if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
-                        Handler().postDelayed({
-                            App.getApplication(requireContext().applicationContext).isLogin = false
-                            requireContext().getSPEdit(Constant.SP_NAME) {
-                                putString(Constant.SP_TRANSCRIPT, "")
-                                putString(Constant.SP_USER_INFO, "")
-                                apply()
-                            }
-                            (requireActivity() as HomeActivity).startLoginActivity()
-                        }, 100)
-                    }
-
+                    viewModel.deleteAllData()
+                    (requireActivity() as HomeActivity).startLoginActivity()
                 }, onError = {
                     toast(getString(R.string.hint_logout_failed))
                 })
             true
         }
 
-        var oldUser = User(0, "")
-        try {
-            val userStr = requireContext().getSP(Constant.SP_NAME).getString(Constant.SP_USER_INFO, "")
-            if (!userStr.isNullOrEmpty()) {
-                oldUser = Gson().fromJson<User>(
-                    userStr,
-                    User::class.java
-                )
+        viewModel.userData().observe(this, Observer<User?> { user ->
+            if (user == null || user.id == 0) {
+                return@Observer
             }
-        } catch (ignore: JsonSyntaxException) {
-        }
-        if (oldUser.id != 0) {
-            userInfoPreference.title = oldUser.name
+            userInfoPreference.title = user.name
             userInfoPreference.summaryProvider = Preference.SummaryProvider<Preference> {
-                oldUser.className
+                user.className
             }
 
             librarySummary.summaryProvider = Preference.SummaryProvider<Preference> {
                 String.format(
                     resources.getString(R.string.library_summary),
-                    oldUser.bookRentNum,
-                    oldUser.bookRentOutDataNum
+                    user.bookRentNum,
+                    user.bookRentOutDataNum
                 )
             }
-        }
-
-        FuckSchoolApi.getInstance(requireContext()).getUserInfo()
-            .subscribe(object : NetworkObserver<User>(requireContext()) {
-                override fun onNetworkNotAvailable() {
-                    toast(R.string.hint_check_network)
-                }
-
-                override fun onNext(user: User) {
-                    if (user.id == 0 || !lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
-                        return
-                    }
-                    requireContext().getSPEdit(Constant.SP_NAME) {
-                        putString(Constant.SP_USER_INFO, Gson().toJson(user))
-                        apply()
-                    }
-
-                    userInfoPreference.title = user.name
-                    userInfoPreference.summaryProvider = Preference.SummaryProvider<Preference> {
-                        user.className
-                    }
-
-                    librarySummary.summaryProvider = Preference.SummaryProvider<Preference> {
-                        String.format(
-                            resources.getString(R.string.library_summary),
-                            user.bookRentNum,
-                            user.bookRentOutDataNum
-                        )
-                    }
-                }
-            })
+        })
 
         authorPreference.setOnPreferenceClickListener {
             val customTabIntent = CustomTabsIntent.Builder()
@@ -156,4 +119,5 @@ class ProfileFragment : PreferenceFragmentCompat() {
         }
 
     }
+
 }
