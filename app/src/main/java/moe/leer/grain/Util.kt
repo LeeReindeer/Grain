@@ -55,17 +55,27 @@ object Util {
 //        imm!!.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
     }
 
-    val formatWithSecond = SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.CHINA)
-    val formatIn24 = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA)
+
+    val formatSecondThreadLocal: ThreadLocal<SimpleDateFormat> = ThreadLocal()
+    val formatThreadLocal: ThreadLocal<SimpleDateFormat> = ThreadLocal()
+
+    /**
+     * Create a SimpleDateFormat instance for every thread, to avoid strange bug
+     * https://stackoverflow.com/questions/18383251/strange-arrayindexoutofboundsexception-for-java-simpledateformat
+     */
     fun getTimeDate(dateStr: String): Date? {
+        //val formatWithSecond = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA)
+        val formatWithSecond = formatSecondThreadLocal.get()
         try {
-            return formatWithSecond.parse(dateStr)
+            return formatWithSecond?.parse(dateStr)
         } catch (ignore: ParseException) {
         }
         return null
     }
 
     fun getTimeString(date: Date): String {
-        return formatIn24.format(date)
+        //val formatIn24 = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA)
+        val formatIn24 = formatThreadLocal.get()
+        return formatIn24?.format(date) ?: ""
     }
 }

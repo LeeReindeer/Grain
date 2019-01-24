@@ -22,6 +22,8 @@ import okhttp3.Response
 import org.jsoup.Jsoup
 import org.jsoup.select.Elements
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 //@SuppressLint("StaticFieldLeak")
@@ -67,7 +69,7 @@ class FuckSchoolApi private constructor(val context: Context) {
         val cookieJar = PersistentCookieJar(SetCookieCache(), SharedPrefsCookiePersistor(context))
         httpClient = OkHttpClient().newBuilder()
             .cookieJar(cookieJar)
-            .callTimeout(5, TimeUnit.SECONDS)
+            .callTimeout(10, TimeUnit.SECONDS)
             .build()
     }
 
@@ -319,16 +321,29 @@ class FuckSchoolApi private constructor(val context: Context) {
         val doc = Jsoup.parse(responseString)
         val table = doc.getElementById("queryGridPluto_inte_jyxx_")
         val rows = table.select("tr")
+
+        Util.formatSecondThreadLocal.set(SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA))
+
         for (i in 1 until rows.size) {
             val cols = rows[i].select("td")
             var money = 0.0
             try {
                 money = cols[5].text().toDouble()
             } catch (ignore: NumberFormatException) {
+                continue
             }
             if (money != 0.0) {
                 val name = prettyName(cols[3].text())
-                val item = ECard(cols[1].text().toLong(), name, Util.getTimeDate(cols[2].text()), money)
+                var item: ECard? = null
+                try {
+//                    Log.d(TAG, "parseCardTable: id:${cols[1].text()}, name: ${name}, date: ${cols[2].text()}")
+                    val date = Util.getTimeDate(cols[2].text())
+                    if (date == null) continue
+                    item = ECard(cols[1].text().toLong(), name, date, money)
+                } catch (e: ArrayIndexOutOfBoundsException) {
+                    e.printStackTrace()
+                    continue
+                }
                 itemList.add(item)
             }
         }

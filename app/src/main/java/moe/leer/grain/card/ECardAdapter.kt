@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import moe.leer.grain.R
 import moe.leer.grain.Util
 import moe.leer.grain.model.ECard
+import java.text.SimpleDateFormat
 import java.util.*
 
 /**
@@ -22,6 +23,10 @@ import java.util.*
 class ECardAdapter : PagedListAdapter<ECard, RecyclerView.ViewHolder>(ITEM_COMPARATOR) {
 
     val TAG = "ECardAdapter"
+
+    init {
+        Util.formatThreadLocal.set(SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA))
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return ECardAdapter.ECardViewHolder(
