@@ -13,6 +13,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreference
 import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
 import moe.leer.grain.*
 import moe.leer.grain.model.User
 
@@ -54,9 +55,9 @@ class ProfileFragment : PreferenceFragmentCompat() {
                 (requireActivity() as HomeActivity).startLoginActivity()
                 return@setOnPreferenceClickListener true
             }
+            toast(getString(R.string.hint_in_logout))
             FuckSchoolApi.getInstance(requireContext()).logout(
                 onComplete = {
-                    toast(getString(R.string.hint_in_logout))
                     //navigate to Login Activity and clear SP
                     if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
                         Handler().postDelayed({
@@ -74,6 +75,32 @@ class ProfileFragment : PreferenceFragmentCompat() {
                     toast(getString(R.string.hint_logout_failed))
                 })
             true
+        }
+
+        var oldUser = User(0, "")
+        try {
+            val userStr = requireContext().getSP(Constant.SP_NAME).getString(Constant.SP_USER_INFO, "")
+            if (!userStr.isNullOrEmpty()) {
+                oldUser = Gson().fromJson<User>(
+                    userStr,
+                    User::class.java
+                )
+            }
+        } catch (ignore: JsonSyntaxException) {
+        }
+        if (oldUser.id != 0) {
+            userInfoPreference.title = oldUser.name
+            userInfoPreference.summaryProvider = Preference.SummaryProvider<Preference> {
+                oldUser.className
+            }
+
+            librarySummary.summaryProvider = Preference.SummaryProvider<Preference> {
+                String.format(
+                    resources.getString(R.string.library_summary),
+                    oldUser.bookRentNum,
+                    oldUser.bookRentOutDataNum
+                )
+            }
         }
 
         FuckSchoolApi.getInstance(requireContext()).getUserInfo()
