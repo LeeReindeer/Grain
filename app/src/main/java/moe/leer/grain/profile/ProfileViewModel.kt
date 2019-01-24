@@ -33,6 +33,12 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
     // Clear all data in shared preference and database
     fun deleteAllData() {
         ioExecutor.execute {
+            repository.deleteAllData()
+        }
+    }
+
+    fun nukeData() {
+        ioExecutor.execute {
             repository.nukeData()
         }
     }

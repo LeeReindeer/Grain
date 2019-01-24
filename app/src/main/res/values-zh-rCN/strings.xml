@@ -60,4 +60,6 @@
     <string name="summary_reset">警告！将清空 APP 数据</string>
     <string name="title_start_page">启动页</string>
     <string name="title_reset">重置</string>
+    <string name="hint_in_reset">重置中…</string>
+    <string name="hint_reset_failed">数据已清除，网络连接失败</string>
 </resources>

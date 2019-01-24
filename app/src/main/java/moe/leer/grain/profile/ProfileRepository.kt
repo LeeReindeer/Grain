@@ -15,13 +15,35 @@ import moe.leer.grain.getSPEdit
  */
 class ProfileRepository(private val db: ECardDatabase, private val context: Context) : BaseUserRepository(context) {
 
-    fun nukeData() {
+    fun deleteAllData() {
         db.clearAllTables()
 
         val lastId = context.getSP(Constant.SP_NAME).getString(Constant.SP_LASTID, "")
         context.getSPEdit(Constant.SP_NAME) {
             clear()
             putString(Constant.SP_LASTID, lastId)
+            apply()
+        }
+    }
+
+    /**
+     * Clear all data in SP in real..
+     */
+    fun nukeData() {
+        db.clearAllTables()
+
+        context.getSPEdit(Constant.SP_NAME) {
+            clear()
+            apply()
+        }
+
+        context.getSPEdit(Constant.SP_SETTING_NAME) {
+            clear()
+            apply()
+        }
+
+        context.getSPEdit("CookiePersistence") {
+            clear()
             apply()
         }
     }

@@ -79,7 +79,7 @@
     <PreferenceCategory android:title="@string/title_dev"
                         app:iconSpaceReserved="false">
         <Preference
-                android:key="key_dev"
+                android:key="key_reset"
                 android:title="@string/title_reset"
                 android:summary="@string/summary_reset"
                 app:iconSpaceReserved="false"/>

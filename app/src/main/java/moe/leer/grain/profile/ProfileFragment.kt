@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import androidx.annotation.StringRes
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
@@ -27,6 +28,8 @@ class ProfileFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChang
     private lateinit var userInfoPreference: Preference
     private lateinit var authorPreference: Preference
     private lateinit var versionPreference: Preference
+    private lateinit var resetPreference: Preference
+
 
     private lateinit var viewModel: ProfileViewModel
 
@@ -46,6 +49,7 @@ class ProfileFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChang
         userInfoPreference = findPreference("key_info")
         authorPreference = findPreference("key_authors")
         versionPreference = findPreference("key_version")
+        resetPreference = findPreference("key_reset")
 
         languageListPreference.onPreferenceChangeListener = this
 
@@ -56,22 +60,7 @@ class ProfileFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChang
         }
 
         logoutButton.setOnPreferenceClickListener {
-            if (!App.getApplication(requireContext().applicationContext).isLogin) {
-                (requireActivity() as HomeActivity).startLoginActivity()
-                return@setOnPreferenceClickListener true
-            }
-            toast(getString(R.string.hint_in_logout))
-
-            App.getApplication(requireContext().applicationContext).isLogin = false
-
-            FuckSchoolApi.getInstance(requireContext()).logout(
-                onComplete = {
-                    //navigate to Login Activity and clear SP
-                    viewModel.deleteAllData()
-                    (requireActivity() as HomeActivity).startLoginActivity()
-                }, onError = {
-                    toast(getString(R.string.hint_logout_failed))
-                })
+            doLogout(R.string.hint_in_logout, R.string.hint_logout_failed, true)
             true
         }
 
@@ -93,6 +82,9 @@ class ProfileFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChang
             }
         })
 
+        authorPreference.summaryProvider = Preference.SummaryProvider<Preference> {
+            "Created by LeeR ${Util.getEmojiByUnicode(0x1F491)} Kwok"
+        }
         authorPreference.setOnPreferenceClickListener {
             val customTabIntent = CustomTabsIntent.Builder()
                 .setStartAnimations(requireContext(), R.anim.slide_in_right, R.anim.slide_out_left)
@@ -115,6 +107,38 @@ class ProfileFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChang
             BuildConfig.VERSION_NAME
         }
 
+        resetPreference.setOnPreferenceClickListener {
+            viewModel.nukeData()
+            doLogout(R.string.hint_in_reset, R.string.hint_reset_failed, false)
+            setLocale(LocaleManager.EN_LANG)
+            return@setOnPreferenceClickListener true
+        }
+    }
+
+    private fun doLogout(@StringRes stringId: Int, @StringRes failedId: Int, jumpToLogin: Boolean) {
+        if (!App.getApplication(requireContext().applicationContext).isLogin) {
+            if (jumpToLogin) {
+                (requireActivity() as HomeActivity).startLoginActivity()
+            }
+            return
+        }
+        toast(stringId)
+        (requireActivity() as HomeActivity).toggleInteraction(false)
+
+        App.getApplication(requireContext().applicationContext).isLogin = false
+
+        FuckSchoolApi.getInstance(requireContext()).logout(
+            onComplete = {
+                //navigate to Login Activity and clear SP
+                viewModel.deleteAllData()
+                if (jumpToLogin) {
+                    (requireActivity() as HomeActivity).startLoginActivity()
+                }
+                (requireActivity() as HomeActivity).toggleInteraction(true)
+            }, onError = {
+                toast(failedId)
+                (requireActivity() as HomeActivity).toggleInteraction(true)
+            })
     }
 
     override fun onPreferenceChange(preference: Preference?, newValue: Any?): Boolean {

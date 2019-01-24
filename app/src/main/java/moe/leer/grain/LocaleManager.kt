@@ -27,10 +27,10 @@ class LocaleManager(private val context: Context) {
     }
 
     fun getLanguage(): String {
-        return when (context.getSP(Constant.SP_SETTING_NAME).getString(LANGUAGE_KEY, ZH_LANG)) {
+        return when (context.getSP(Constant.SP_SETTING_NAME).getString(LANGUAGE_KEY, EN_LANG)) {
             "0" -> EN_LANG
             "1" -> ZH_LANG
-            else -> ZH_LANG
+            else -> EN_LANG
         }
     }
 
