@@ -1,6 +1,7 @@
 package moe.leer.grain.base
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Binder
 import android.os.Build
@@ -13,6 +14,7 @@ import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import moe.leer.grain.LocaleManager
 import moe.leer.grain.R
 import moe.leer.grain.Util
 import java.io.Serializable
@@ -27,6 +29,10 @@ abstract class BaseActivity : AppCompatActivity() {
 
     val TAG = javaClass.simpleName
 
+    override fun attachBaseContext(newBase: Context) {
+        val localeManager = LocaleManager(newBase)
+        super.attachBaseContext(localeManager.setLocale(newBase))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
 //        setFullScreen()

@@ -24,7 +24,7 @@
 
         <ListPreference
                 android:key="key_start_page"
-                android:title="Start page"
+                android:title="@string/title_start_page"
                 android:icon="@drawable/ic_home_black_24dp"
                 android:entries="@array/page_entries"
                 android:entryValues="@array/entry_values_three"
@@ -74,6 +74,15 @@
                 android:summary="1.0"
                 app:iconSpaceReserved="false"/>
 
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/title_dev"
+                        app:iconSpaceReserved="false">
+        <Preference
+                android:key="key_dev"
+                android:title="@string/title_reset"
+                android:summary="@string/summary_reset"
+                app:iconSpaceReserved="false"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

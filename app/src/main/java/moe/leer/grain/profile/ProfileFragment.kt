@@ -2,6 +2,7 @@ package moe.leer.grain.profile
 
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.browser.customtabs.CustomTabsIntent
@@ -12,17 +13,11 @@ import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreference
-import moe.leer.grain.App
-import moe.leer.grain.BuildConfig
-import moe.leer.grain.FuckSchoolApi
-import moe.leer.grain.HomeActivity
-import moe.leer.grain.R
-import moe.leer.grain.Util
+import moe.leer.grain.*
 import moe.leer.grain.model.User
-import moe.leer.grain.toast
 
 
-class ProfileFragment : PreferenceFragmentCompat() {
+class ProfileFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChangeListener {
 
     private lateinit var colorListPreference: ListPreference
     private lateinit var languageListPreference: ListPreference
@@ -51,6 +46,8 @@ class ProfileFragment : PreferenceFragmentCompat() {
         userInfoPreference = findPreference("key_info")
         authorPreference = findPreference("key_authors")
         versionPreference = findPreference("key_version")
+
+        languageListPreference.onPreferenceChangeListener = this
 
         if (!App.getApplication(requireContext().applicationContext).isLogin) {
             // change to login
@@ -117,6 +114,30 @@ class ProfileFragment : PreferenceFragmentCompat() {
         versionPreference.summaryProvider = Preference.SummaryProvider<Preference> {
             BuildConfig.VERSION_NAME
         }
+
+    }
+
+    override fun onPreferenceChange(preference: Preference?, newValue: Any?): Boolean {
+        if (preference?.key == "key_language") {
+            when (newValue as String) {
+                "0" -> setLocale(LocaleManager.EN_LANG)
+                else -> setLocale(LocaleManager.ZH_LANG)
+            }
+            return true
+        } else {
+            return false
+        }
+    }
+
+    fun setLocale(lang: String) {
+        val context = requireContext().applicationContext
+        (context as App).localeManager
+
+        startActivity(
+            Intent(this.requireActivity(), HomeActivity::class.java).addFlags(
+                Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+            )
+        )
 
     }
 

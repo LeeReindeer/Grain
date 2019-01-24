@@ -2,6 +2,8 @@ package moe.leer.grain
 
 import android.app.Application
 import android.content.Context
+import android.content.res.Configuration
+import android.util.Log
 import moe.leer.grain.Constant.SP_NAME
 
 /**
@@ -11,7 +13,9 @@ import moe.leer.grain.Constant.SP_NAME
  * https://github.com/LeeReindeer
  */
 class App : Application() {
+
     private val TAG = "App"
+    lateinit var localeManager: LocaleManager
 
     var isLogin
         get() = this.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE).getBoolean("isLogin", false)
@@ -22,6 +26,17 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
+    }
+
+    override fun attachBaseContext(base: Context) {
+        localeManager = LocaleManager(base)
+        super.attachBaseContext(localeManager.setLocale(base))
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration?) {
+        super.onConfigurationChanged(newConfig)
+        localeManager.setLocale(this)
+        Log.d(TAG, "onConfigurationChanged: ${newConfig?.locale?.language}")
     }
 
     companion object {

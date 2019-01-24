@@ -3,7 +3,7 @@
     <string name="app_name">海大助手</string>
     <string name="title_transcript">成绩</string>
     <string name="title_card">校园卡</string>
-    <string name="title_me">我</string>
+    <string name="title_me">个人设置</string>
     <string name="text_func">查成绩，校园卡，图书馆</string>
 
     <string-array name="spinner_year">
@@ -19,4 +19,45 @@
         <item>第一学期</item>
         <item>第二学期</item>
     </string-array>
+
+    <string-array name="color_entries">
+        <item>5 种颜色</item>
+        <item>绿色和红色</item>
+    </string-array>
+
+    <string-array name="page_entries">
+        <item>成绩单</item>
+        <item>校园卡</item>
+        <item>个人设置</item>
+    </string-array>
+
+    <string name="menu_logout">登出</string>
+    <string name="hint_password">密码</string>
+    <string name="hint_id">学号</string>
+    <string name="text_login">登录</string>
+    <string name="text_welcome">欢迎</string>
+    <string name="privacy_policy">隐私权政策</string>
+    <string name="hint_privacy_policy">开玩笑的</string>
+    <string name="text_privacy_policy">你必须同意隐私权政策</string>
+    <string name="hint_check_network">请检查网络或重新登录</string>
+    <string name="text_unknown_data">？？？</string>
+    <string name="summary_relogin_on">Cookie 失效时自动重新登录</string>
+    <string name="summary_relogin_off">推荐打开</string>
+    <string name="title_authors">作者</string>
+    <string name="title_version">版本号</string>
+    <string name="title_logout">登出</string>
+    <string name="title_setting">设置</string>
+    <string name="title_about">关于</string>
+    <string name="library_summary">借阅: %d | 过期: %d</string>
+    <string name="hint_login">请先登录</string>
+    <string name="hint_in_logout">正在登出…</string>
+    <string name="hint_logout_failed">登出失败，请检查网络或清除数据</string>
+    <string name="title_transcript_color">成绩单颜色</string>
+    <string name="title_language">语言</string>
+    <string name="title_auto_login">自动登录</string>
+    <string name="title_library">图书馆</string>
+    <string name="title_dev">开发者选项</string>
+    <string name="summary_reset">警告！将清空 APP 数据</string>
+    <string name="title_start_page">启动页</string>
+    <string name="title_reset">重置</string>
 </resources>
