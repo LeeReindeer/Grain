@@ -2,19 +2,13 @@ package moe.leer.grain.card
 
 import android.content.Context
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
-import com.google.gson.Gson
-import com.google.gson.JsonSyntaxException
-import moe.leer.grain.Constant
-import moe.leer.grain.Constant.SP_NAME
 import moe.leer.grain.FuckSchoolApi
 import moe.leer.grain.NetworkObserver
+import moe.leer.grain.base.BaseUserRepository
 import moe.leer.grain.db.ECardLocalCache
-import moe.leer.grain.getSP
 import moe.leer.grain.model.ECard
-import moe.leer.grain.model.User
 import java.util.*
 
 /**
@@ -23,15 +17,7 @@ import java.util.*
  * Copyright (c) 2017 LeeReindeer
  * https://github.com/LeeReindeer
  */
-class ECardRepository(private val cache: ECardLocalCache, private val context: Context) {
-    val TAG = "ECardRepository"
-
-    private val _userData: MutableLiveData<User?> = MutableLiveData()
-    val userData: LiveData<User?>
-        get() {
-            refreshUser()
-            return _userData
-        }
+class ECardRepository(private val cache: ECardLocalCache, private val context: Context) : BaseUserRepository(context) {
 
     /**
      * Fetch [size] ( the size of items will change to >= 100) card items from network
@@ -82,31 +68,4 @@ class ECardRepository(private val cache: ECardLocalCache, private val context: C
             .setBoundaryCallback(boundaryCallback)
             .build()
     }
-
-    fun refreshUser() {
-        var oldUser = User(0, "")
-        try {
-            val userStr = context.getSP(SP_NAME).getString(Constant.SP_USER_INFO, "")
-           if (!userStr.isNullOrEmpty()) {
-               oldUser = Gson().fromJson<User>(
-                   userStr,
-                   User::class.java
-               )
-           }
-        } catch (ignore: JsonSyntaxException) {
-        }
-        _userData.value = oldUser
-
-        FuckSchoolApi.getInstance(context).getUserInfo()
-            .subscribe(object : NetworkObserver<User>(context) {
-                override fun onNetworkNotAvailable() {
-                    _userData.value = null
-                }
-
-                override fun onNext(user: User) {
-                    _userData.value = user
-                }
-            })
-    }
-
 }

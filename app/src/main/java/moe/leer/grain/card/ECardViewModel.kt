@@ -35,7 +35,7 @@ class ECardViewModel(application: Application) :
 
     // fetch the first page again to get new item, also refresh user info
     fun refresh(afterRefresh: () -> Unit) {
-        repository.refreshUser()
+        repository.refreshAndSaveUser()
         repository.fetch(FuckSchoolApi.DEFAULT_PAGE_SIZE) {
             afterRefresh()
         }
@@ -46,4 +46,9 @@ class ECardViewModel(application: Application) :
     }
 
     fun cardListByDate(from: Date, to: Date): LiveData<PagedList<ECard>> = repository.getByDate(from, to)
+
+    override fun onCleared() {
+        super.onCleared()
+        repository.userDisposable?.dispose()
+    }
 }
