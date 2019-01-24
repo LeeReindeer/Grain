@@ -1,6 +1,7 @@
 package moe.leer.grain.base
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
@@ -32,7 +33,7 @@ abstract class BaseUserRepository(private val context: Context) {
         }
 
 
-    open fun refreshAndSaveUser() {
+    fun loadFromCache(): User {
         var oldUser = User(0, "")
         try {
             val userStr = context.getSP(Constant.SP_NAME).getString(Constant.SP_USER_INFO, "")
@@ -41,14 +42,25 @@ abstract class BaseUserRepository(private val context: Context) {
                     userStr,
                     User::class.java
                 )
+                Log.d(TAG, "loadFromCache: $oldUser")
             }
         } catch (ignore: JsonSyntaxException) {
         }
-        _userData.value = oldUser
+        return oldUser
+    }
+
+    open fun refreshAndSaveUser() {
+
+        _userData.value = loadFromCache()
 
         val observer = object : NetworkObserver<User>(context) {
             override fun onNetworkNotAvailable() {
-                _userData.value = null
+                val oldUser = loadFromCache()
+                if (oldUser.id != 0) {
+                    _userData.postValue(oldUser)
+                } else {
+                    _userData.value = null
+                }
             }
 
             override fun onError(e: Throwable) {

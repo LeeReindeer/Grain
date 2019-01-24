@@ -55,7 +55,7 @@
     <string name="hint_privacy_policy">Haha, relax, we won’t track you</string>
     <string name="text_privacy_policy">You must agree ours privacy policy</string>
     <string name="text_func">Transcript, ECard, Library</string>
-    <string name="hint_check_network">Please check network</string>
+    <string name="hint_check_network">Please check network or Relogin</string>
     <string name="text_unknown_data">\???</string>
     <string name="summary_relogin_on">Auto relogin when cookie invalid</string>
     <string name="summary_relogin_off">Recommend to turn on</string>

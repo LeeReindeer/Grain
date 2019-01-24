@@ -34,11 +34,9 @@ class ECardViewModel(application: Application) :
         get() = repository.get()
 
     // fetch the first page again to get new item, also refresh user info
-    fun refresh(afterRefresh: () -> Unit) {
+    fun refresh(afterRefresh: () -> Unit, onError: () -> Unit) {
         repository.refreshAndSaveUser()
-        repository.fetch(FuckSchoolApi.DEFAULT_PAGE_SIZE) {
-            afterRefresh()
-        }
+        repository.fetch(FuckSchoolApi.DEFAULT_PAGE_SIZE, afterRefresh, onError)
     }
 
     fun refreshUserInfo(): LiveData<User?> {

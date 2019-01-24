@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_transcript.view.*
 import moe.leer.grain.R
 import moe.leer.grain.base.BaseFragment
@@ -38,11 +39,7 @@ class TranscriptFragment : BaseFragment() {
         view.transcriptRefresh.isRefreshing = true
         transcriptViewModel.getTranscript().observe(this, Observer<MutableList<Transcript>?> { transcript ->
             Log.d(TAG, "observe: transcript size :${transcript?.size}")
-            if (transcript == null || transcript.isEmpty()) {
-                view.errorPage.visibility = View.VISIBLE
-            } else {
-                view.errorPage.visibility = View.GONE
-            }
+            showEmptyList(view, transcript == null || transcript.isEmpty())
 
             Log.d(TAG, "onViewCreated: errorPage: ${view.errorPage.visibility == View.VISIBLE}")
             adapter.transcriptList = transcript
@@ -53,6 +50,17 @@ class TranscriptFragment : BaseFragment() {
 //        Handler().postDelayed({
 //            transcriptViewModel.refresh()
 //        }, 500)
+    }
+
+    private fun showEmptyList(view: View, show: Boolean) {
+        Glide.with(this)
+            .load(R.mipmap.witch)
+            .into(view.errorImage)
+        if (show) {
+            view.errorPage.visibility = View.VISIBLE
+        } else {
+            view.errorPage.visibility = View.GONE
+        }
     }
 
     override fun onResume() {

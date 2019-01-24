@@ -24,20 +24,21 @@ class ECardRepository(private val cache: ECardLocalCache, private val context: C
      * Used to fetch a chunk of data and index by date in Service,
      * It will reduce time to load data in further scroll
      */
-    fun fetch(size: Int, fetchFinished: () -> Unit) {
+    fun fetch(size: Int, fetchFinished: () -> Unit, onError: () -> Unit) {
         val requestTimes = (size / FuckSchoolApi.NETWORK_PAGE_SIZE) + 1
         for (page in 1..requestTimes) {
-            requestAndSave(page, fetchFinished)
+            requestAndSave(page, fetchFinished, onError)
         }
     }
 
     /**
      * Fetch 100 items from server and save to local database
      */
-    private fun requestAndSave(pageIndex: Int, finished: () -> Unit) {
+    private fun requestAndSave(pageIndex: Int, finished: () -> Unit, error: () -> Unit) {
         FuckSchoolApi.getInstance(context).getECardList(pageIndex, FuckSchoolApi.NETWORK_PAGE_SIZE)
             .subscribe(object : NetworkObserver<ArrayList<ECard>?>(context) {
                 override fun onNetworkNotAvailable() {
+                    error()
                 }
 
                 override fun onNext(items: ArrayList<ECard>) {
@@ -48,6 +49,7 @@ class ECardRepository(private val cache: ECardLocalCache, private val context: C
 
                 override fun onError(e: Throwable) {
                     super.onError(e)
+                    error()
                 }
             })
     }

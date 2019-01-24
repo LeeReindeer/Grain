@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.chaychan.viewlib.NumberRunningTextView
 import kotlinx.android.synthetic.main.fragment_card.*
 import moe.leer.grain.App
@@ -39,9 +40,7 @@ class CardFragment : BaseFragment() {
     private fun initView() {
         ecardRV.layoutManager = LinearLayoutManager(context)
         refreshLayout.setOnRefreshListener {
-            viewModel.refresh {
-                refreshLayout.isRefreshing = false
-            }
+            refresh()
         }
         initCard()
     }
@@ -67,25 +66,41 @@ class CardFragment : BaseFragment() {
             if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)
                 && App.getApplication(requireContext().applicationContext).isLogin
             ) {
+                Handler().postDelayed({
+                    refreshLayout.isRefreshing = false
+                }, 500)
                 adapter.submitList(it)
             }
         })
         refreshLayout.isRefreshing = true
 
-        if (App.getApplication(requireContext().applicationContext).isLogin) {
-            viewModel.refresh {
+//        if (App.getApplication(requireContext().applicationContext).isLogin) {
+//            refresh()
+//        } else {
+//            refreshLayout.isRefreshing = false
+//            toast(R.string.hint_login)
+//        }
+
+    }
+
+    /**
+     *  Refresh card list, and always set refreshLayout.isRefreshing false
+     */
+    private fun refresh() {
+        viewModel.refresh(
+            afterRefresh = {
                 Log.d(TAG, "initData: refresh finish")
                 Handler().postDelayed({
                     if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
                         refreshLayout.isRefreshing = false
                     }
                 }, 100)
+            },
+            onError = {
+                refreshLayout.isRefreshing = false
+                toast(R.string.hint_check_network)
             }
-        } else {
-            refreshLayout.isRefreshing = false
-            toast(R.string.hint_login)
-        }
-
+        )
     }
 
     private fun mockData() {
@@ -106,19 +121,28 @@ class CardFragment : BaseFragment() {
     }
 
     private fun showEmptyPage(show: Boolean) {
+        //todo
         if (show) {
-            //todo
+            toast(R.string.hint_check_network)
         } else {
+
         }
     }
 
     private fun showEmptyCard(show: Boolean) {
+        Glide.with(this)
+            .load(R.mipmap.witch)
+            .into(errorImage)
         if (show) {
+            errorImage.visibility = View.VISIBLE
+
             cardIdText.visibility = View.INVISIBLE
             cardNameText.visibility = View.INVISIBLE
             cardMoneyText.visibility = View.INVISIBLE
             cardMoneyLabel.visibility = View.INVISIBLE
         } else {
+            errorImage.visibility = View.INVISIBLE
+
             cardIdText.visibility = View.VISIBLE
             cardNameText.visibility = View.VISIBLE
             cardMoneyText.visibility = View.VISIBLE
