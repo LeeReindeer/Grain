@@ -4,6 +4,7 @@ import android.content.Context
 import moe.leer.grain.Constant
 import moe.leer.grain.base.BaseUserRepository
 import moe.leer.grain.db.ECardDatabase
+import moe.leer.grain.getSP
 import moe.leer.grain.getSPEdit
 
 /**
@@ -12,14 +13,15 @@ import moe.leer.grain.getSPEdit
  * Copyright (c) 2017 LeeReindeer
  * https://github.com/LeeReindeer
  */
-class ProfileRepository(private val db: ECardDatabase, private val context: Context): BaseUserRepository(context) {
+class ProfileRepository(private val db: ECardDatabase, private val context: Context) : BaseUserRepository(context) {
 
     fun nukeData() {
         db.clearAllTables()
 
+        val lastId = context.getSP(Constant.SP_NAME).getString(Constant.SP_LASTID, "")
         context.getSPEdit(Constant.SP_NAME) {
-            putString(Constant.SP_TRANSCRIPT, "")
-            putString(Constant.SP_USER_INFO, "")
+            clear()
+            putString(Constant.SP_LASTID, lastId)
             apply()
         }
     }
