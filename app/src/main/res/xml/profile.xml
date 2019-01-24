@@ -28,7 +28,7 @@
                 android:icon="@drawable/ic_home_black_24dp"
                 android:entries="@array/page_entries"
                 android:entryValues="@array/entry_values_three"
-                android:defaultValue="0"
+                android:defaultValue="2"
                 android:summary="%s"
         />
 
