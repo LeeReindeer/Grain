@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -17,12 +17,6 @@
                 android:background="@drawable/gradient_bg"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-
-            <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/errorImage"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    tools:src="@mipmap/witch"/>
 
             <RelativeLayout
                     android:layout_centerInParent="true"
@@ -84,11 +78,13 @@
 
     </com.google.android.material.card.MaterialCardView>
 
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/refreshLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="216dp">
+            android:layout_marginTop="216dp"
+            tools:visibility="gone">
 
         <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/ecardRV"
@@ -99,5 +95,13 @@
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+    <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/errorImage"
+            android:layout_centerHorizontal="true"
+            android:layout_width="300dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="216dp"
+            tools:src="@mipmap/witch"/>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</RelativeLayout>

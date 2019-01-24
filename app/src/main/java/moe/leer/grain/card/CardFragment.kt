@@ -66,20 +66,18 @@ class CardFragment : BaseFragment() {
             if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)
                 && App.getApplication(requireContext().applicationContext).isLogin
             ) {
-                Handler().postDelayed({
-                    refreshLayout.isRefreshing = false
-                }, 500)
                 adapter.submitList(it)
             }
         })
         refreshLayout.isRefreshing = true
 
-//        if (App.getApplication(requireContext().applicationContext).isLogin) {
-//            refresh()
-//        } else {
-//            refreshLayout.isRefreshing = false
-//            toast(R.string.hint_login)
-//        }
+        // refresh from network
+        if (App.getApplication(requireContext().applicationContext).isLogin) {
+            refresh()
+        } else {
+            refreshLayout.isRefreshing = false
+            toast(R.string.hint_login)
+        }
 
     }
 
@@ -121,28 +119,25 @@ class CardFragment : BaseFragment() {
     }
 
     private fun showEmptyPage(show: Boolean) {
-        //todo
-        if (show) {
-            toast(R.string.hint_check_network)
-        } else {
-
-        }
-    }
-
-    private fun showEmptyCard(show: Boolean) {
         Glide.with(this)
             .load(R.mipmap.witch)
             .into(errorImage)
         if (show) {
             errorImage.visibility = View.VISIBLE
+            refreshLayout.visibility = View.INVISIBLE
+        } else {
+            errorImage.visibility = View.GONE
+            refreshLayout.visibility = View.VISIBLE
+        }
+    }
 
+    private fun showEmptyCard(show: Boolean) {
+        if (show) {
             cardIdText.visibility = View.INVISIBLE
             cardNameText.visibility = View.INVISIBLE
             cardMoneyText.visibility = View.INVISIBLE
             cardMoneyLabel.visibility = View.INVISIBLE
         } else {
-            errorImage.visibility = View.INVISIBLE
-
             cardIdText.visibility = View.VISIBLE
             cardNameText.visibility = View.VISIBLE
             cardMoneyText.visibility = View.VISIBLE
