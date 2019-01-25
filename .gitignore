@@ -29,4 +29,5 @@ ohfuckschool/
 .idea/
 local.properties
 *.iml
+app/fabric.properties
 
