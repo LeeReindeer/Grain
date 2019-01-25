@@ -48,13 +48,15 @@ class TranscriptRepository(val context: Context) {
      * FETCH_TIMEOUT not timeout or
      * network error
      */
-    fun getDataFromSP() {
+    fun getDataFromSP(): MutableList<Transcript>? {
         val transcriptJson = sp.getString(Constant.SP_TRANSCRIPT, "")!!
         Log.d(TAG, "network not available, getTranscript: from sp")
+        var list: MutableList<Transcript>? = null
         if (!transcriptJson.isEmpty()) {
             try {
                 Log.d(TAG, "getTranscript: from sp: $transcriptJson")
                 val transcriptFromSP = Gson().fromJson(transcriptJson, TranscriptResponse::class.java)
+                list = transcriptFromSP.transcriptList
 
                 originData.clear()
                 originData.addAll(transcriptFromSP.transcriptList!!)
@@ -63,9 +65,10 @@ class TranscriptRepository(val context: Context) {
                 e.printStackTrace()
             }
         }
+        return list
     }
 
-    fun getTranscript(): MutableLiveData<MutableList<Transcript>> {
+    fun getTranscript(onError: () -> Unit): MutableLiveData<MutableList<Transcript>> {
 //        if (System.currentTimeMillis() - context.getSP(Constant.SP_NAME).getLong(
 //                SP_FETCH_TRANSCRIPT_TIME,
 //                0L
@@ -83,9 +86,13 @@ class TranscriptRepository(val context: Context) {
         val observer = object : NetworkObserver<MutableList<Transcript>?>(context) {
             override fun onNetworkNotAvailable() {
                 //try get from SP
-                if ((context as App).isLogin) {
-                    getDataFromSP()
+                val list = getDataFromSP()
+                if ((context as App).isLogin && list != null) {
+                    originData.clear()
+                    originData.addAll(list)
+                    transcriptList.postValue(list)
                 }
+                onError()
             }
 
             override fun onNext(transcriptList: MutableList<Transcript>) {
@@ -101,6 +108,7 @@ class TranscriptRepository(val context: Context) {
                 super.onError(e)
                 originData.clear()
                 transcriptList.value?.clear()
+                onError()
             }
         }
         api.getTranscript().subscribe(observer)

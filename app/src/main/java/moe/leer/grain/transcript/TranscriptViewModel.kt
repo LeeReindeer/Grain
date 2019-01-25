@@ -3,6 +3,7 @@ package moe.leer.grain.transcript
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import moe.leer.grain.model.Transcript
 
@@ -22,10 +23,10 @@ class TranscriptViewModel(application: Application) : AndroidViewModel(applicati
 
     init {
         repository = TranscriptRepository(application)
-        transcript = repository.getTranscript()
+        transcript = repository.getTranscript({})
     }
 
-    fun getTranscript(): MutableLiveData<MutableList<Transcript>> {
+    fun getTranscript(): LiveData<MutableList<Transcript>> {
         return transcript
     }
 
@@ -40,8 +41,8 @@ class TranscriptViewModel(application: Application) : AndroidViewModel(applicati
     }
 
 
-    fun refresh() {
-        repository.getTranscript()
+    fun refresh(onError: () -> Unit) {
+        repository.getTranscript(onError)
         Log.d(TAG, "refresh: year: $year  semester: $semester")
         transcript.postValue(repository.filter(year, semester))
     }
