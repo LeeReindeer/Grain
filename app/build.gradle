@@ -18,7 +18,8 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -56,7 +57,7 @@ dependencies {
     def paging_version = "2.1.0-rc01"
     implementation "androidx.paging:paging-runtime:$paging_version" // use -ktx for Kotlin
     // optional - RxJava support
-    implementation "androidx.paging:paging-rxjava2:$paging_version" // use -ktx for Kotlin
+//    implementation "androidx.paging:paging-rxjava2:$paging_version" // use -ktx for Kotlin
 
     // Coroutines
 //    def coroutines = "1.1.0"
