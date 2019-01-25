@@ -65,9 +65,6 @@ class CardFragment : BaseFragment() {
                 cardIdText.text = it.id.toString(10)
                 (cardMoneyText as NumberRunningTextView).setContent(it.moneyRem.toString())
                 cardNameText.text = it.name
-                Handler().postDelayed({
-                    throw RuntimeException("This is a crash");
-                }, 500)
             }
         })
     }
