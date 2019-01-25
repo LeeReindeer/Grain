@@ -20,22 +20,27 @@ import java.util.*
 class ECardRepository(private val cache: ECardLocalCache, private val context: Context) : BaseUserRepository(context) {
 
     /**
-     * Fetch [size] ( the size of items will change to >= 100) card items from network
+     * Fetch [size] ( the size of items will change to >= [pageSize]) card items from network
      * Used to fetch a chunk of data and index by date in Service,
      * It will reduce time to load data in further scroll
      */
-    fun fetch(size: Int, fetchFinished: () -> Unit, onError: () -> Unit) {
-        val requestTimes = (size / FuckSchoolApi.NETWORK_PAGE_SIZE) + 1
+    fun fetch(
+        size: Int = 0,
+        pageSize: Int = FuckSchoolApi.DEFAULT_PAGE_SIZE,
+        fetchFinished: () -> Unit,
+        onError: () -> Unit
+    ) {
+        val requestTimes = (size / pageSize) + 1
         for (page in 1..requestTimes) {
-            requestAndSave(page, fetchFinished, onError)
+            requestAndSave(page, pageSize, fetchFinished, onError)
         }
     }
 
     /**
      * Fetch 100 items from server and save to local database
      */
-    private fun requestAndSave(pageIndex: Int, finished: () -> Unit, error: () -> Unit) {
-        FuckSchoolApi.getInstance(context).getECardList(pageIndex, FuckSchoolApi.NETWORK_PAGE_SIZE)
+    private fun requestAndSave(pageIndex: Int, pageSize: Int, finished: () -> Unit, error: () -> Unit) {
+        FuckSchoolApi.getInstance(context).getECardList(pageIndex, pageSize)
             .subscribe(object : NetworkObserver<ArrayList<ECard>?>(context) {
                 override fun onNetworkNotAvailable() {
                     error()
