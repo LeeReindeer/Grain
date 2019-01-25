@@ -35,6 +35,7 @@ class CardFragment : BaseFragment() {
     private lateinit var viewModel: ECardViewModel
     private val adapter = ECardAdapter()
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initData()
         initView()
@@ -134,30 +135,34 @@ class CardFragment : BaseFragment() {
     }
 
     private fun showEmptyPage(show: Boolean, @StringRes errorMsgId: Int) {
-        Glide.with(this)
-            .load(R.mipmap.witch)
-            .into(errorImage)
-        errorText.setText(errorMsgId)
-        if (show) {
-            errorPage.visibility = View.VISIBLE
-            ecardRV.visibility = View.INVISIBLE
-        } else {
-            errorPage.visibility = View.GONE
-            ecardRV.visibility = View.VISIBLE
+        if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
+            Glide.with(this)
+                .load(R.mipmap.witch)
+                .into(errorImage)
+            errorText.setText(errorMsgId)
+            if (show) {
+                errorPage.visibility = View.VISIBLE
+                ecardRV.visibility = View.INVISIBLE
+            } else {
+                errorPage.visibility = View.GONE
+                ecardRV.visibility = View.VISIBLE
+            }
         }
     }
 
     private fun showEmptyCard(show: Boolean) {
-        if (show) {
-            cardIdText.visibility = View.INVISIBLE
-            cardNameText.visibility = View.INVISIBLE
-            cardMoneyText.visibility = View.INVISIBLE
-            cardMoneyLabel.visibility = View.INVISIBLE
-        } else {
-            cardIdText.visibility = View.VISIBLE
-            cardNameText.visibility = View.VISIBLE
-            cardMoneyText.visibility = View.VISIBLE
-            cardMoneyLabel.visibility = View.VISIBLE
+        if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
+            if (show) {
+                cardIdText.visibility = View.INVISIBLE
+                cardNameText.visibility = View.INVISIBLE
+                cardMoneyText.visibility = View.INVISIBLE
+                cardMoneyLabel.visibility = View.INVISIBLE
+            } else {
+                cardIdText.visibility = View.VISIBLE
+                cardNameText.visibility = View.VISIBLE
+                cardMoneyText.visibility = View.VISIBLE
+                cardMoneyLabel.visibility = View.VISIBLE
+            }
         }
     }
 }
