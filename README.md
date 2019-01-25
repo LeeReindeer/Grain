@@ -17,9 +17,9 @@ UI 设计参考 [Material Design 2](https://material.io/design/)，感谢@番茄
 
 ## 截图
 
-| ![login](./art/login.png) | ![witch](./art/transcript-witch.png) |
+| ![login](./art/login.webp) | ![witch](./art/transcript-witch.webp) |
 | -------------------- | ------------------------------- |
-| ![ecard](./art/ecard.png) | ![profile](./art/profile.png)          |
+| ![ecard](./art/ecard.webp) | ![profile](./art/profile.webp)     |
 
 ## Open source license
 
