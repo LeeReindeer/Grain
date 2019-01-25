@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.View
+import android.view.animation.AnimationUtils
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -39,6 +40,9 @@ class CardFragment : BaseFragment() {
 
     private fun initView() {
         ecardRV.layoutManager = LinearLayoutManager(context)
+        val controller = AnimationUtils.loadLayoutAnimation(activity, R.anim.anim_layout_fall_down)
+        ecardRV.layoutAnimation = controller
+
         refreshLayout.setOnRefreshListener {
             refresh()
         }

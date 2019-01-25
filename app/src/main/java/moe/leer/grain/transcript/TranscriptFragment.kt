@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
@@ -35,6 +36,7 @@ class TranscriptFragment : BaseFragment() {
         recyclerView = transcriptRV
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this.requireContext())
+        val controller = AnimationUtils.loadLayoutAnimation(activity, R.anim.anim_layout_fall_down)
 
         transcriptViewModel = ViewModelProviders.of(this).get(TranscriptViewModel::class.java)
         transcriptRefresh.isRefreshing = true
@@ -43,6 +45,7 @@ class TranscriptFragment : BaseFragment() {
             showEmptyList(transcript == null || transcript.isEmpty())
 
             Log.d(TAG, "onViewCreated: errorPage: ${errorPage.visibility == View.VISIBLE}")
+            recyclerView.layoutAnimation = controller
             adapter.transcriptList = transcript
             transcriptRefresh.isRefreshing = false
         })
