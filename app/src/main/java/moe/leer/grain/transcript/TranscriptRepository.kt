@@ -7,7 +7,6 @@ import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import io.reactivex.disposables.Disposable
-import moe.leer.grain.App
 import moe.leer.grain.Constant
 import moe.leer.grain.FuckSchoolApi
 import moe.leer.grain.NetworkObserver
@@ -48,7 +47,7 @@ class TranscriptRepository(val context: Context) {
      * FETCH_TIMEOUT not timeout or
      * network error
      */
-    fun getDataFromSP(): MutableList<Transcript>? {
+    private fun getDataFromSP(): MutableList<Transcript>? {
         val transcriptJson = sp.getString(Constant.SP_TRANSCRIPT, "")!!
         Log.d(TAG, "network not available, getTranscript: from sp")
         var list: MutableList<Transcript>? = null
@@ -83,15 +82,16 @@ class TranscriptRepository(val context: Context) {
 //            apply()
 //        }
 
+        // load from SP first
+        val dataCache = getDataFromSP()
+        if (dataCache != null) {
+            originData.clear()
+            originData.addAll(dataCache)
+            transcriptList.postValue(dataCache)
+        }
+
         val observer = object : NetworkObserver<MutableList<Transcript>?>(context) {
             override fun onNetworkNotAvailable() {
-                //try get from SP
-                val list = getDataFromSP()
-                if ((context as App).isLogin && list != null) {
-                    originData.clear()
-                    originData.addAll(list)
-                    transcriptList.postValue(list)
-                }
                 onError()
             }
 
@@ -106,8 +106,6 @@ class TranscriptRepository(val context: Context) {
 
             override fun onError(e: Throwable) {
                 super.onError(e)
-                originData.clear()
-                transcriptList.value?.clear()
                 onError()
             }
         }

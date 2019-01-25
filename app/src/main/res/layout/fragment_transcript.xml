@@ -64,6 +64,7 @@
                 tools:src="@mipmap/witch"/>
 
         <TextView
+                android:id="@+id/errorText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/errorImage"

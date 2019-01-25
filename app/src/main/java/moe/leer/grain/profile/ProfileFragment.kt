@@ -143,7 +143,6 @@ class ProfileFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChang
             return
         }
         toast(stringId)
-        (requireActivity() as HomeActivity).toggleInteraction(false)
 
         App.getApplication(requireContext().applicationContext).isLogin = false
 
@@ -154,10 +153,8 @@ class ProfileFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChang
                 if (jumpToLogin) {
                     (requireActivity() as HomeActivity).startLoginActivity()
                 }
-                (requireActivity() as HomeActivity).toggleInteraction(true)
             }, onError = {
                 toast(failedId)
-                (requireActivity() as HomeActivity).toggleInteraction(true)
             })
     }
 

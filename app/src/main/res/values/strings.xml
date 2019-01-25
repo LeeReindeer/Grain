@@ -79,5 +79,6 @@
     <string name="hint_in_reset">Reset…</string>
     <string name="hint_reset_failed">Reset failed</string>
     <string name="text_error">Failed to load content</string>
+    <string name="hint_empty">Nothing but broom here</string>
     <string name="title_share">Share with friend</string>
 </resources>

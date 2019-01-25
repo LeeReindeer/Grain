@@ -6,6 +6,7 @@ import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
+import androidx.annotation.StringRes
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -72,22 +73,25 @@ class CardFragment : BaseFragment() {
     private fun initData() {
         viewModel = ViewModelProviders.of(this).get(ECardViewModel::class.java)
         ecardRV.adapter = adapter
+        refreshLayout.isRefreshing = true
         viewModel.cardList.observe(this, Observer<PagedList<ECard>?> {
-            showEmptyPage(it == null || it.isEmpty())
-            if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)
-                && App.getApplication(requireContext().applicationContext).isLogin
-            ) {
-                adapter.submitList(it)
+            if (App.getApplication(requireContext().applicationContext).isLogin) {
+                if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
+                    showEmptyPage(it == null || it.isEmpty(), R.string.text_error)
+                    adapter.submitList(it)
+                }
+            } else {
+                refreshLayout.isRefreshing = false
+                showEmptyPage(true, R.string.hint_login)
             }
         })
-        refreshLayout.isRefreshing = true
 
         // refresh from network
         if (App.getApplication(requireContext().applicationContext).isLogin) {
             refresh()
         } else {
             refreshLayout.isRefreshing = false
-            toast(R.string.hint_login)
+            showEmptyPage(true, R.string.hint_login)
         }
 
     }
@@ -129,10 +133,11 @@ class CardFragment : BaseFragment() {
             })
     }
 
-    private fun showEmptyPage(show: Boolean) {
+    private fun showEmptyPage(show: Boolean, @StringRes errorMsgId: Int) {
         Glide.with(this)
             .load(R.mipmap.witch)
             .into(errorImage)
+        errorText.setText(errorMsgId)
         if (show) {
             errorPage.visibility = View.VISIBLE
             ecardRV.visibility = View.INVISIBLE

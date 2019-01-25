@@ -3,18 +3,22 @@ package moe.leer.grain.transcript
 
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import androidx.annotation.StringRes
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_transcript.*
+import moe.leer.grain.App
 import moe.leer.grain.R
 import moe.leer.grain.base.BaseFragment
 import moe.leer.grain.model.Transcript
@@ -37,17 +41,26 @@ class TranscriptFragment : BaseFragment() {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this.requireContext())
         val controller = AnimationUtils.loadLayoutAnimation(activity, R.anim.anim_layout_fall_down)
+        recyclerView.layoutAnimation = controller
 
         transcriptViewModel = ViewModelProviders.of(this).get(TranscriptViewModel::class.java)
         transcriptRefresh.isRefreshing = true
-        transcriptViewModel.getTranscript().observe(this, Observer<MutableList<Transcript>?> { transcript ->
+        transcriptViewModel.getTranscript {
+            showEmptyList(true, R.string.hint_check_network)
+        }.observe(this, Observer<MutableList<Transcript>?> { transcript ->
             Log.d(TAG, "observe: transcript size :${transcript?.size}")
-            showEmptyList(transcript == null || transcript.isEmpty())
-
-            Log.d(TAG, "onViewCreated: errorPage: ${errorPage.visibility == View.VISIBLE}")
-            recyclerView.layoutAnimation = controller
-            adapter.transcriptList = transcript
-            transcriptRefresh.isRefreshing = false
+            if (App.getApplication(requireContext().applicationContext).isLogin) {
+                adapter.transcriptList = transcript
+                if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
+                    Handler().postDelayed({
+                        showEmptyList(transcript == null || transcript.isEmpty(), R.string.hint_empty)
+                        Log.d(TAG, "onViewCreated: errorPage: ${errorPage.visibility == View.VISIBLE}")
+                        transcriptRefresh.isRefreshing = false
+                    }, 500)
+                }
+            } else {
+                showEmptyList(true, R.string.hint_login)
+            }
         })
         initView()
 
@@ -56,10 +69,11 @@ class TranscriptFragment : BaseFragment() {
 //        }, 500)
     }
 
-    private fun showEmptyList(show: Boolean) {
+    private fun showEmptyList(show: Boolean, @StringRes errorMsgId: Int) {
         Glide.with(this)
             .load(R.mipmap.witch)
             .into(errorImage)
+        errorText.setText(errorMsgId)
         if (show) {
             errorPage.visibility = View.VISIBLE
         } else {
