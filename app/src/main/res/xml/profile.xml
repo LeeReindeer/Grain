@@ -74,6 +74,10 @@
                 android:summary="1.0"
                 app:iconSpaceReserved="false"/>
 
+        <Preference
+                android:key="key_share"
+                android:title="@string/title_share"
+                app:iconSpaceReserved="false"/>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/title_dev"

@@ -30,6 +30,7 @@ class ProfileFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChang
     private lateinit var authorPreference: Preference
     private lateinit var versionPreference: Preference
     private lateinit var resetPreference: Preference
+    private lateinit var sharePreference: Preference
 
 
     private lateinit var viewModel: ProfileViewModel
@@ -50,6 +51,7 @@ class ProfileFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChang
         userInfoPreference = findPreference("key_info")
         authorPreference = findPreference("key_authors")
         versionPreference = findPreference("key_version")
+        sharePreference = findPreference("key_share")
         resetPreference = findPreference("key_reset")
 
         languageListPreference.onPreferenceChangeListener = this
@@ -109,6 +111,17 @@ class ProfileFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChang
 
         versionPreference.summaryProvider = Preference.SummaryProvider<Preference> {
             BuildConfig.VERSION_NAME
+        }
+
+        sharePreference.setOnPreferenceClickListener {
+            var shareIntent = Intent(Intent.ACTION_SEND)
+                .putExtra(Intent.EXTRA_TEXT, "推荐应用【海大助手】查成绩，校园卡，图书馆：https://github.com/LeeReindeer/Grain")
+                .setType("text/plain")
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+
+            shareIntent = Intent.createChooser(shareIntent, resources.getString(R.string.title_share))
+            requireActivity().startActivity(shareIntent)
+            true
         }
 
         resetPreference.setOnPreferenceClickListener {
