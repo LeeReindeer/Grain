@@ -14,15 +14,17 @@ import java.util.*
  */
 class LocaleManager(private val context: Context) {
 
+    private val TAG = "LocaleManage"
+
     companion object {
         const val EN_LANG = "en"
         const val ZH_LANG = "zh"
         const val LANGUAGE_KEY = "key_language"
     }
 
-    fun setLocale(context: Context): Context {
+    fun updateLocale(context: Context): Context {
         val lang = getLanguage()
-        Log.d("LocaleManage", "getLanguage: ${lang}")
+        Log.d(TAG, "getLanguage: ${lang}")
         return updateLocale(context, lang)
     }
 
@@ -38,7 +40,7 @@ class LocaleManager(private val context: Context) {
     /**
      * Update locale and return new context of that
      */
-    private fun updateLocale(context: Context, language: String): Context {
+    fun updateLocale(context: Context, language: String): Context {
         var newContext = context
         val locale = Locale(language)
         Locale.setDefault(locale)

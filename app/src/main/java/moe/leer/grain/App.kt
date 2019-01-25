@@ -30,12 +30,12 @@ class App : Application() {
 
     override fun attachBaseContext(base: Context) {
         localeManager = LocaleManager(base)
-        super.attachBaseContext(localeManager.setLocale(base))
+        super.attachBaseContext(localeManager.updateLocale(base))
     }
 
     override fun onConfigurationChanged(newConfig: Configuration?) {
         super.onConfigurationChanged(newConfig)
-        localeManager.setLocale(this)
+        localeManager.updateLocale(this)
         Log.d(TAG, "onConfigurationChanged: ${newConfig?.locale?.language}")
     }
 

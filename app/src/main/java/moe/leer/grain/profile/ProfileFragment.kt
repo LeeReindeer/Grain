@@ -16,6 +16,7 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreference
 import moe.leer.grain.*
 import moe.leer.grain.model.User
+import java.util.*
 
 
 class ProfileFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChangeListener {
@@ -64,23 +65,26 @@ class ProfileFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChang
             true
         }
 
-        viewModel.userData().observe(this, Observer<User?> { user ->
-            if (user == null || user.id == 0) {
-                return@Observer
-            }
-            userInfoPreference.title = user.name
-            userInfoPreference.summaryProvider = Preference.SummaryProvider<Preference> {
-                user.className
-            }
+        if ((requireContext().applicationContext as App).isLogin) {
+            viewModel.userData().observe(this, Observer<User?> { user ->
+                if (user == null || user.id == 0) {
+                    return@Observer
+                }
+                userInfoPreference.title = user.name
+                userInfoPreference.summaryProvider = Preference.SummaryProvider<Preference> {
+                    user.className
+                }
 
-            librarySummary.summaryProvider = Preference.SummaryProvider<Preference> {
-                String.format(
-                    resources.getString(R.string.library_summary),
-                    user.bookRentNum,
-                    user.bookRentOutDataNum
-                )
-            }
-        })
+                librarySummary.summaryProvider = Preference.SummaryProvider<Preference> {
+                    String.format(
+                        resources.getString(R.string.library_summary),
+                        user.bookRentNum,
+                        user.bookRentOutDataNum
+                    )
+                }
+            })
+        }
+
 
         authorPreference.summaryProvider = Preference.SummaryProvider<Preference> {
             "Created by LeeR ${Util.getEmojiByUnicode(0x1F491)} Kwok"
@@ -110,7 +114,7 @@ class ProfileFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChang
         resetPreference.setOnPreferenceClickListener {
             viewModel.nukeData()
             doLogout(R.string.hint_in_reset, R.string.hint_reset_failed, false)
-            setLocale(LocaleManager.EN_LANG)
+            updateLocale(LocaleManager.EN_LANG)
             return@setOnPreferenceClickListener true
         }
     }
@@ -144,8 +148,8 @@ class ProfileFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChang
     override fun onPreferenceChange(preference: Preference?, newValue: Any?): Boolean {
         if (preference?.key == "key_language") {
             when (newValue as String) {
-                "0" -> setLocale(LocaleManager.EN_LANG)
-                else -> setLocale(LocaleManager.ZH_LANG)
+                "0" -> updateLocale(LocaleManager.EN_LANG)
+                else -> updateLocale(LocaleManager.ZH_LANG)
             }
             return true
         } else {
@@ -153,10 +157,22 @@ class ProfileFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChang
         }
     }
 
+    @Deprecated("for <= SDK 17")
     fun setLocale(lang: String) {
-        val context = requireContext().applicationContext
-        (context as App).localeManager
+        val myLocale = Locale(lang)
+        val res = resources
+        val dm = res.displayMetrics
+        val conf = res.configuration
+        conf.locale = myLocale
+        res.updateConfiguration(conf, dm)
+        val refresh = Intent(this.requireActivity(), HomeActivity::class.java)
+        requireActivity().finish()
+        startActivity(refresh)
+    }
 
+    fun updateLocale(lang: String) {
+        val context = requireContext().applicationContext
+        (context as App).localeManager.updateLocale(requireContext(), lang)
         startActivity(
             Intent(this.requireActivity(), HomeActivity::class.java).addFlags(
                 Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK

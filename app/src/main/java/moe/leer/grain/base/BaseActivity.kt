@@ -31,7 +31,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun attachBaseContext(newBase: Context) {
         val localeManager = LocaleManager(newBase)
-        super.attachBaseContext(localeManager.setLocale(newBase))
+        super.attachBaseContext(localeManager.updateLocale(newBase))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
