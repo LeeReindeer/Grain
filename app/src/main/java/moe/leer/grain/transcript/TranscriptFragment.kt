@@ -13,10 +13,11 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.fragment_transcript.view.*
+import kotlinx.android.synthetic.main.fragment_transcript.*
 import moe.leer.grain.R
 import moe.leer.grain.base.BaseFragment
 import moe.leer.grain.model.Transcript
+import moe.leer.grain.toast
 
 
 class TranscriptFragment : BaseFragment() {
@@ -31,35 +32,35 @@ class TranscriptFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         this.adapter = TranscriptAdapter(this@TranscriptFragment.requireContext())
-        recyclerView = view.transcriptRV
+        recyclerView = transcriptRV
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this.requireContext())
 
         transcriptViewModel = ViewModelProviders.of(this).get(TranscriptViewModel::class.java)
-        view.transcriptRefresh.isRefreshing = true
+        transcriptRefresh.isRefreshing = true
         transcriptViewModel.getTranscript().observe(this, Observer<MutableList<Transcript>?> { transcript ->
             Log.d(TAG, "observe: transcript size :${transcript?.size}")
-            showEmptyList(view, transcript == null || transcript.isEmpty())
+            showEmptyList(transcript == null || transcript.isEmpty())
 
-            Log.d(TAG, "onViewCreated: errorPage: ${view.errorPage.visibility == View.VISIBLE}")
+            Log.d(TAG, "onViewCreated: errorPage: ${errorPage.visibility == View.VISIBLE}")
             adapter.transcriptList = transcript
-            view.transcriptRefresh.isRefreshing = false
+            transcriptRefresh.isRefreshing = false
         })
-        initView(view)
+        initView()
 
 //        Handler().postDelayed({
 //            transcriptViewModel.refresh()
 //        }, 500)
     }
 
-    private fun showEmptyList(view: View, show: Boolean) {
+    private fun showEmptyList(show: Boolean) {
         Glide.with(this)
             .load(R.mipmap.witch)
-            .into(view.errorImage)
+            .into(errorImage)
         if (show) {
-            view.errorPage.visibility = View.VISIBLE
+            errorPage.visibility = View.VISIBLE
         } else {
-            view.errorPage.visibility = View.GONE
+            errorPage.visibility = View.GONE
         }
     }
 
@@ -67,7 +68,7 @@ class TranscriptFragment : BaseFragment() {
         super.onResume()
     }
 
-    private fun initView(view: View) {
+    private fun initView() {
         val yearSpinnerAdapter = ArrayAdapter.createFromResource(
             this.requireContext(),
             R.array.spinner_year,
@@ -80,10 +81,10 @@ class TranscriptFragment : BaseFragment() {
         )
         yearSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         semesterSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        view.yearSpinner.adapter = yearSpinnerAdapter
-        view.semesterSpinner.adapter = semesterSpinnerAdapter
+        yearSpinner.adapter = yearSpinnerAdapter
+        semesterSpinner.adapter = semesterSpinnerAdapter
 
-        view.semesterSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        semesterSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {
             }
 
@@ -95,7 +96,7 @@ class TranscriptFragment : BaseFragment() {
 
         }
 
-        view.yearSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        yearSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {
             }
 
@@ -105,9 +106,22 @@ class TranscriptFragment : BaseFragment() {
             }
 
         }
-        view.transcriptRefresh.setOnRefreshListener {
-            transcriptViewModel.refresh()
-            view.transcriptRefresh.isRefreshing = false
+        transcriptRefresh.setOnRefreshListener {
+            refresh()
+            transcriptRefresh.isRefreshing = false
+        }
+        errorPage.setOnClickListener {
+            refresh()
         }
     }
+
+    private fun refresh() {
+        yearSpinner.setSelection(0, true)
+        semesterSpinner.setSelection(0, true)
+        transcriptViewModel.refresh {
+            //onError
+            toast(R.string.hint_check_network)
+        }
+    }
+
 }

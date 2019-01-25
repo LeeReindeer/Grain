@@ -78,4 +78,5 @@
     <string name="title_reset">Reset</string>
     <string name="hint_in_reset">Reset…</string>
     <string name="hint_reset_failed">Reset failed</string>
+    <string name="text_error">Failed to load content</string>
 </resources>

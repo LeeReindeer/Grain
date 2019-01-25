@@ -42,6 +42,9 @@ class CardFragment : BaseFragment() {
         refreshLayout.setOnRefreshListener {
             refresh()
         }
+        errorPage.setOnClickListener {
+            refresh()
+        }
         initCard()
     }
 
@@ -123,11 +126,11 @@ class CardFragment : BaseFragment() {
             .load(R.mipmap.witch)
             .into(errorImage)
         if (show) {
-            errorImage.visibility = View.VISIBLE
-            refreshLayout.visibility = View.INVISIBLE
+            errorPage.visibility = View.VISIBLE
+            ecardRV.visibility = View.INVISIBLE
         } else {
-            errorImage.visibility = View.GONE
-            refreshLayout.visibility = View.VISIBLE
+            errorPage.visibility = View.GONE
+            ecardRV.visibility = View.VISIBLE
         }
     }
 

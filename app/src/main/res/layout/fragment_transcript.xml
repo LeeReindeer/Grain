@@ -46,7 +46,7 @@
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
-    <FrameLayout
+    <RelativeLayout
             android:id="@+id/errorPage"
             android:layout_marginTop="64dp"
             android:layout_width="match_parent"
@@ -58,10 +58,20 @@
         <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/errorImage"
                 android:layout_marginTop="152dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_width="300dp"
-                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
                 tools:src="@mipmap/witch"/>
-    </FrameLayout>
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/errorImage"
+                android:textAlignment="center"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/grey"
+                android:textStyle="bold"
+                android:text="@string/text_error"/>
+    </RelativeLayout>
 
 </RelativeLayout>
