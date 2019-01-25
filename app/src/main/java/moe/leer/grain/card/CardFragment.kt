@@ -16,6 +16,7 @@ import com.chaychan.viewlib.NumberRunningTextView
 import kotlinx.android.synthetic.main.fragment_card.*
 import moe.leer.grain.App
 import moe.leer.grain.FuckSchoolApi
+import moe.leer.grain.HomeActivity
 import moe.leer.grain.NetworkObserver
 import moe.leer.grain.R
 import moe.leer.grain.base.BaseFragment
@@ -57,10 +58,16 @@ class CardFragment : BaseFragment() {
             if (it == null || it.id == 0) {
                 showEmptyCard(true)
             } else {
+
+                (requireActivity() as HomeActivity).logUserToCrashlytics(it)
+
                 showEmptyCard(false)
                 cardIdText.text = it.id.toString(10)
                 (cardMoneyText as NumberRunningTextView).setContent(it.moneyRem.toString())
                 cardNameText.text = it.name
+                Handler().postDelayed({
+                    throw RuntimeException("This is a crash");
+                }, 500)
             }
         })
     }

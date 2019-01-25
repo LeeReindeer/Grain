@@ -72,6 +72,9 @@ class ProfileFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChang
                 if (user == null || user.id == 0) {
                     return@Observer
                 }
+
+                (requireActivity() as HomeActivity).logUserToCrashlytics(user)
+
                 userInfoPreference.title = user.name
                 userInfoPreference.summaryProvider = Preference.SummaryProvider<Preference> {
                     user.className

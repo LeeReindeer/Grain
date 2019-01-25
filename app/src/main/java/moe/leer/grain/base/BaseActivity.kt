@@ -14,9 +14,11 @@ import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import com.crashlytics.android.Crashlytics
 import moe.leer.grain.LocaleManager
 import moe.leer.grain.R
 import moe.leer.grain.Util
+import moe.leer.grain.model.User
 import java.io.Serializable
 
 /**
@@ -94,6 +96,11 @@ abstract class BaseActivity : AppCompatActivity() {
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
             )
         }
+    }
+
+    fun logUserToCrashlytics(user: User) {
+        Crashlytics.setUserName(user.name)
+        Crashlytics.setUserIdentifier("${user.id}+${user.className}")
     }
 
     /**

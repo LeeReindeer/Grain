@@ -9,7 +9,9 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.crashlytics.android.Crashlytics
 import com.google.android.material.snackbar.Snackbar
+import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_home.*
 import moe.leer.grain.base.BaseActivity
 import moe.leer.grain.login.LoginActivity
@@ -71,6 +73,7 @@ class HomeActivity : BaseActivity() {
     }
 
     override fun initData() {
+        Fabric.with(this, Crashlytics())
     }
 
     override fun initView() {
