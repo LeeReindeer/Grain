@@ -1,1 +1,1 @@
-include ':app', ':ohfuckschool', ':okhttp3-persistent-cookiejar'
+include ':app', ':ohfuckschool'

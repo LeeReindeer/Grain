@@ -2,7 +2,6 @@ package moe.leer.grain
 
 import android.content.Context
 import android.util.Log
-import com.franmontiel.persistentcookiejar.PersistentCookieJar
 import com.franmontiel.persistentcookiejar.cache.SetCookieCache
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor
 import com.google.gson.Gson
@@ -66,7 +65,7 @@ class FuckSchoolApi private constructor(val context: Context) {
     }
 
     init {
-        val cookieJar = PersistentCookieJar(SetCookieCache(), SharedPrefsCookiePersistor(context))
+        val cookieJar = PersistentCookieJarWrapper(SetCookieCache(), SharedPrefsCookiePersistor(context))
         httpClient = OkHttpClient().newBuilder()
             .cookieJar(cookieJar)
             .callTimeout(10, TimeUnit.SECONDS)
