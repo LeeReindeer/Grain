@@ -13,7 +13,7 @@ UI 设计参考 [Material Design 2](https://material.io/design/)，感谢@番茄
 ## 下载
 
 - [GitHub](https://github.com/LeeReindeer/Grain/releases)
-- [应用主页下载](https://www.pgyer.com/grain2)
+- [蒲公英主页下载](https://www.pgyer.com/grain2)
 
 ## 截图
 
@@ -23,8 +23,8 @@ UI 设计参考 [Material Design 2](https://material.io/design/)，感谢@番茄
 
 ## Open source license
 
-- 图标绘制：@番茄星人
-- 空视图女巫：@番茄星人
+- 图标绘制：[@番茄星人](https://github.com/tomatokwok)
+- 空视图女巫：[@番茄星人](https://github.com/tomatokwok)
 - Andoird Jetpack
 - Rxjava2
 - OkHttp
