@@ -303,7 +303,7 @@ class FuckSchoolApi private constructor(val context: Context) {
             if (!response.isSuccessful || response.body() == null) {
                 ArrayList()
             } else {
-                parseCardTable(response.body()!!.string())
+                parseCardTable(response.body()!!.string(), pageSize)
             }
         }
             .subscribeOn(Schedulers.io())
@@ -312,11 +312,11 @@ class FuckSchoolApi private constructor(val context: Context) {
 
     private val regex1 = Regex("(消费机|同力|多媒体)[0-9]*")
     private val regexToRemoveNum = Regex("[0-9]+")
-    private fun parseCardTable(responseString: String): ArrayList<ECard>? {
+    private fun parseCardTable(responseString: String, pageSize: Int): ArrayList<ECard>? {
         if (responseString.isEmpty()) {
             return null
         }
-        val itemList = ArrayList<ECard>(30)
+        val itemList = ArrayList<ECard>(pageSize)
         val doc = Jsoup.parse(responseString)
         val table = doc.getElementById("queryGridPluto_inte_jyxx_")
         val rows = table.select("tr")
