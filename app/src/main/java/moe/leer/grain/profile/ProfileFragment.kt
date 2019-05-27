@@ -62,6 +62,11 @@ class ProfileFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChang
             logoutButton.setTitle(R.string.text_login)
         }
 
+        reloginPreference.setOnPreferenceChangeListener { preference, newValue ->
+            toast(R.string.in_dev)
+            true
+        }
+
         logoutButton.setOnPreferenceClickListener {
             doLogout(R.string.hint_in_logout, R.string.hint_logout_failed, true)
             true

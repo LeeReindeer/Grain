@@ -81,4 +81,5 @@
     <string name="text_error">Failed to load content</string>
     <string name="hint_empty">Nothing but broom here</string>
     <string name="title_share">Share with friend</string>
+    <string name="in_dev">In development…</string>
 </resources>
