@@ -63,7 +63,7 @@ class ProfileFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChang
         }
 
         reloginPreference.setOnPreferenceChangeListener { preference, newValue ->
-            toast(R.string.in_dev)
+            toast(R.string.toast_in_dev)
             true
         }
 
@@ -73,6 +73,17 @@ class ProfileFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChang
         }
 
         if ((requireContext().applicationContext as App).isLogin) {
+
+            // show loading hint
+            userInfoPreference.title = getString(R.string.hint_loading)
+            userInfoPreference.summaryProvider = Preference.SummaryProvider<Preference> {
+                getString(R.string.hint_loading)
+            }
+
+            librarySummary.summaryProvider = Preference.SummaryProvider<Preference> {
+                getString(R.string.hint_loading)
+            }
+
             viewModel.userData().observe(this, Observer<User?> { user ->
                 if (user == null || user.id == 0) {
                     return@Observer

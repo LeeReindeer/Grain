@@ -35,9 +35,9 @@
     </string-array>
 
     <string-array name="page_entries">
-        <item>Transcript</item>
-        <item>Card</item>
-        <item>Me</item>
+        <item>@string/title_transcript</item>
+        <item>@string/title_card</item>
+        <item>@string/title_me</item>
     </string-array>
 
     <string-array name="entry_values">
@@ -81,5 +81,6 @@
     <string name="text_error">Failed to load content</string>
     <string name="hint_empty">Nothing but broom here</string>
     <string name="title_share">Share with friend</string>
-    <string name="in_dev">In development…</string>
+    <string name="toast_in_dev">In development…</string>
+    <string name="hint_loading">Loading…</string>
 </resources>
