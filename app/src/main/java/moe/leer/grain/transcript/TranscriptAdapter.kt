@@ -42,28 +42,35 @@ class TranscriptAdapter(private val context: Context) : RecyclerView.Adapter<Tra
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val (year, semester, subjectName, subjectProperty, subjectFullGrade, score1, reScore) = this.transcriptList!![position]
+        val transcript = this.transcriptList!![position]
+        with(transcript) {
+            with(holder) {
+                var showScore = getFinalScore(score)
+                if (reScore != null) {
+                    showScore = getFinalScore(reScore)
+                }
+                scoreText.text = showScore.toString()
+                scoreText.setBackgroundColor(ContextCompat.getColor(context, getBackgroundColor(showScore)))
+                usualGradeText.text = usualGrade ?: context.getString(R.string.test_na)
+                examGradeText.text = examGrade ?: context.getString(R.string.test_na)
 
-        var score = getFinalScore(score1)
-        if (reScore != null) {
-            score = getFinalScore(reScore)
+                var name = if (subjectName.length > 10)
+                    subjectName.substring(0, 8) + "..."
+                else
+                    subjectName
+                if (reScore != null) {
+                    name += " (重修)"
+                }
+                nameText.text = name
+
+                gradeText.text =
+                    String.format(Locale.CHINESE, "学分:%.1f", java.lang.Float.parseFloat(subjectFullGrade))
+                propertyText.text = subjectProperty
+                timeText.text = String.format(Locale.CHINESE, "%s-%d", year, semester)
+            }
+
         }
-        holder.scoreText.text = score.toString()
-        holder.scoreText.setBackgroundColor(ContextCompat.getColor(context, getBackgroundColor(score)))
 
-        var name = if (subjectName.length > 10)
-            subjectName.substring(0, 8) + "..."
-        else
-            subjectName
-        if (reScore != null) {
-            name += " (重修)"
-        }
-        holder.nameText.text = name
-
-        holder.gradeText.text =
-                String.format(Locale.CHINESE, "%.1f学分", java.lang.Float.parseFloat(subjectFullGrade))
-        holder.propertyText.text = subjectProperty
-        holder.timeText.text = String.format(Locale.CHINESE, "%s 第%d学期", year, semester)
     }
 
     private fun getFinalScore(scoreStr: String): Int {
@@ -112,19 +119,13 @@ class TranscriptAdapter(private val context: Context) : RecyclerView.Adapter<Tra
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val scoreText: TextView
-        val nameText: TextView
-        val gradeText: TextView
-        val propertyText: TextView
-        val timeText: TextView
+        val scoreText: TextView = itemView.findViewById(R.id.finalGradeText)
+        val usualGradeText: TextView = itemView.findViewById(R.id.usualGradeText)
+        val examGradeText: TextView = itemView.findViewById(R.id.examGradeText)
+        val nameText: TextView = itemView.findViewById(R.id.subjectNameText)
+        val gradeText: TextView = itemView.findViewById(R.id.subjectGradeText)
+        val propertyText: TextView = itemView.findViewById(R.id.subjectPropertyText)
+        val timeText: TextView = itemView.findViewById(R.id.subjectTimeText)
 
-        init {
-
-            scoreText = itemView.findViewById(R.id.scoreText)
-            nameText = itemView.findViewById(R.id.subjectNameText)
-            gradeText = itemView.findViewById(R.id.subjectGradeText)
-            propertyText = itemView.findViewById(R.id.subjectPropertyText)
-            timeText = itemView.findViewById(R.id.subjectTimeText)
-        }
     }
 }

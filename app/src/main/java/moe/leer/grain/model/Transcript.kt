@@ -22,5 +22,9 @@ data class Transcript(
     @SerializedName("CJ")
     val score: String,
     @SerializedName("CXCJ")
-    val reScore: String? = null //重修成绩
+    val reScore: String? = null, //重修成绩
+    @SerializedName("PSCJ")
+    val usualGrade: String?,      //平时成绩
+    @SerializedName("QMCJ")
+    val examGrade: String?        //期末成绩
 )

@@ -6,36 +6,38 @@
                 tools:context=".transcript.TranscriptFragment">
 
 
-    <RelativeLayout
+    <LinearLayout
+            android:id="@+id/spinner_container"
             android:layout_width="match_parent"
             android:layout_height="@dimen/spinner_height"
             android:background="@color/blue"
-            android:padding="@dimen/margin_4dp">
+            android:padding="@dimen/margin_4dp"
+            android:layout_marginBottom="@dimen/margin_8dp">
 
         <androidx.appcompat.widget.AppCompatSpinner
                 android:id="@+id/yearSpinner"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="match_parent"
-                android:layout_toStartOf="@id/semesterSpinner"
                 android:theme="@style/white_spinner_style"
-                android:padding="@dimen/margin_8dp"
                 android:entries="@array/spinner_year"/>
 
         <androidx.appcompat.widget.AppCompatSpinner
                 android:id="@+id/semesterSpinner"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="match_parent"
-                android:layout_alignParentEnd="true"
                 android:theme="@style/white_spinner_style"
                 android:entries="@array/spinner_semester"/>
-    </RelativeLayout>
+    </LinearLayout>
 
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/transcriptRefresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/spinner_height">
+            android:layout_below="@id/spinner_container"
+    >
 
         <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/transcriptRV"
@@ -48,13 +50,12 @@
 
     <RelativeLayout
             android:id="@+id/errorPage"
-            android:layout_marginTop="64dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white"
+            android:layout_below="@id/spinner_container"
             android:visibility="gone"
             tools:visibility="visible">
-        <!--216dp - 64dp = 152dp-->
         <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/errorImage"
                 android:layout_marginTop="152dp"
