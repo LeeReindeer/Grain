@@ -78,6 +78,10 @@ dependencies {
 
     implementation 'br.com.simplepass:loading-button-android:2.0.6'
     implementation 'com.github.bumptech.glide:glide:4.8.0'
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-andx-10'
+    implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-andx-10'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
 
     implementation('com.crashlytics.sdk.android:crashlytics:2.9.8@aar') {
         transitive = true

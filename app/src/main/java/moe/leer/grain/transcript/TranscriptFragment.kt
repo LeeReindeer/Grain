@@ -20,8 +20,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
+import com.scwang.smartrefresh.header.PhoenixHeader
+import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import moe.leer.grain.App
 import moe.leer.grain.R
 import moe.leer.grain.base.BaseFragment
@@ -38,7 +39,7 @@ class TranscriptFragment : BaseFragment() {
     private lateinit var transcriptViewModel: TranscriptViewModel
     private lateinit var adapter: TranscriptAdapter
 
-    private lateinit var transcriptRefresh: SwipeRefreshLayout
+    private lateinit var transcriptRefresh: SmartRefreshLayout
     private lateinit var recyclerView: RecyclerView
     private lateinit var errorTextView: TextView
     private lateinit var errorImageView: AppCompatImageView
@@ -63,7 +64,9 @@ class TranscriptFragment : BaseFragment() {
         recyclerView.layoutAnimation = controller
 
         transcriptViewModel = ViewModelProviders.of(this).get(TranscriptViewModel::class.java)
-        transcriptRefresh.isRefreshing = true
+        transcriptRefresh.setRefreshHeader(PhoenixHeader(requireContext()))
+        transcriptRefresh.setPrimaryColorsId(R.color.colorAccent, R.color.lightBlue)
+        transcriptRefresh.autoRefreshAnimationOnly()
         transcriptViewModel.getTranscript {
             showEmptyList(true, R.string.hint_check_network)
         }.observe(this, Observer<MutableList<Transcript>?> { transcript ->
@@ -74,7 +77,7 @@ class TranscriptFragment : BaseFragment() {
                     Handler().postDelayed({
                         showEmptyList(transcript == null || transcript.isEmpty(), R.string.hint_empty)
                         Log.d(TAG, "onViewCreated: errorPage: ${errorLayout.visibility == View.VISIBLE}")
-                        transcriptRefresh.isRefreshing = false
+                        transcriptRefresh.finishRefresh()
                     }, 500)
                 }
             } else {
@@ -146,7 +149,7 @@ class TranscriptFragment : BaseFragment() {
         }
         transcriptRefresh.setOnRefreshListener {
             refresh()
-            transcriptRefresh.isRefreshing = false
+            transcriptRefresh.finishRefresh(1000)
         }
         errorLayout.setOnClickListener {
             refresh()
@@ -158,6 +161,7 @@ class TranscriptFragment : BaseFragment() {
         semesterSpinner.setSelection(0, true)
         transcriptViewModel.refresh {
             //onError
+            transcriptRefresh.finishRefresh(false)
             toast(R.string.hint_check_network)
         }
     }
