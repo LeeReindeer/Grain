@@ -67,7 +67,7 @@ class TranscriptRepository(val context: Context) {
         return list
     }
 
-    fun getTranscript(onError: () -> Unit): MutableLiveData<MutableList<Transcript>> {
+    fun getTranscript(onCompleted: () -> Unit? = {}, onError: () -> Unit): MutableLiveData<MutableList<Transcript>> {
 //        if (System.currentTimeMillis() - context.getSP(Constant.SP_NAME).getLong(
 //                SP_FETCH_TRANSCRIPT_TIME,
 //                0L
@@ -104,6 +104,10 @@ class TranscriptRepository(val context: Context) {
                     .apply()
             }
 
+            override fun onComplete() {
+                onCompleted()
+            }
+
             override fun onError(e: Throwable) {
                 super.onError(e)
                 onError()
@@ -117,6 +121,7 @@ class TranscriptRepository(val context: Context) {
 
     /**
      * Filter data with year and semester, filter year first
+     * No network access when filter, so the data maybe outdated
      * @param year filter with year: 1, 2, 3 ,4
      * @param semester 1, 2
      */

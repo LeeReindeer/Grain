@@ -65,6 +65,8 @@ class TranscriptFragment : BaseFragment() {
 
         transcriptViewModel = ViewModelProviders.of(this).get(TranscriptViewModel::class.java)
         transcriptRefresh.setRefreshHeader(PhoenixHeader(requireContext()))
+        transcriptRefresh.setEnableLoadMore(false)
+        transcriptRefresh.setEnableAutoLoadMore(false)
         transcriptRefresh.setPrimaryColorsId(R.color.colorAccent, R.color.lightBlue)
         transcriptRefresh.autoRefreshAnimationOnly()
         transcriptViewModel.getTranscript {
@@ -149,7 +151,6 @@ class TranscriptFragment : BaseFragment() {
         }
         transcriptRefresh.setOnRefreshListener {
             refresh()
-            transcriptRefresh.finishRefresh(1000)
         }
         errorLayout.setOnClickListener {
             refresh()
@@ -157,13 +158,14 @@ class TranscriptFragment : BaseFragment() {
     }
 
     private fun refresh() {
-        yearSpinner.setSelection(0, true)
-        semesterSpinner.setSelection(0, true)
-        transcriptViewModel.refresh {
-            //onError
-            transcriptRefresh.finishRefresh(false)
-            toast(R.string.hint_check_network)
-        }
+        transcriptViewModel.refresh(
+            onCompleted = {
+                transcriptRefresh.finishRefresh(100)
+            },
+            onError = {
+                transcriptRefresh.finishRefresh(false)
+                toast(R.string.hint_check_network)
+            })
     }
 
 }
