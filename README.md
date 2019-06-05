@@ -21,7 +21,7 @@ UI 设计参考 [Material Design 2](https://material.io/design/)，感谢@番茄
 | -------------------- | ------------------------------- |
 | ![ecard](./art/ecard.webp) | ![profile](./art/profile.webp)     |
 
-## Open source license
+## Thanks
 
 - 图标绘制：[@番茄星人](https://github.com/tomatokwok)
 - 空视图女巫：[@番茄星人](https://github.com/tomatokwok)
@@ -29,3 +29,7 @@ UI 设计参考 [Material Design 2](https://material.io/design/)，感谢@番茄
 - Rxjava2
 - OkHttp
 - see more at [build.gradle](https://github.com/LeeReindeer/Grain/blob/0d57fcdfac9dd74bce0eaaf06f5fcca73d4dbcb2/app/build.gradle#L30)
+
+# License
+
+GPL-3.0，包括代码、图标和素材等。**禁止一切商业形式的复制、分发、修改和编译。**
